@@ -24,7 +24,7 @@ public class Conv1 extends HttpServlet {
 
             StringBuilder out = new StringBuilder();
             for (String w : text.split("\\s")) {
-                w = new Fanetyka3().fanetykaSlova(w);
+                w = Fanetyka3.fanetykaSlova(w);
                 out.append(w).append(' ');
             }
             resp.setContentType("text/plain; charset=UTF-8");

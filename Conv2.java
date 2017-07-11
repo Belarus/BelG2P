@@ -22,13 +22,13 @@ public class Conv2 extends HttpServlet {
                 text = IOUtils.toString(reader);
             }
 
-            StringBuilder out = new StringBuilder();
+            Fanetyka3 f=new Fanetyka3();
             for (String w : text.split("\\s")) {
-                w = new Fanetyka3().fanetykaSlova(w);
-                out.append(w).append(' ');
+                f.addWord(w);
             }
+            String out=f.getFanetyka();
             resp.setContentType("text/plain; charset=UTF-8");
-            resp.getOutputStream().write(out.toString().getBytes(StandardCharsets.UTF_8));
+            resp.getOutputStream().write(out.getBytes(StandardCharsets.UTF_8));
         } catch (Exception ex) {
             resp.setContentType("text/plain; charset=UTF-8");
             resp.getOutputStream().write(("Памылка: " + ex.getMessage()).getBytes(StandardCharsets.UTF_8));

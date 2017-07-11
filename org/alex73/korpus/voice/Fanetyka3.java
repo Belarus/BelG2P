@@ -10,15 +10,11 @@ public class Fanetyka3 {
     StringBuilder out = new StringBuilder();
     List<String> words=new ArrayList<>();
     
-    public Fanetyka3() {
-        
-    }
-
     public void addWord(String w) {
         words.add(w);
     }
-    
-    public String fanetykaSlova() {
+
+    public String getFanetyka() {
         for(String w:words) {
            stvarajemBazavyjaHuji(w.toLowerCase());
         }
@@ -35,9 +31,18 @@ public class Fanetyka3 {
         ustaunojeA();
 
         for (Huk huk : huki) {
+            if (huk.pacatakSlova) {
+                out.append(' ');
+            }
             out.append(huk.toString());
         }
         return out.toString();
+    }
+    
+    public static String fanetykaSlova(String w) {
+        Fanetyka3 r=new Fanetyka3();
+        r.addWord(w);
+        return r.getFanetyka();
     }
     //
     // /**
