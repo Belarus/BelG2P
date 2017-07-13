@@ -1,6 +1,10 @@
 package org.alex73.korpus.voice;
 
 public class Huk {
+    public static int PADZIEL_PRYSTAUKA = 1;
+    public static int PADZIEL_KORANI = 2;
+    public static int PADZIEL_SLOVY = 4;
+
     public String zychodnyjaLitary;
     public String bazavyHuk;
     public boolean miakki;
@@ -8,8 +12,7 @@ public class Huk {
     public boolean halosnaja, miakkajaHalosnaja;
     public boolean apostrafPasla;
     /** Гэты гук павінен быць аддзелены ад наступнага, бо гэта апошні гук прыстаўкі. */
-    public boolean padzielPasla;
-    public boolean pacatakSlova;
+    public int padzielPasla;
 
     public Huk(String z, String b) {
         zychodnyjaLitary = z;
@@ -166,5 +169,21 @@ public class Huk {
             o += "ː";
         }
         return o;
+    }
+
+    public boolean is(String bazavy, Boolean miakkasc, Boolean padvajennie, Integer padziel) {
+        if (!bazavyHuk.equals(bazavy)) {
+            return false;
+        }
+        if (miakkasc != null && miakkasc.booleanValue() != miakki) {
+            return false;
+        }
+        if (padvajennie != null && padvajennie.booleanValue() != padvojeny) {
+            return false;
+        }
+        if (padziel != null && (padziel.intValue() & padzielPasla) == 0) {
+            return false;
+        }
+        return true;
     }
 }
