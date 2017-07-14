@@ -148,8 +148,8 @@ public class Fanetyka3 {
      * 
      * ц'-ц пераходзіць у т'-ц
      * 
-     * с-ц'(толькі на канцы слова) пераходзіць у c', як "дасць талацэ"
-     * з-дз-зычны(толькі на канцы слова мяккія і цвёрдыя) - дз выпадае, як "дасць заснуць"
+     * с'-ц'(толькі на канцы слова) пераходзіць у c', як "дасць талацэ"
+     * з'-д'(толькі на канцы слова) пераходзіць у з', як "дасць заснуць"
      * ж-дж-зычны(толькі на канцы слова мяккія і цвёрдыя) - дз выпадае, як "дасць жыцця"
      * ш-ч-зычны(толькі на канцы слова мяккія і цвёрдыя) - ч выпадае, як "дасць шырокі"
      */
@@ -191,26 +191,27 @@ public class Fanetyka3 {
                     && nastupny.bazavyHuk.equals("s")) {
                 // ш->с
                 huk.bazavyHuk = "s";
-            } else if (huk.miakki && huk.padzielPasla!=0 && huk.bazavyHuk.equals("t͡s")
-                    && nastupny.bazavyHuk.equals("t") && !nastupny.miakki) {
+            } else if (huk.is("t͡s", true, null, Huk.PADZIEL_PRYSTAUKA) && nastupny.is("t", false, null, 0)) {
                 // ц'-т -> т'-т
                 huk.bazavyHuk = "t";
-            } else if (huk.miakki && huk.padzielPasla!=0 && huk.bazavyHuk.equals("t͡s")
-                    && nastupny.bazavyHuk.equals("t͡s") && !nastupny.miakki) {
+            } else if (huk.is("t͡s", true, null, Huk.PADZIEL_PRYSTAUKA)&& nastupny.is("t͡s", false, null, 0)) {
                 // ц'-ц -> т'-ц
                 huk.bazavyHuk = "t";
             } else if (papiaredni.is("s", true, null, 0) && huk.is("t͡s", true, false, Huk.PADZIEL_SLOVY)) {
-                // с-ц'(толькі на канцы слова) пераходзіць у c', як "дасць талацэ"
-                papiaredni.miakki = true;
+                // с'-ц'(толькі на канцы слова) пераходзіць у c', як "дасць талацэ"
+                papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
                 huki.remove(i);
-            } else if (papiaredni.is("z", null, null, 0) && huk.is("d͡z", null, false, Huk.PADZIEL_SLOVY)) {
-                // з-дз-зычны(толькі на канцы слова мяккія і цвёрдыя) - дз выпадае, як "дасць заснуць"
+            } else if (papiaredni.is("z", true, null, 0) && huk.is("d", true, false, Huk.PADZIEL_SLOVY)) {
+                // з'-д'(толькі на канцы слова) пераходзіць у з', як "дасць заснуць"
+                papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
                 huki.remove(i);
             } else if (papiaredni.is("ʐ", null, null, 0) && huk.is("d͡ʐ", null, false, Huk.PADZIEL_SLOVY)) {
                 // ж-дж-зычны(толькі на канцы слова мяккія і цвёрдыя) - дз выпадае, як "дасць жыцця"
+                papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
                 huki.remove(i);
             } else if (papiaredni.is("ʂ", null, null, 0) && huk.is("t͡ʂ", null, false, Huk.PADZIEL_SLOVY)) {
                 // ш-ч-зычны(толькі на канцы слова мяккія і цвёрдыя) - ч выпадае, як "дасць шырокі"
+                papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
                 huki.remove(i);
             }
         }
@@ -299,34 +300,36 @@ public class Fanetyka3 {
             boolean halosnyPasla = i == huki.size() - 1 || huki.get(i + 1).halosnaja;
             if (huk.bazavyHuk.equals(papiaredni.bazavyHuk) && !huk.halosnaja) {
                 huk.padvojeny = true;// halosnyPasla && halosnyPierad;
-                if (halosnyPierad && (huk.bazavyHuk.equals("s") || huk.bazavyHuk.equals("ʂ")
+                /*if (halosnyPierad && (huk.bazavyHuk.equals("s") || huk.bazavyHuk.equals("ʂ")
                         || huk.bazavyHuk.equals("z") || huk.bazavyHuk.equals("p"))) {
                     // cc+зычны, шш+зычны, зз+зычны, пп+зычны - звычайна ў прыстаўках
                     huk.padvojeny = true;
-                }
+                }*/
                 huki.remove(i - 1);
                 huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
                 i--;
+TODO                // 1. дасць сёння c'+c'=>с': 2. дасць зялёнаму з'+з'=>з': 3. дасць табе с'+т=>с'+т 4. дасць дом з'+д=>з'+д
+                // 5. дасць швагру с'+ш=>ш: 6. дасць жабе з'+ж=>ж: 7. дасць чалавеку с'+ч=>ш+ч 8. дасць джону з'+дж=>ж+жд
             } else if (huk.bazavyHuk.equals("d͡ʐ") && papiaredni.bazavyHuk.equals("d")) {
-                // ддж
+                // д+дж => дж:
                 huk.padvojeny = true;// halosnyPasla && halosnyPierad;
                 huki.remove(i - 1);
                 huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
                 i--;
             } else if (huk.bazavyHuk.equals("d͡z") && papiaredni.bazavyHuk.equals("d")) {
-                // ддз
+                // ддз => дз:
                 huk.padvojeny = true;// halosnyPasla && halosnyPierad;
                 huki.remove(i - 1);
                 huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
                 i--;
             } else if (huk.bazavyHuk.equals("t͡ʂ") && papiaredni.bazavyHuk.equals("t")) {
-                // tt͡ʂ
+                // т+ч => ч:
                 huk.padvojeny = true;// halosnyPasla && halosnyPierad;
                 huki.remove(i - 1);
                 huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
                 i--;
             } else if (huk.bazavyHuk.equals("t͡s") && papiaredni.bazavyHuk.equals("t")) {
-                // tt͡s
+                // т+ш => ш:
                 huk.padvojeny = true;// halosnyPasla && halosnyPierad;
                 huki.remove(i - 1);
                 huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
@@ -487,8 +490,8 @@ public class Fanetyka3 {
 
     boolean isZvonki(Huk huk) {
         if (huk.miakki) {
-            return huk.bazavyHuk.equals("b") || huk.bazavyHuk.equals("d͡z") || huk.bazavyHuk.equals("z")
-                    || huk.bazavyHuk.equals("g") || huk.bazavyHuk.equals("ɣ");
+            return huk.bazavyHuk.equals("b") || huk.bazavyHuk.equals("d") || huk.bazavyHuk.equals("d͡z")
+                    || huk.bazavyHuk.equals("z") || huk.bazavyHuk.equals("g") || huk.bazavyHuk.equals("ɣ");
         } else {
             return huk.bazavyHuk.equals("b") || huk.bazavyHuk.equals("d") || huk.bazavyHuk.equals("d͡z")
                     || huk.bazavyHuk.equals("z") || huk.bazavyHuk.equals("ʐ") || huk.bazavyHuk.equals("d͡ʐ")

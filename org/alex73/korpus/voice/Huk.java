@@ -181,8 +181,12 @@ public class Huk {
         if (padvajennie != null && padvajennie.booleanValue() != padvojeny) {
             return false;
         }
-        if (padziel != null && (padziel.intValue() & padzielPasla) == 0) {
-            return false;
+        if (padziel != null) {
+            int pp=padziel.intValue();
+            if (pp==0) {
+                return padzielPasla==0;
+            }
+            return (pp & padzielPasla) != 0;
         }
         return true;
     }
