@@ -7,7 +7,6 @@ import java.util.List;
 
 public class Fanetyka3 {
     List<Huk> huki = new ArrayList<>();
-    StringBuilder out = new StringBuilder();
     List<String> words=new ArrayList<>();
     
     public void addWord(String w) {
@@ -18,18 +17,29 @@ public class Fanetyka3 {
         for(String w:words) {
            stvarajemBazavyjaHuji(w.toLowerCase());
         }
-        pierachodI();
-        paznacajemMiakkasc();
-        ahlusennieIazvancennie();
-        prypadabniennie();
-        sypiacyjaSvisciacyja();
-        pierachodTS();
-        sprascennie();
-        pierachodV();
-        pierachodM();
-        padvajennie();
-        ustaunojeA();
+        String h;
+        while (true) {
+            h = toString();
+            pierachodI();
+            paznacajemMiakkasc();
+            ahlusennieIazvancennie();
+            prypadabniennie();
+            sypiacyjaSvisciacyja();
+            pierachodTS();
+            sprascennie();
+            pierachodV();
+            pierachodM();
+            padvajennie();
+            ustaunojeA();
+            if (h.equals(toString())) {
+                break;
+            }
+        }
+        return h;
+    }
 
+    public String toString() {
+        StringBuilder out = new StringBuilder();
         for (Huk huk : huki) {
             out.append(huk.toString());
             if ((huk.padzielPasla & Huk.PADZIEL_SLOVY) != 0) {
@@ -308,7 +318,7 @@ public class Fanetyka3 {
                 huki.remove(i - 1);
                 huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
                 i--;
-TODO                // 1. дасць сёння c'+c'=>с': 2. дасць зялёнаму з'+з'=>з': 3. дасць табе с'+т=>с'+т 4. дасць дом з'+д=>з'+д
+                // 1. дасць сёння c'+c'=>с': 2. дасць зялёнаму з'+з'=>з': 3. дасць табе с'+т=>с'+т 4. дасць дом з'+д=>з'+д
                 // 5. дасць швагру с'+ш=>ш: 6. дасць жабе з'+ж=>ж: 7. дасць чалавеку с'+ч=>ш+ч 8. дасць джону з'+дж=>ж+жд
             } else if (huk.bazavyHuk.equals("d͡ʐ") && papiaredni.bazavyHuk.equals("d")) {
                 // д+дж => дж:
@@ -525,9 +535,6 @@ TODO                // 1. дасць сёння c'+c'=>с': 2. дасць зял
             if (huk.halosnaja) {
                 // зьмягчаеццца перад мяккімі галоснымі
                 miakkasc = huk.miakkajaHalosnaja;
-            } else if (huk.miakki) {
-                // зьмягчаеццца перад мяккімі зычнымі(калі быў 'ь')
-                miakkasc = true;
             } else if (huk.apostrafPasla) {
                 miakkasc = false;
                 huk.miakki = false;
@@ -555,20 +562,16 @@ TODO                // 1. дасць сёння c'+c'=>с': 2. дасць зял
                 }
                 huk.miakki = miakkasc;
             } else if (huk.bazavyHuk.equals("ɣ") || huk.bazavyHuk.equals("k") || huk.bazavyHuk.equals("x")) {
-                // яны самі зьмягчаюцца перад зычным(але не перад галосным), але не даюць зьмягчацца гукам
-                // перад імі: аб'едкі
+                // яны самі зьмягчаюцца толькі перад галоснымі(але не перад зычнымі), і не даюць зьмягчацца гукам
+                // перад імі: аб'едкі, вянгляр
                 if (nastupny != null) {
                     if (huk.bazavyHuk.equals(nastupny.bazavyHuk)) {
                         // акрамя выпадкаў калі далей ідзе такі самы зычны(бпмгкх)
                     } else if (nastupny.halosnaja) {
-                        miakkasc = nastupny.miakkajaHalosnaja;
-                    } else {
-                        // не зьмягчаецца перад наступным мяккім зычным, але не перад галоснай
-                        miakkasc = false;
+                        huk.miakki = nastupny.miakkajaHalosnaja;
                     }
                 }
-                huk.miakki = miakkasc;
-                // але не даюць зьмягчацца гукам перад імі
+                // не даюць зьмягчацца гукам перад імі
                 miakkasc = false; // TODO праверыць падваеньне гкх
             } else if (huk.bazavyHuk.equals("d")) {
                 if (nastupny != null && nastupny.miakki && (nastupny.bazavyHuk.equals("n")
@@ -599,6 +602,9 @@ TODO                // 1. дасць сёння c'+c'=>с': 2. дасць зял
                     }
                 }
                 huk.miakki = miakkasc;
+            } else if (huk.miakki) {
+                // зьмягчаеццца перад мяккімі зычнымі(калі быў 'ь')
+                miakkasc = true;
             } else {
                 // цьвёрды зычны - зьмягчаецца ў залежнасьці ад таго што ідзе далей
                 huk.miakki = miakkasc;
