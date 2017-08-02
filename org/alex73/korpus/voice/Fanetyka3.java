@@ -192,9 +192,8 @@ public class Fanetyka3 {
                 papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
                 huki.remove(i);
                 papiaredni.miakki = nastupny.miakki;
-            } else if (papiaredni.bazavyHuk.equals("s") && huk.bazavyHuk.equals("s")
-                    && nastupny.bazavyHuk.equals("k")) {
-                // першы выпадае
+            } else if (papiaredni.is("s", null, false, 0) && huk.is("s", null, false, 0) && nastupny.is("k", null, false, null)) {
+                // с-с-к пераходзіць у c-к: першы выпадае, але не на сутыку: бяссківічны
                 huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
                 huki.remove(i - 1);
             } else if (!huk.miakki && huk.padzielPasla==0 && huk.bazavyHuk.equals("ʂ")
@@ -285,12 +284,9 @@ public class Fanetyka3 {
         for (int i = 0; i < huki.size() - 1; i++) {
             Huk huk = huki.get(i);
             Huk nastupny = huki.get(i + 1);
-            if (!huk.miakki && !nastupny.miakki && huk.bazavyHuk.equals("d")
-                    && nastupny.bazavyHuk.equals("t͡ʂ")) {
+            if (huk.is("d", false, false, null) && nastupny.is("t͡ʂ", false, false, null)) {
                 huk.bazavyHuk = "t";
-            }
-            if (!huk.miakki && !nastupny.miakki && huk.bazavyHuk.equals("d")
-                    && nastupny.bazavyHuk.equals("t͡s")) {
+            } else if (huk.is("d", false, false, null) && nastupny.is("t͡s", false, false, null)) {
                 huk.bazavyHuk = "t";
             }
         }
@@ -375,12 +371,8 @@ public class Fanetyka3 {
     void sypiacyjaSvisciacyja() {
         for (int i = huki.size() - 2; i >= 0; i--) {
             Huk huk = huki.get(i);
-            if (huk.padzielPasla != 0) {
-                // прыстаўка, корань ці розныя словы
-                continue;
-            }
             Huk nastupny = huki.get(i + 1);
-            if (isSvisciacy(nastupny) && !huk.miakki) {
+            if (isSvisciacy(nastupny) && !huk.miakki && huk.padzielPasla == 0) {
                 // пераходзіць у сьвісьцячы
                 switch (huk.bazavyHuk) {
                 case "ʂ":
@@ -592,16 +584,10 @@ public class Fanetyka3 {
             } else if (huk.bazavyHuk.equals("d͡z") && nastupny != null && nastupny.bazavyHuk.equals("l")) {
                 huk.miakki = false;
                 miakkasc = false;
-            } else if (huk.bazavyHuk.equals("n")) {
+            } else if (nastupny != null && huk.is("n", true, false, null) && (nastupny.is("v", true, false, null) || nastupny.is("f", true, false, null))) {
                 // Перад губнымі [в’], [ф’] у двухчленных спалучэннях часцей сустракаецца цвёрды н
-                if (nastupny != null) {
-                    if (nastupny.miakki
-                            && (nastupny.bazavyHuk.equals("v") || nastupny.bazavyHuk.equals("f"))) {
-                        huk.miakki = false;
-                        miakkasc = false;
-                    }
-                }
-                huk.miakki = miakkasc;
+                huk.miakki = false;
+                miakkasc = false;
             } else if (huk.miakki) {
                 // зьмягчаеццца перад мяккімі зычнымі(калі быў 'ь')
                 miakkasc = true;
@@ -612,7 +598,7 @@ public class Fanetyka3 {
         }
     }
 
-    static final String[] PRYSTAUKI = new String[] { "ад", "безад", "беспад", "вод", "звод", "наад", "навод",
+    static final String[] PRYSTAUKI = new String[] { "zzzад", "безад", "беспад", "вод", "звод", "наад", "навод",
             "напад", "над", "неад", "непад", "непрад", "павод", "панад", "папад", "падад", "пад", "перапад",
             "перад", "под", "прад", "прыад", "прыпад", "спад", "спрад",
             "супад"/*
