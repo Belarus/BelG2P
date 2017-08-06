@@ -1,5 +1,7 @@
 package org.alex73.korpus.voice;
 
+import java.util.function.Function;
+
 public class Huk {
     public static int PADZIEL_PRYSTAUKA = 1;
     public static int PADZIEL_KORANI = 2;
@@ -21,295 +23,295 @@ public class Huk {
 
     @Override
     public String toString() {
-        return toStringIPA();
+        return ipa.apply(this);
     }
 
-    public String toStringIPA() {
+    public static Function<Huk,String> ipa= h-> {
         String o;
-        switch (bazavyHuk) {
+        switch (h.bazavyHuk) {
         case "a":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
-            o = bazavyHuk;
+            o = h.bazavyHuk;
             break;
         case "b":
-            o = miakki ? "bʲ" : "b";
+            o = h.miakki ? "bʲ" : "b";
             break;
         case "v":
-            o = miakki ? "vʲ" : "v";
+            o = h.miakki ? "vʲ" : "v";
             break;
         case "β":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
-            o = bazavyHuk;
+            o = h.bazavyHuk;
             break;
         case "ɣ":
-            o = miakki ? "ʝ" : "ɣ";
+            o = h.miakki ? "ʝ" : "ɣ";
             break;
         case "g":
-            o = miakki ? "ɟ" : "g";
+            o = h.miakki ? "ɟ" : "g";
             break;
         case "d":
-            o = miakki ? "dʲ" : "d";
+            o = h.miakki ? "dʲ" : "d";
             break;
         case "ɛ":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
-            o = bazavyHuk;
+            o = h.bazavyHuk;
             break;
         case "d͡ʐ":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
-            o = bazavyHuk;
+            o = h.bazavyHuk;
             break;
         case "d͡z":
-            o = miakki ? "d͡zʲ" : "d͡z";
+            o = h.miakki ? "d͡zʲ" : "d͡z";
             break;
         case "ʐ":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
-            o = bazavyHuk;
+            o = h.bazavyHuk;
             break;
         case "z":
-            o = miakki ? "zʲ" : "z";
+            o = h.miakki ? "zʲ" : "z";
             break;
         case "i":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
-            o = bazavyHuk;
+            o = h.bazavyHuk;
             break;
         case "k":
-            o = miakki ? "c" : "k";
+            o = h.miakki ? "c" : "k";
             break;
         case "l":
-            o = miakki ? "ʎ" : "l";
+            o = h.miakki ? "ʎ" : "l";
             break;
         case "m":
-            o = miakki ? "mʲ" : "m";
+            o = h.miakki ? "mʲ" : "m";
             break;
         case "ɱ":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
-            o = bazavyHuk;
+            o = h.bazavyHuk;
             break;
         case "n":
-            o = miakki ? "ɲ" : "n";
+            o = h.miakki ? "ɲ" : "n";
             break;
         case "ɔ":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
-            o = bazavyHuk;
+            o = h.bazavyHuk;
             break;
         case "p":
-            o = miakki ? "pʲ" : "p";
+            o = h.miakki ? "pʲ" : "p";
             break;
         case "r":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
-            o = bazavyHuk;
+            o = h.bazavyHuk;
             break;
         case "s":
-            o = miakki ? "sʲ" : "s";
+            o = h.miakki ? "sʲ" : "s";
             break;
         case "t":
-            o = miakki ? "tʲ" : "t";
+            o = h.miakki ? "tʲ" : "t";
             break;
         case "u":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
-            o = bazavyHuk;
+            o = h.bazavyHuk;
             break;
         case "u̯":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
-            o = bazavyHuk;
+            o = h.bazavyHuk;
             break;
         case "f":
-            o = miakki ? "fʲ" : "f";
+            o = h.miakki ? "fʲ" : "f";
             break;
         case "x":
-            o = miakki ? "ç" : "x";
+            o = h.miakki ? "ç" : "x";
             break;
         case "t͡s":
-            o = miakki ? "t͡sʲ" : "t͡s";
+            o = h.miakki ? "t͡sʲ" : "t͡s";
             break;
         case "t͡ʂ":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
-            o = bazavyHuk;
+            o = h.bazavyHuk;
             break;
         case "ʂ":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
-            o = bazavyHuk;
+            o = h.bazavyHuk;
             break;
         case "ɨ":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
-            o = bazavyHuk;
+            o = h.bazavyHuk;
             break;
         case "j":
             // ён заўсёды аднолькавы
-            o = bazavyHuk;
+            o = h.bazavyHuk;
             break;
         default:
-            throw new RuntimeException("Невядомы базавы гук: " + bazavyHuk);
+            throw new RuntimeException("Невядомы базавы гук: " + h.bazavyHuk);
         }
-        if (padvojeny) {
+        if (h.padvojeny) {
             o += "ː";
         }
         return o;
-    }
+    };
 
-    public String toStringArfaep() {
+    public static Function<Huk,String> arfaep= h-> {
         String o;
-        switch (bazavyHuk) {
+        switch (h.bazavyHuk) {
         case "a":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             o = "а";
             break;
         case "b":
-            o = miakki ? "б'" : "б";
+            o = h.miakki ? "б'" : "б";
             break;
         case "v":
-            o = miakki ? "в'" : "в";
+            o = h.miakki ? "в'" : "в";
             break;
         case "β":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             o = "в";
             break;
         case "ɣ":
-            o = miakki ? "γ'" : "γ";
+            o = h.miakki ? "γ'" : "γ";
             break;
         case "g":
-            o = miakki ? "g'" : "g";
+            o = h.miakki ? "g'" : "g";
             break;
         case "d":
-            o = miakki ? "д'" : "д";
+            o = h.miakki ? "д'" : "д";
             break;
         case "ɛ":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             o = "э";
             break;
         case "d͡ʐ":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             o = "ž";
             break;
         case "d͡z":
-            o = miakki ? "z'" : "z";
+            o = h.miakki ? "z'" : "z";
             break;
         case "ʐ":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             o = "ж";
             break;
         case "z":
-            o = miakki ? "з'" : "з";
+            o = h.miakki ? "з'" : "з";
             break;
         case "i":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             o = "і";
             break;
         case "k":
-            o = miakki ? "к'" : "к";
+            o = h.miakki ? "к'" : "к";
             break;
         case "l":
-            o = miakki ? "л'" : "л";
+            o = h.miakki ? "л'" : "л";
             break;
         case "m":
-            o = miakki ? "м'" : "м";
+            o = h.miakki ? "м'" : "м";
             break;
         case "ɱ":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             o = "м";
             break;
         case "n":
-            o = miakki ? "н'" : "н";
+            o = h.miakki ? "н'" : "н";
             break;
         case "ɔ":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             o = "о";
             break;
         case "p":
-            o = miakki ? "п'" : "п";
+            o = h.miakki ? "п'" : "п";
             break;
         case "r":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
-            o = bazavyHuk;
+            o = "р";
             break;
         case "s":
-            o = miakki ? "с'" : "с";
+            o = h.miakki ? "с'" : "с";
             break;
         case "t":
-            o = miakki ? "т'" : "т";
+            o = h.miakki ? "т'" : "т";
             break;
         case "u":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             o = "у";
             break;
         case "u̯":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             o = "ў";
             break;
         case "f":
-            o = miakki ? "ф'" : "ф";
+            o = h.miakki ? "ф'" : "ф";
             break;
         case "x":
-            o = miakki ? "х'" : "х";
+            o = h.miakki ? "х'" : "х";
             break;
         case "t͡s":
-            o = miakki ? "ц'" : "ц";
+            o = h.miakki ? "ц'" : "ц";
             break;
         case "t͡ʂ":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             o = "ч";
             break;
         case "ʂ":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             o = "ш";
             break;
         case "ɨ":
-            if (miakki) {
-                throw new RuntimeException("Небывае мяккі: " + bazavyHuk);
+            if (h.miakki) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             o = "ы";
             break;
@@ -318,13 +320,13 @@ public class Huk {
             o = "й";
             break;
         default:
-            throw new RuntimeException("Невядомы базавы гук: " + bazavyHuk);
+            throw new RuntimeException("Невядомы базавы гук: " + h.bazavyHuk);
         }
-        if (padvojeny) {
-            o += "ː";
+        if (h.padvojeny) {
+            o += ":";
         }
         return o;
-    }
+    };
 
     public boolean is(String bazavy, Boolean miakkasc, Boolean padvajennie, Integer padziel) {
         if (!bazavyHuk.equals(bazavy)) {

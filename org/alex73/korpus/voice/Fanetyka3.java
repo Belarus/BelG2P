@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 
 public class Fanetyka3 {
     List<Huk> huki = new ArrayList<>();
@@ -13,13 +14,13 @@ public class Fanetyka3 {
         words.add(w);
     }
 
-    public String getFanetyka() {
+    public String getFanetyka(Function<Huk,String> hukConverter) {
         for(String w:words) {
            stvarajemBazavyjaHuji(w.toLowerCase());
         }
-        String h;
+        // TODO prev in set for check all against cycle
+        String prev=toString();
         while (true) {
-            h = toString();
             pierachodI();
             paznacajemMiakkasc();
             ahlusennieIazvancennie();
@@ -31,17 +32,22 @@ public class Fanetyka3 {
             pierachodM();
             padvajennie();
             ustaunojeA();
-            if (h.equals(toString())) {
+            String hnew=toString();
+            if (hnew.equals(prev)) {
                 break;
             }
+            prev=hnew;
         }
-        return h;
+        return toString(hukConverter);
     }
 
     public String toString() {
+        return toString(Huk.ipa);
+    }
+    public String toString(Function<Huk,String> hukConverter) {
         StringBuilder out = new StringBuilder();
         for (Huk huk : huki) {
-            out.append(huk.toString());
+            out.append(hukConverter.apply(huk));
             if ((huk.padzielPasla & Huk.PADZIEL_SLOVY) != 0) {
                 out.append(' ');
             }
@@ -52,7 +58,7 @@ public class Fanetyka3 {
     public static String fanetykaSlova(String w) {
         Fanetyka3 r=new Fanetyka3();
         r.addWord(w);
-        return r.getFanetyka();
+        return r.getFanetyka(Huk.ipa);
     }
     //
     // /**
