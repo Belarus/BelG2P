@@ -18,8 +18,8 @@ public class Fanetyka3 {
         for(String w:words) {
            stvarajemBazavyjaHuji(w.toLowerCase());
         }
-        // TODO prev in set for check all against cycle
         String prev=toString();
+        int pass = 0;
         while (true) {
             pierachodI();
             paznacajemMiakkasc();
@@ -37,6 +37,10 @@ public class Fanetyka3 {
                 break;
             }
             prev=hnew;
+            pass++;
+            if (pass>=100) {
+                throw new RuntimeException("Too many passes");
+            }
         }
         return toString(hukConverter);
     }
