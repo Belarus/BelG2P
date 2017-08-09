@@ -345,6 +345,157 @@ public class Huk {
         return o;
     };
 
+    public static Function<Huk, String> skolny = h -> {
+        String o;
+        switch (h.bazavyHuk) {
+        case "a":
+            if (h.miakki != 0) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
+            }
+            o = "а";
+            break;
+        case "b":
+            o = h.miakki != 0 ? "б'" : "б";
+            break;
+        case "v":
+            o = h.miakki != 0 ? "в'" : "в";
+            break;
+        case "β":
+            if (h.miakki != 0) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
+            }
+            o = "в";
+            break;
+        case "ɣ":
+            o = h.miakki != 0 ? "г'" : "г";
+            break;
+        case "g":
+            o = h.miakki != 0 ? "ѓ'" : "ѓ";
+            break;
+        case "d":
+            o = h.miakki != 0 ? "д'" : "д";
+            break;
+        case "ɛ":
+            if (h.miakki != 0) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
+            }
+            o = "э";
+            break;
+        case "d͡ʐ":
+            if (h.miakki != 0) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
+            }
+            o = "дж";
+            break;
+        case "d͡z":
+            o = h.miakki != 0 ? "дз'" : "дз";
+            break;
+        case "ʐ":
+            if (h.miakki != 0) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
+            }
+            o = "ж";
+            break;
+        case "z":
+            o = h.miakki != 0 ? "з'" : "з";
+            break;
+        case "i":
+            if (h.miakki != 0) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
+            }
+            o = "і";
+            break;
+        case "k":
+            o = h.miakki != 0 ? "к'" : "к";
+            break;
+        case "l":
+            o = h.miakki != 0 ? "л'" : "л";
+            break;
+        case "m":
+            o = h.miakki != 0 ? "м'" : "м";
+            break;
+        case "ɱ":
+            if (h.miakki != 0) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
+            }
+            o = "м";
+            break;
+        case "n":
+            o = h.miakki != 0 ? "н'" : "н";
+            break;
+        case "ɔ":
+            if (h.miakki != 0) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
+            }
+            o = "о";
+            break;
+        case "p":
+            o = h.miakki != 0 ? "п'" : "п";
+            break;
+        case "r":
+            if (h.miakki != 0) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
+            }
+            o = "р";
+            break;
+        case "s":
+            o = h.miakki != 0 ? "с'" : "с";
+            break;
+        case "t":
+            o = h.miakki != 0 ? "т'" : "т";
+            break;
+        case "u":
+            if (h.miakki != 0) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
+            }
+            o = "у";
+            break;
+        case "u̯":
+            if (h.miakki != 0) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
+            }
+            o = "ў";
+            break;
+        case "f":
+            o = h.miakki != 0 ? "ф'" : "ф";
+            break;
+        case "x":
+            o = h.miakki != 0 ? "х'" : "х";
+            break;
+        case "t͡s":
+            o = h.miakki != 0 ? "ц'" : "ц";
+            break;
+        case "t͡ʂ":
+            if (h.miakki != 0) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
+            }
+            o = "ч";
+            break;
+        case "ʂ":
+            if (h.miakki != 0) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
+            }
+            o = "ш";
+            break;
+        case "ɨ":
+            if (h.miakki != 0) {
+                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
+            }
+            o = "ы";
+            break;
+        case "j":
+            // ён заўсёды аднолькавы
+            o = "й";
+            break;
+        default:
+            throw new RuntimeException("Невядомы базавы гук: " + h.bazavyHuk);
+        }
+        if (h.padvojeny) {
+            o += ":";
+        }
+        return o;
+    };
+
     public boolean is(String bazavy, Integer miakkasc, Boolean padvajennie, Integer padziel) {
         if (!bazavyHuk.equals(bazavy)) {
             return false;

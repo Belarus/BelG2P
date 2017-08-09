@@ -14,13 +14,14 @@ public class Fanetyka3 {
         words.add(w);
     }
 
-    public String getFanetyka(Function<Huk,String> hukConverter) {
+    public void calcFanetyka() {
         for(String w:words) {
            stvarajemBazavyjaHuji(w.toLowerCase());
         }
         String prev=toString();
         int pass = 0;
         while (true) {
+            pierachodZHA();
             pierachodI();
             paznacajemMiakkasc();
             ahlusennieIazvancennie();
@@ -43,7 +44,6 @@ public class Fanetyka3 {
                 throw new RuntimeException("Too many passes");
             }
         }
-        return toString(hukConverter);
     }
 
     public String toString() {
@@ -63,7 +63,8 @@ public class Fanetyka3 {
     public static String fanetykaSlova(String w) {
         Fanetyka3 r=new Fanetyka3();
         r.addWord(w);
-        return r.getFanetyka(Huk.ipa);
+        r.calcFanetyka();
+        return r.toString(Huk.ipa);
     }
     //
     // /**
@@ -129,7 +130,7 @@ public class Fanetyka3 {
             }
         }
     }
-
+//TODO перагледзець як g адрозніваецца ад ɣ
     /**
      * ф-г => ў-г, як у афганец (TODO таксама: прафбюро, сульфгідрыдны ???)
      */
@@ -139,6 +140,24 @@ public class Fanetyka3 {
             Huk nastupny = huki.get(i + 1);
             if (huk.is("f", null, false, 0) && nastupny.is("ɣ", null, false, 0)) {
                 huk.bazavyHuk = "u̯";
+            }
+        }
+    }
+    
+    /**
+     * zɣ -> zag, zg -> zag
+     */
+    void pierachodZHA() {
+        for (int i = 0; i < huki.size() - 1; i++) {
+            Huk huk = huki.get(i);
+            Huk nastupny = huki.get(i + 1);
+            if (huk.is("z", 0, false, 0) && (nastupny.is("ɣ", 0, false, null) || nastupny.is("g", 0, false, null))) {
+                nastupny.bazavyHuk = "g";
+                if (nastupny.padzielPasla == Huk.PADZIEL_SLOVY) {
+                    Huk a = new Huk("", "a");
+                    a.halosnaja = true;
+                    huki.add(i + 1, a);
+                }
             }
         }
     }
@@ -580,7 +599,7 @@ public class Fanetyka3 {
                     }
                 }
                 huk.setMiakkasc(miakkasc);
-            } else if (huk.bazavyHuk.equals("ɣ") || huk.bazavyHuk.equals("k") || huk.bazavyHuk.equals("x")) {
+            } else if (huk.bazavyHuk.equals("g") || huk.bazavyHuk.equals("ɣ") || huk.bazavyHuk.equals("k") || huk.bazavyHuk.equals("x")) {
                 // яны самі зьмягчаюцца толькі перад галоснымі(але не перад зычнымі), і не даюць зьмягчацца гукам
                 // перад імі: аб'едкі, вянгляр
                 if (nastupny != null) {
