@@ -145,14 +145,13 @@ public class Fanetyka3 {
     }
     
     /**
-     * zɣ -> zag, zg -> zag
+     * zɣ -> zaɣ, zg -> zag
      */
     void pierachodZHA() {
         for (int i = 0; i < huki.size() - 1; i++) {
             Huk huk = huki.get(i);
             Huk nastupny = huki.get(i + 1);
             if (huk.is("z", 0, false, 0) && (nastupny.is("ɣ", 0, false, null) || nastupny.is("g", 0, false, null))) {
-                nastupny.bazavyHuk = "g";
                 if (nastupny.padzielPasla == Huk.PADZIEL_SLOVY) {
                     Huk a = new Huk("", "a");
                     a.halosnaja = true;
@@ -439,6 +438,10 @@ public class Fanetyka3 {
                     throw new RuntimeException("Ня можа пераходзіць пазначаная мяккасць");
                 }
                 switch (huk.bazavyHuk) {
+                case "t":
+                    huk.bazavyHuk = "t͡ʂ";
+                    huk.miakki = 0;
+                    break;
                 case "s":
                     huk.bazavyHuk = "ʂ";
                     huk.miakki = 0;

@@ -22,10 +22,10 @@ public class Conv2 extends HttpServlet {
                 text = IOUtils.toString(reader);
             }
 
-            FanetykaText f = new FanetykaText(text.replace("_", "|"));
+            FanetykaText f = new FanetykaText(text.replace("_", "|").replaceAll("[-‒‒–]", "-"));
 
             resp.setContentType("text/html; charset=UTF-8");
-            String o =  f.ipa.replace("\n", "<br/>") + "<hr/>" + f.skola.replace("\n", "<br/>");
+            String o = f.ipa.replace("\n", "<br/>") + "<hr/>" + f.skola.replace("\n", "<br/>");
             resp.getOutputStream().write(o.getBytes(StandardCharsets.UTF_8));
         } catch (Exception ex) {
             resp.setContentType("text/plain; charset=UTF-8");

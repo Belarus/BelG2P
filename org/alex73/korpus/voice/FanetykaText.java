@@ -9,7 +9,11 @@ public class FanetykaText {
         Fanetyka3 f = new Fanetyka3();
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
-            if (isLetter(c)) {
+            boolean letter = isLetter(c);
+            if (c == '-' && i > 0 && !isLetter(text.charAt(i - 1))) {
+                letter = false;
+            }
+            if (letter) {
                 word += c;
             } else {
                 if (!word.isEmpty()) {
@@ -40,7 +44,7 @@ public class FanetykaText {
     }
 
     public static void main(String[] a) {
-        FanetykaText f = new FanetykaText("мазґі");
+        FanetykaText f = new FanetykaText("мозґ");
         System.out.println(f.ipa);
         System.out.println(f.skola);
     }
