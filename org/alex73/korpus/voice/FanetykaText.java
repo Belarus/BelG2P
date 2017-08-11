@@ -1,8 +1,12 @@
 package org.alex73.korpus.voice;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FanetykaText {
     public String ipa = "";
     public String skola = "";
+    public List<String> why = new ArrayList<>();
 
     public FanetykaText(String text) {
         String word = "";
@@ -19,14 +23,15 @@ public class FanetykaText {
                 if (!word.isEmpty()) {
                     f.addWord(word);
                     word = "";
-                }else if (c==' ') {
+                } else if (c == ' ') {
                     ipa += c;
                     skola += c;
                 }
-                if (c!=' ') {
+                if (c != ' ') {
                     f.calcFanetyka();
                     ipa += f.toString(Huk.ipa);
                     skola += f.toString(Huk.skolny);
+                    why.addAll(f.why);
                     f = new Fanetyka3();
                     ipa += c;
                     skola += c;
@@ -39,6 +44,7 @@ public class FanetykaText {
         f.calcFanetyka();
         ipa += f.toString(Huk.ipa);
         skola += f.toString(Huk.skolny);
+        why.addAll(f.why);
     }
 
     boolean isLetter(char c) {
@@ -50,5 +56,7 @@ public class FanetykaText {
         FanetykaText f = new FanetykaText("мозґ, пра");
         System.out.println(f.ipa);
         System.out.println(f.skola);
+        System.out.println("==========");
+        f.why.forEach(w -> System.out.println(w));
     }
 }
