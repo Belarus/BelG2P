@@ -19,8 +19,11 @@ public class FanetykaText {
                 if (!word.isEmpty()) {
                     f.addWord(word);
                     word = "";
+                }else if (c==' ') {
+                    ipa += c;
+                    skola += c;
                 }
-                if (c != ' ') {
+                if (c!=' ') {
                     f.calcFanetyka();
                     ipa += f.toString(Huk.ipa);
                     skola += f.toString(Huk.skolny);
@@ -44,7 +47,7 @@ public class FanetykaText {
     }
 
     public static void main(String[] a) {
-        FanetykaText f = new FanetykaText("мозґ");
+        FanetykaText f = new FanetykaText("мозґ, пра");
         System.out.println(f.ipa);
         System.out.println(f.skola);
     }
