@@ -62,10 +62,10 @@ public class Huk {
     }
 
     public enum IPA {
-        a, b, bʲ, v, vʲ, β, ɣ, ɣʲ, g, gʲ, d, dʲ, ɛ, d͡ʐ, d͡z, d͡zʲ, ʐ, z, zʲ, i, k, kʲ, l, lʲ, m, mʲ, ɱ, n, nʲ, ɔ, p, pʲ, r, s, sʲ, t, tʲ, u, u̯, f, fʲ, x, xʲ, t͡s, t͡sʲ, t͡ʂ, ʂ, ɨ, j
+        a, b, bʲ, v, vʲ, β, ɣ, ɣʲ, g, gʲ, d, dʲ, ɛ, d͡ʐ, d͡z, d͡zʲ, ʐ, z, zʲ, i, k, kʲ, ɫ, lʲ, m, mʲ, ɱ, n, nʲ, ɔ, p, pʲ, r, s, sʲ, t, tʲ, u, u̯, f, fʲ, x, xʲ, t͡s, t͡sʲ, t͡ʂ, ʂ, ɨ, j
     }
 
-    public List<IPA> sanornyja = Arrays.asList(IPA.r, IPA.l, IPA.lʲ, IPA.m, IPA.mʲ, IPA.n, IPA.nʲ, IPA.v, IPA.vʲ, IPA.ɱ,
+    public List<IPA> sanornyja = Arrays.asList(IPA.r, IPA.ɫ, IPA.lʲ, IPA.m, IPA.mʲ, IPA.n, IPA.nʲ, IPA.v, IPA.vʲ, IPA.ɱ,
             IPA.u̯, IPA.j);
 
     public static Function<Huk, IPA> ipa_enum = h -> {
@@ -116,8 +116,8 @@ public class Huk {
             return IPA.i;
         case "k":
             return h.miakki == 0 ? IPA.k : IPA.kʲ;
-        case "l":
-            return h.miakki == 0 ? IPA.l : IPA.lʲ;
+        case "ɫ":
+            return h.miakki == 0 ? IPA.ɫ : IPA.lʲ;
         case "m":
             return h.miakki == 0 ? IPA.m : IPA.mʲ;
         case "ɱ":
@@ -205,7 +205,7 @@ public class Huk {
         SKOLNY_MAP.put(IPA.i, "і");
         SKOLNY_MAP.put(IPA.k, "к");
         SKOLNY_MAP.put(IPA.kʲ, "к'");
-        SKOLNY_MAP.put(IPA.l, "л");
+        SKOLNY_MAP.put(IPA.ɫ, "л");
         SKOLNY_MAP.put(IPA.lʲ, "л'");
         SKOLNY_MAP.put(IPA.m, "м");
         SKOLNY_MAP.put(IPA.mʲ, "м'");

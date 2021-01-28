@@ -10,9 +10,9 @@ import org.apache.commons.io.FileUtils;
 
 public class FanetykaTestSpisu {
     public static void main(String[] args) throws Exception {
-        List<String> in = FileUtils.readLines(new File("src/org/alex73/korpus/voice/spraudzana.txt"));
+        List<String> in = FileUtils.readLines(new File("src-fanetyka/org/alex73/fanetyka/impl/spraudzana.txt"));
         Set<String> f0 = new HashSet<>(
-                FileUtils.readLines(new File("src/org/alex73/korpus/voice/spraudzanaSkip.txt")));
+                FileUtils.readLines(new File("src-fanetyka/org/alex73/fanetyka/impl/spraudzanaSkip.txt")));
 
         int count=0;
         for (int i = 0; i < in.size(); i++) {

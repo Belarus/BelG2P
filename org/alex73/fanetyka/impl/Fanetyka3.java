@@ -228,7 +228,7 @@ public class Fanetyka3 {
                     a.halosnaja = true;
                     huki.add(i + 1, a);
                 }
-            } else if (nastupny.bazavyHuk.equals("l") && nastupny.miakki != 0) {
+            } else if (nastupny.bazavyHuk.equals("ɫ") && nastupny.miakki != 0) {
                 if (huk.bazavyHuk.equals("r") || huk.bazavyHuk.equals("t͡ʂ") || huk.bazavyHuk.equals("d͡ʐ")
                         || huk.bazavyHuk.equals("ʂ") || huk.bazavyHuk.equals("ʐ") || huk.bazavyHuk.equals("b")
                         || huk.bazavyHuk.equals("p") || huk.bazavyHuk.equals("m") || huk.bazavyHuk.equals("f")
@@ -751,7 +751,7 @@ public class Fanetyka3 {
                 huk.setMiakkasc(false);
             } else if (huk.bazavyHuk.equals("b") || huk.bazavyHuk.equals("p") || huk.bazavyHuk.equals("m")
                     || huk.bazavyHuk.equals("ɱ") || huk.bazavyHuk.equals("f")
-                    || (huk.bazavyHuk.equals("l") && huk.miakki == 0)) {
+                    || (huk.bazavyHuk.equals("ɫ") && huk.miakki == 0)) {
                 // бпмфл не зьмягчаецца перад наступным мяккім зычным
                 why.add("Мяккасць: ");
                 if (nastupny != null) {
@@ -798,7 +798,7 @@ public class Fanetyka3 {
                     huk.setMiakkasc(false);
                     miakkasc = false;
                 }
-            } else if (huk.bazavyHuk.equals("d͡z") && nastupny != null && nastupny.bazavyHuk.equals("l")) {
+            } else if (huk.bazavyHuk.equals("d͡z") && nastupny != null && nastupny.bazavyHuk.equals("ɫ")) {
                 why.add("Мяккасць: ");
                 huk.setMiakkasc(false);
                 miakkasc = false;
@@ -929,7 +929,7 @@ public class Fanetyka3 {
                 novyHuk = new Huk("к", "k");
                 break;
             case 'л':
-                novyHuk = new Huk("л", "l");
+                novyHuk = new Huk("л", "ɫ");
                 break;
             case 'м':
                 novyHuk = new Huk("м", "m");
