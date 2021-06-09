@@ -23,7 +23,26 @@ public class Fanetyka3 {
     }
 
     public void calcFanetyka() {
-        for (String w : words) {
+        for (int i = 0; i < words.size(); i++) {
+            String w = words.get(i);
+            if (i < words.size() - 1) {
+                // "без,не -> бяз,ня" перад словамі з націскам на першы склад
+                String wl = w.toLowerCase();
+                switch (wl) {
+                case "не":
+                case "не´":
+                    if (firstSkladNacisk(words.get(i + 1))) {
+                        w = "ня";
+                    }
+                    break;
+                case "без":
+                case "без´":
+                    if (firstSkladNacisk(words.get(i + 1))) {
+                        w = "бяз";
+                    }
+                    break;
+                }
+            }
             stvarajemBazavyjaHuji(w.toLowerCase());
         }
         String prev = toString();
@@ -42,6 +61,7 @@ public class Fanetyka3 {
             padvajennie();
             ustaunojeA();
             pierachodFH();
+            pierachodZG();
             String hnew = toString();
             if (hnew.equals(prev)) {
                 break;
@@ -253,6 +273,24 @@ public class Fanetyka3 {
                 huk.bazavyHuk = "u̯";
             }
         }
+    }
+
+    /**
+     * зг паміж галосных пераходзіць у зґ
+     * TODO праверыць на сутыку прыстаўкі
+     */
+    void pierachodZG() {
+       /* for (int i = 0; i < huki.size() - 3; i++) {
+            Huk h1 = huki.get(i);
+            Huk h2 = huki.get(i + 1);
+            Huk h3 = huki.get(i + 2);
+            Huk h4 = huki.get(i + 3);
+            if (h1.halosnaja && h4.halosnaja && !h1.apostrafPasla && h1.padzielPasla < Huk.PADZIEL_SLOVY
+                    && h2.bazavyHuk.equals("з") && h3.bazavyHuk.equals("γ") && !h2.apostrafPasla && !h3.apostrafPasla
+                    && !h2.padvojeny && !h3.padvojeny) {
+                h3.bazavyHuk = "g";
+            }
+        }*/
     }
 
     /**
@@ -1049,6 +1087,19 @@ public class Fanetyka3 {
             jot.setMiakkasc(true);
             huki.add(jot);
         }
+    }
+
+    boolean firstSkladNacisk(String word) {
+        for (int i = 0; i < word.length(); i++) {
+            char c = Character.toLowerCase(word.charAt(i));
+            if ("ёуеыаоэяію".indexOf(c) >= 0) {
+                if (i < word.length() - 1) {
+                    char c1 = word.charAt(i + 1);
+                    return c1 == '´';
+                }
+            }
+        }
+        return false;
     }
 
     public static void main(String[] words) {
