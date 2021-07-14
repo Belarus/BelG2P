@@ -16,7 +16,7 @@ import java.util.function.Function;
 public class Fanetyka3 {
     List<Huk> huki = new ArrayList<>();
     List<String> words = new ArrayList<>();
-    List<String> why = new ArrayList<>();
+    List<String> why = new ArrayList<>(); // як адбываюцца пераходы
 
     public void addWord(String w) {
         words.add(w);
@@ -33,12 +33,14 @@ public class Fanetyka3 {
                 case "не´":
                     if (firstSkladNacisk(words.get(i + 1))) {
                         w = "ня";
+                        why.add("'не' пераходзіць у 'ня' перад словам з націскам на першы склад");
                     }
                     break;
                 case "без":
                 case "без´":
                     if (firstSkladNacisk(words.get(i + 1))) {
                         w = "бяз";
+                        why.add("'без' пераходзіць у 'бяз' перад словам з націскам на першы склад");
                     }
                     break;
                 }
@@ -52,10 +54,10 @@ public class Fanetyka3 {
             pierachodI();
             paznacajemMiakkasc();
             ahlusennieIazvancennie();
+            sprascennie();
             prypadabniennie();
             sypiacyjaSvisciacyja();
             pierachodTS();
-            sprascennie();
             pierachodV();
             pierachodM();
             padvajennie();
@@ -76,7 +78,7 @@ public class Fanetyka3 {
     }
 
     public String toString() {
-        return toString(Huk.ipa);
+        return toString(Huk.ipa) + " / " + toString(Huk.skolny);
     }
 
     public String toString(Function<Huk, String> hukConverter) {
@@ -277,20 +279,20 @@ public class Fanetyka3 {
 
     /**
      * зг паміж галосных пераходзіць у зґ
-     * TODO праверыць на сутыку прыстаўкі
      */
     void pierachodZG() {
-       /* for (int i = 0; i < huki.size() - 3; i++) {
+       for (int i = 0; i < huki.size() - 3; i++) {
             Huk h1 = huki.get(i);
             Huk h2 = huki.get(i + 1);
             Huk h3 = huki.get(i + 2);
-            Huk h4 = huki.get(i + 3);
-            if (h1.halosnaja && h4.halosnaja && !h1.apostrafPasla && h1.padzielPasla < Huk.PADZIEL_SLOVY
-                    && h2.bazavyHuk.equals("з") && h3.bazavyHuk.equals("γ") && !h2.apostrafPasla && !h3.apostrafPasla
+            //Huk h4 = huki.get(i + 3);
+            if (h1.halosnaja && !h1.apostrafPasla && h2.padzielPasla == 0
+                    && h2.bazavyHuk.equals("z") && h3.bazavyHuk.equals("ɣ") && !h2.apostrafPasla && !h3.apostrafPasla
                     && !h2.padvojeny && !h3.padvojeny) {
                 h3.bazavyHuk = "g";
+                why.add("Пераход 'зг' -> 'зґ' паміж галосных і не на сутыку прыстаўкі і кораня");
             }
-        }*/
+        }
     }
 
     /**
@@ -345,6 +347,8 @@ public class Fanetyka3 {
      * 
      * з-д-н' пераходзіць у з'-н'
      * 
+     * з-д-ч пераходзіць у ш-ч
+     * 
      * с-с-к пераходзіць у c-к
      * 
      * ц'-т пераходзіць у т'-т
@@ -389,6 +393,12 @@ public class Fanetyka3 {
                     && nastupny.is("k", null, false, null)) {
                 why.add("Спрашчэнне: с-с-к пераходзіць у c-к: першы выпадае, але не на сутыку, як 'бяссківічны'");
                 huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
+                huki.remove(i - 1);
+            } else if (papiaredni.is("z", 0, false, 0) && huk.is("d", 0, false, 0)
+                    && nastupny.is("t͡ʂ", 0, false, null)) {
+                why.add("Спрашчэнне: з-д-ч пераходзіць у ш-ч: як 'аб’ездчык'");
+                huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
+                huk.bazavyHuk = "ʂ";
                 huki.remove(i - 1);
             } else if (huk.miakki == 0 && huk.padzielPasla == 0 && huk.bazavyHuk.equals("ʂ")
                     && nastupny.bazavyHuk.equals("s")) {
@@ -766,8 +776,8 @@ public class Fanetyka3 {
             Huk huk = huki.get(i);
             Huk nastupny = i < huki.size() - 1 ? huki.get(i + 1) : null;
             if (!huk.halosnaja && huk.padzielPasla != 0) {
-                miakkasc = huk.miakki != 0;
-                continue;
+                //miakkasc = huk.miakki != 0;
+                //continue;
             }
             if (huk.halosnaja) {
                 // зьмягчаеццца перад мяккімі галоснымі
@@ -875,7 +885,8 @@ public class Fanetyka3 {
                     * "не-рас", "не-с", "не-ўс", "пера-рас", "пера-с", "ня-с", "ня-ўс", "па-па-с",
                     * "па-рас", "прас", "пра-с", "рас", "рас-с", "па-ўс", "пры-с", "рос", "с",
                     * "са-с", "у-рас", "у-рос", "па-с"
-                    */ , "між", "звыш", "контр", "гіпер", "супер", "экс", "обер", "супраць" };
+                    */ , "між", "звыш", "контр", "гіпер", "супер", "экс", "обер", "супраць",
+                    "абез", "без", "бяз", "вуз"};
 
     static {
         Arrays.sort(PRYSTAUKI, new Comparator<String>() {
@@ -1069,7 +1080,7 @@ public class Fanetyka3 {
     void dadacJotKaliPatrebny(Huk papiaredni, char current) {
         if ((papiaredni == null || papiaredni.halosnaja || papiaredni.apostrafPasla || papiaredni.miakki != 0
                 || papiaredni.zychodnyjaLitary.equals("ў"))) {
-            if (papiaredni != null && papiaredni.padzielPasla != 0) {
+            if (papiaredni != null && papiaredni.padzielPasla != 0 && !papiaredni.apostrafPasla) {
                 return;
             }
             // першая літара ці пасьля пералічаных
