@@ -257,6 +257,20 @@ public class Huk {
         return o;
     };
 
+    public static Function<Huk, String> ipaOldStress = h -> {
+        String o = ipa_enum.apply(h).name().toLowerCase();
+        if (h.stressIpa) {
+            //o = 'ˈ' + o;
+        }
+        if (h.stress) {
+            o += '´';
+        }
+        if (h.padvojeny) {
+            o += "ː";
+        }
+        return o;
+    };
+
     public static Function<Huk, String> arfaep = h -> {
         String o = ARFAEP_MAP.get(ipa_enum.apply(h));
         if (h.stressIpa) {

@@ -913,6 +913,12 @@ public class Fanetyka3 {
         for (int i = 0; i < w.length(); i++) {
             char c = w.charAt(i);
             Huk novyHuk = null;
+            char next;
+            try {
+                next = w.charAt(i + 1);
+            } catch (StringIndexOutOfBoundsException ex) {
+                next = 0;
+            }
             switch (c) {
             case 'а':
                 novyHuk = new Huk("а", "a");
@@ -934,13 +940,13 @@ public class Fanetyka3 {
                 novyHuk = new Huk("д", "d");
                 break;
             case 'е':
-                dadacJotKaliPatrebny(papiaredniHuk, c);
+                dadacJotKaliPatrebny(papiaredniHuk, c, next);
                 novyHuk = new Huk("е", "ɛ");
                 novyHuk.halosnaja = true;
                 novyHuk.miakkajaHalosnaja = true;
                 break;
             case 'ё':
-                dadacJotKaliPatrebny(papiaredniHuk, c);
+                dadacJotKaliPatrebny(papiaredniHuk, c, next);
                 novyHuk = new Huk("ё", "ɔ");
                 novyHuk.halosnaja = true;
                 novyHuk.miakkajaHalosnaja = true;
@@ -966,7 +972,7 @@ public class Fanetyka3 {
                 }
                 break;
             case 'і':
-                dadacJotKaliPatrebny(papiaredniHuk, c);
+                dadacJotKaliPatrebny(papiaredniHuk, c, next);
                 novyHuk = new Huk("і", "i");
                 novyHuk.halosnaja = true;
                 novyHuk.miakkajaHalosnaja = true;
@@ -1038,13 +1044,13 @@ public class Fanetyka3 {
                 novyHuk.halosnaja = true;
                 break;
             case 'ю':
-                dadacJotKaliPatrebny(papiaredniHuk, c);
+                dadacJotKaliPatrebny(papiaredniHuk, c, next);
                 novyHuk = new Huk("ю", "u");
                 novyHuk.halosnaja = true;
                 novyHuk.miakkajaHalosnaja = true;
                 break;
             case 'я':
-                dadacJotKaliPatrebny(papiaredniHuk, c);
+                dadacJotKaliPatrebny(papiaredniHuk, c, next);
                 novyHuk = new Huk("я", "a");
                 novyHuk.halosnaja = true;
                 novyHuk.miakkajaHalosnaja = true;
@@ -1062,6 +1068,9 @@ public class Fanetyka3 {
                 papiaredniHuk.padzielPasla = Huk.PADZIEL_MINUS;
                 break;
             case '´':
+                if (papiaredniHuk==null || !papiaredniHuk.halosnaja || papiaredniHuk.padzielPasla!=0) {
+                    throw new RuntimeException("Няправільная пазнака націску");
+                }
                 papiaredniHuk.stress = true;
                 break;
             default:
@@ -1077,11 +1086,21 @@ public class Fanetyka3 {
         }
     }
 
-    void dadacJotKaliPatrebny(Huk papiaredni, char current) {
+    void dadacJotKaliPatrebny(Huk papiaredni, char current, char next) {
         if ((papiaredni == null || papiaredni.halosnaja || papiaredni.apostrafPasla || papiaredni.miakki != 0
                 || papiaredni.zychodnyjaLitary.equals("ў"))) {
-            if (papiaredni != null && papiaredni.padzielPasla != 0 && !papiaredni.apostrafPasla) {
-                return;
+            if (papiaredni != null && papiaredni.padzielPasla != 0/* && !papiaredni.apostrafPasla*/) {
+                //return;
+            }
+            // перад ненаціскным 'і' - непатрэбна
+            if (papiaredni == null) {
+                if (current == 'і' && next != '´') {
+                        return;
+                }
+            } else {
+                if (!papiaredni.halosnaja && !papiaredni.apostrafPasla && current == 'і' && next != '+') {
+                    return;
+                }
             }
             // першая літара ці пасьля пералічаных
             Huk jot = new Huk("", "j");
