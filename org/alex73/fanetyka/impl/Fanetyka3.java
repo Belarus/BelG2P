@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 
+import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
+
 /*
  * Праверыць - [й] перад галоснымі - гэта галосны ці змяніць на зычны
  * 
@@ -99,7 +101,7 @@ public class Fanetyka3 {
             if (h.stress) {
                 setIpaStress(hal, i);
             }
-            if (h.halosnaja && !h.bazavyHuk.equals("j")) {
+            if (h.halosnaja && h.bazavyHuk!=BAZAVY_HUK.j) {
                 hal = i;
             }
             if ((h.padzielPasla & Huk.PADZIEL_SLOVY) != 0) {
@@ -116,7 +118,7 @@ public class Fanetyka3 {
         StringBuilder s = new StringBuilder();
         for (int i = prevHalIndex; i <= halIndex; i++) {
             Huk h = huki.get(i);
-            if (h.bazavyHuk.equals("u̯") || h.bazavyHuk.equals("j") || h.bazavyHuk.equals("r")) {
+            if (h.bazavyHuk==BAZAVY_HUK.u̯ || h.bazavyHuk==BAZAVY_HUK.j || h.bazavyHuk==BAZAVY_HUK.r) {
                 s.append('J');
             } else if (h.halosnaja) {
                 s.append('H');
@@ -215,20 +217,20 @@ public class Fanetyka3 {
     // }
     // Huk hety = huki.get(prystLen);
     // Huk nastupny = huki.get(prystLen + 1);
-    // if (hety.bazavyHuk.equals("d͡ʐ") && !hety.miakki) {
+    // if (hety.bazavyHuk==BAZAVY_HUK.d͡ʐ") && !hety.miakki) {
     // Huk d = new Huk("", "d");
     // huki.add(prystLen, d);
-    // huki.get(prystLen + 1).bazavyHuk = "ʐ";
-    // } else if (hety.bazavyHuk.equals("d͡z") && !hety.padvojeny &&
+    // huki.get(prystLen + 1).bazavyHuk = BAZAVY_HUK.ʐ";
+    // } else if (hety.bazavyHuk==BAZAVY_HUK.d͡z") && !hety.padvojeny &&
     // !nastupny.halosnaja) {
     // Huk d = new Huk("", "d");
     // d.miakki = false; // заўсёды цьвердае ў прыстаўцы
     // huki.add(prystLen, d);
-    // huki.get(prystLen + 1).bazavyHuk = "z";
-    // } else if (hety.bazavyHuk.equals("t͡s") && !hety.padvojeny) {
+    // huki.get(prystLen + 1).bazavyHuk = BAZAVY_HUK.z";
+    // } else if (hety.bazavyHuk==BAZAVY_HUK.t͡s") && !hety.padvojeny) {
     // Huk t = new Huk("", "t");
     // huki.add(prystLen, t);
-    // huki.get(prystLen + 1).bazavyHuk = "s";
+    // huki.get(prystLen + 1).bazavyHuk = BAZAVY_HUK.s";
     // }
     // }
 
@@ -245,19 +247,19 @@ public class Fanetyka3 {
             if (dalej != null && dalej.halosnaja) {
                 continue;
             }
-            if (nastupny.bazavyHuk.equals("r") && nastupny.miakki == 0) {
-                if (!huk.halosnaja && !huk.bazavyHuk.equals("r") && !huk.bazavyHuk.equals("j")
-                        && !huk.bazavyHuk.equals("u̯")) {
-                    Huk a = new Huk("", "a");
+            if (nastupny.bazavyHuk==BAZAVY_HUK.r && nastupny.miakki == 0) {
+                if (!huk.halosnaja && huk.bazavyHuk!=BAZAVY_HUK.r && huk.bazavyHuk!=BAZAVY_HUK.j
+                        && huk.bazavyHuk!=BAZAVY_HUK.u̯) {
+                    Huk a = new Huk("", BAZAVY_HUK.a);
                     a.halosnaja = true;
                     huki.add(i + 1, a);
                 }
-            } else if (nastupny.bazavyHuk.equals("ɫ") && nastupny.miakki != 0) {
-                if (huk.bazavyHuk.equals("r") || huk.bazavyHuk.equals("t͡ʂ") || huk.bazavyHuk.equals("d͡ʐ")
-                        || huk.bazavyHuk.equals("ʂ") || huk.bazavyHuk.equals("ʐ") || huk.bazavyHuk.equals("b")
-                        || huk.bazavyHuk.equals("p") || huk.bazavyHuk.equals("m") || huk.bazavyHuk.equals("f")
-                        || huk.bazavyHuk.equals("ɣ") || huk.bazavyHuk.equals("k") || huk.bazavyHuk.equals("x")) {
-                    Huk a = new Huk("", "a");
+            } else if (nastupny.bazavyHuk ==BAZAVY_HUK.ɫ && nastupny.miakki != 0) {
+                if (huk.bazavyHuk==BAZAVY_HUK.r || huk.bazavyHuk==BAZAVY_HUK.t͡ʂ || huk.bazavyHuk==BAZAVY_HUK.d͡ʐ
+                        || huk.bazavyHuk==BAZAVY_HUK.ʂ || huk.bazavyHuk==BAZAVY_HUK.ʐ || huk.bazavyHuk==BAZAVY_HUK.b
+                        || huk.bazavyHuk==BAZAVY_HUK.p || huk.bazavyHuk==BAZAVY_HUK.m || huk.bazavyHuk==BAZAVY_HUK.f
+                        || huk.bazavyHuk==BAZAVY_HUK.ɣ || huk.bazavyHuk==BAZAVY_HUK.k || huk.bazavyHuk==BAZAVY_HUK.x) {
+                    Huk a = new Huk("", BAZAVY_HUK.a);
                     a.halosnaja = true;
                     huki.add(i + 1, a);
                 }
@@ -273,8 +275,8 @@ public class Fanetyka3 {
         for (int i = 0; i < huki.size() - 1; i++) {
             Huk huk = huki.get(i);
             Huk nastupny = huki.get(i + 1);
-            if (huk.is("f", null, false, 0) && nastupny.is("ɣ", null, false, 0)) {
-                huk.bazavyHuk = "u̯";
+            if (huk.is(BAZAVY_HUK.f, null, false, 0) && nastupny.is(BAZAVY_HUK.ɣ, null, false, 0)) {
+                huk.bazavyHuk = BAZAVY_HUK.u̯;
             }
         }
     }
@@ -289,9 +291,9 @@ public class Fanetyka3 {
             Huk h3 = huki.get(i + 2);
             //Huk h4 = huki.get(i + 3);
             if (h1.halosnaja && !h1.apostrafPasla && h2.padzielPasla == 0
-                    && h2.bazavyHuk.equals("z") && h3.bazavyHuk.equals("ɣ") && !h2.apostrafPasla && !h3.apostrafPasla
+                    && h2.bazavyHuk==BAZAVY_HUK.z && h3.bazavyHuk==BAZAVY_HUK.ɣ && !h2.apostrafPasla && !h3.apostrafPasla
                     && !h2.padvojeny && !h3.padvojeny) {
-                h3.bazavyHuk = "g";
+                h3.bazavyHuk = BAZAVY_HUK.g;
                 why.add("Пераход 'зг' -> 'зґ' паміж галосных і не на сутыку прыстаўкі і кораня");
             }
         }
@@ -304,10 +306,10 @@ public class Fanetyka3 {
         for (int i = 0; i < huki.size() - 1; i++) {
             Huk huk = huki.get(i);
             Huk nastupny = huki.get(i + 1);
-            if (huk.is("z", 0, false, 0) && (nastupny.is("ɣ", 0, false, null) || nastupny.is("g", 0, false, null))) {
+            if (huk.is(BAZAVY_HUK.z, 0, false, 0) && (nastupny.is(BAZAVY_HUK.ɣ, 0, false, null) || nastupny.is(BAZAVY_HUK.g, 0, false, null))) {
                 if (nastupny.padzielPasla == Huk.PADZIEL_SLOVY) {
                     why.add("Устаўное 'а': zɣ -> zaɣ, zg -> zag");
-                    Huk a = new Huk("", "a");
+                    Huk a = new Huk("", BAZAVY_HUK.a);
                     a.halosnaja = true;
                     huki.add(i + 1, a);
                 }
@@ -326,9 +328,9 @@ public class Fanetyka3 {
                 continue;
             }
             if (huk.miakki == 0 && nastupny.miakki == 0) {
-                if (huk.bazavyHuk.equals("t") && nastupny.bazavyHuk.equals("s")) {
+                if (huk.bazavyHuk==BAZAVY_HUK.t && nastupny.bazavyHuk==BAZAVY_HUK.s) {
                     why.add("'t' і 's' пераходзіць у 'c', толькі калі няма падзелу");
-                    huk.bazavyHuk = "t͡s";
+                    huk.bazavyHuk = BAZAVY_HUK.t͡s;
                     huk.zychodnyjaLitary += nastupny.zychodnyjaLitary;
                     huki.remove(i + 1);
                 }
@@ -367,79 +369,108 @@ public class Fanetyka3 {
      * на канцы слова мяккія і цвёрдыя) - ч выпадае, як "дасць шырокі"
      */
     void sprascennie() {
-        for (int i = 1; i < huki.size() - 1; i++) {
+        for (int i = 1; i < huki.size()-1; i++) {
+            Huk h1=null,h2=null,h3=null,h4=null;
+            try {
+                h1=huki.get(i);
+            }catch(IndexOutOfBoundsException ex) {}
+            try {
+                h2=huki.get(i+1);
+            }catch(IndexOutOfBoundsException ex) {}
+            try {
+                h3=huki.get(i+2);
+            }catch(IndexOutOfBoundsException ex) {}
+            try {
+                h4=huki.get(i+3);
+            }catch(IndexOutOfBoundsException ex) {}
             Huk huk = huki.get(i);
             Huk nastupny = huki.get(i + 1);
             Huk papiaredni = huki.get(i - 1);
-            if (huk.miakki == 0 && papiaredni.miakki == 0 && papiaredni.bazavyHuk.equals("s")
-                    && huk.bazavyHuk.equals("t͡s") && nastupny.bazavyHuk.equals("k")) {
+            if (areHuki(i, BAZAVY_HUK.s,BAZAVY_HUK.t͡s,BAZAVY_HUK.k)) { // с-ц-к
+                //if (h1)
+            }
+            if (huk.miakki == 0 && papiaredni.miakki == 0 && papiaredni.bazavyHuk==BAZAVY_HUK.s
+                    && huk.bazavyHuk==BAZAVY_HUK.t͡s && nastupny.bazavyHuk==BAZAVY_HUK.k) {
                 why.add("Спрашчэнне: сярэдні выпадае");
                 papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
                 huki.remove(i);
             } else if (huk.miakki == 0 && papiaredni.miakki == 0 && nastupny.miakki == 0
-                    && papiaredni.bazavyHuk.equals("s") && huk.bazavyHuk.equals("t")
-                    && nastupny.bazavyHuk.equals("t͡ʂ")) {
+                    && papiaredni.bazavyHuk==BAZAVY_HUK.s && huk.bazavyHuk==BAZAVY_HUK.t
+                    && nastupny.bazavyHuk==BAZAVY_HUK.t͡ʂ) {
                 // сярэдні выпадае
                 why.add("Спрашчэнне: сярэдні выпадае, с->ш");
                 papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
                 huki.remove(i);
-                papiaredni.bazavyHuk = "ʂ";
-            } else if (papiaredni.bazavyHuk.equals("s") && huk.bazavyHuk.equals("t")
-                    && nastupny.bazavyHuk.equals("n")) {
+                papiaredni.bazavyHuk = BAZAVY_HUK.ʂ;
+            } else if (papiaredni.bazavyHuk==BAZAVY_HUK.s && huk.bazavyHuk==BAZAVY_HUK.t
+                    && nastupny.bazavyHuk==BAZAVY_HUK.n) {
                 why.add("Спрашчэнне: сярэдні выпадае");
                 papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
                 huki.remove(i);
-            } else if (papiaredni.bazavyHuk.equals("z") && huk.bazavyHuk.equals("d")
-                    && nastupny.bazavyHuk.equals("n")) {
+            } else if (papiaredni.bazavyHuk==BAZAVY_HUK.z && huk.bazavyHuk==BAZAVY_HUK.d
+                    && nastupny.bazavyHuk==BAZAVY_HUK.n) {
                 why.add("Спрашчэнне: сярэдні выпадае");
                 papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
                 huki.remove(i);
                 papiaredni.miakki = nastupny.miakki;
-            } else if (papiaredni.is("s", null, false, 0) && huk.is("s", null, false, 0)
-                    && nastupny.is("k", null, false, null)) {
+            } else if (papiaredni.is(BAZAVY_HUK.s, null, false, 0) && huk.is(BAZAVY_HUK.s, null, false, 0)
+                    && nastupny.is(BAZAVY_HUK.k, null, false, null)) {
                 why.add("Спрашчэнне: с-с-к пераходзіць у c-к: першы выпадае, але не на сутыку, як 'бяссківічны'");
                 huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
                 huki.remove(i - 1);
-            } else if (papiaredni.is("z", 0, false, 0) && huk.is("d", 0, false, 0)
-                    && nastupny.is("t͡ʂ", 0, false, null)) {
+            } else if (papiaredni.is(BAZAVY_HUK.z, 0, false, 0) && huk.is(BAZAVY_HUK.d, 0, false, 0)
+                    && nastupny.is(BAZAVY_HUK.t͡ʂ, 0, false, null)) {
                 why.add("Спрашчэнне: з-д-ч пераходзіць у ш-ч: як 'аб’ездчык'");
                 huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
-                huk.bazavyHuk = "ʂ";
+                huk.bazavyHuk = BAZAVY_HUK.ʂ;
                 huki.remove(i - 1);
-            } else if (huk.miakki == 0 && huk.padzielPasla == 0 && huk.bazavyHuk.equals("ʂ")
-                    && nastupny.bazavyHuk.equals("s")) {
+            } else if (huk.miakki == 0 && huk.padzielPasla == 0 && huk.bazavyHuk==BAZAVY_HUK.ʂ
+                    && nastupny.bazavyHuk==BAZAVY_HUK.s) {
                 why.add("Спрашчэнне: ш->с");
-                huk.bazavyHuk = "s";
-            } else if (huk.is("t͡s", Huk.MASK_MIAKKASC_USIE, null, Huk.PADZIEL_PRYSTAUKA)
-                    && nastupny.is("t", 0, null, 0)) {
+                huk.bazavyHuk = BAZAVY_HUK.s;
+            } else if (huk.is(BAZAVY_HUK.t͡s, Huk.MASK_MIAKKASC_USIE, null, Huk.PADZIEL_PRYSTAUKA)
+                    && nastupny.is(BAZAVY_HUK.t, 0, null, 0)) {
                 why.add("Спрашчэнне: ц'-т -> т'-т");
-                huk.bazavyHuk = "t";
-            } else if (huk.is("t͡s", Huk.MASK_MIAKKASC_USIE, null, Huk.PADZIEL_PRYSTAUKA)
-                    && nastupny.is("t͡s", 0, null, 0)) {
+                huk.bazavyHuk = BAZAVY_HUK.t;
+            } else if (huk.is(BAZAVY_HUK.t͡s, Huk.MASK_MIAKKASC_USIE, null, Huk.PADZIEL_PRYSTAUKA)
+                    && nastupny.is(BAZAVY_HUK.t͡s, 0, null, 0)) {
                 why.add("Спрашчэнне: ц'-ц -> т'-ц");
-                huk.bazavyHuk = "t";
-            } else if (papiaredni.is("s", Huk.MASK_MIAKKASC_USIE, null, 0)
-                    && huk.is("t͡s", Huk.MASK_MIAKKASC_USIE, false, Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) {
+                huk.bazavyHuk = BAZAVY_HUK.t;
+            } else if (papiaredni.is(BAZAVY_HUK.s, Huk.MASK_MIAKKASC_USIE, null, 0)
+                    && huk.is(BAZAVY_HUK.t͡s, Huk.MASK_MIAKKASC_USIE, false, Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) {
                 why.add("Спрашчэнне: с'-ц'(толькі на канцы слова) пераходзіць у c', як 'дасць талацэ'");
                 papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
                 huki.remove(i);
-            } else if (papiaredni.is("z", Huk.MASK_MIAKKASC_USIE, null, 0)
-                    && huk.is("d", Huk.MASK_MIAKKASC_USIE, false, Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) {
+            } else if (papiaredni.is(BAZAVY_HUK.z, Huk.MASK_MIAKKASC_USIE, null, 0)
+                    && huk.is(BAZAVY_HUK.d, Huk.MASK_MIAKKASC_USIE, false, Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) {
                 why.add("Спрашчэнне: з'-д'(толькі на канцы слова) пераходзіць у з', як 'дасць заснуць'");
                 papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
                 huki.remove(i);
-            } else if (papiaredni.is("ʐ", null, null, 0)
-                    && huk.is("d͡ʐ", null, false, Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) {
+            } else if (papiaredni.is(BAZAVY_HUK.ʐ, null, null, 0)
+                    && huk.is(BAZAVY_HUK.d͡ʐ, null, false, Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) {
                 why.add("Спрашчэнне: ж-дж-зычны(толькі на канцы слова мяккія і цвёрдыя) - дз выпадае, як 'дасць жыцця'");
                 papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
                 huki.remove(i);
-            } else if (papiaredni.is("ʂ", null, null, 0)
-                    && huk.is("t͡ʂ", null, false, Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) {
+            } else if (papiaredni.is(BAZAVY_HUK.ʂ, null, null, 0)
+                    && huk.is(BAZAVY_HUK.t͡ʂ, null, false, Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) {
                 why.add("Спрашчэнне: ш-ч-зычны(толькі на канцы слова мяккія і цвёрдыя) - ч выпадае, як 'дасць шырокі'");
                 papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
                 huki.remove(i);
             }
         }
+    }
+
+    boolean areHuki(int startPos, BAZAVY_HUK... expected) {
+        if (startPos + expected.length > huki.size()) {
+            return false;
+        }
+
+        for (int i = 0; i < expected.length; i++) {
+            if (huki.get(startPos + i).bazavyHuk != expected[i]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -449,10 +480,10 @@ public class Fanetyka3 {
         for (int i = 0; i < huki.size() - 1; i++) {
             Huk huk = huki.get(i);
             Huk nastupny = huki.get(i + 1);
-            if (huk.miakki == 0 && huk.bazavyHuk.equals("v")) {
-                if (!nastupny.miakkajaHalosnaja && (nastupny.bazavyHuk.equals("ɔ") || nastupny.bazavyHuk.equals("u"))) {
+            if (huk.miakki == 0 && huk.bazavyHuk==BAZAVY_HUK.v) {
+                if (!nastupny.miakkajaHalosnaja && (nastupny.bazavyHuk==BAZAVY_HUK.ɔ || nastupny.bazavyHuk==BAZAVY_HUK.u)) {
                     why.add("'v' перад 'о' і 'у' пераходзіць у 'β'");
-                    huk.bazavyHuk = "β";
+                    huk.bazavyHuk = BAZAVY_HUK.β;
                 }
             }
         }
@@ -465,11 +496,11 @@ public class Fanetyka3 {
         for (int i = 0; i < huki.size() - 1; i++) {
             Huk huk = huki.get(i);
             Huk nastupny = huki.get(i + 1);
-            if (huk.miakki == 0 && huk.bazavyHuk.equals("m")) {
-                if (nastupny.bazavyHuk.equals("f") || nastupny.bazavyHuk.equals("v")
-                        || nastupny.bazavyHuk.equals("β")) {
+            if (huk.miakki == 0 && huk.bazavyHuk==BAZAVY_HUK.m) {
+                if (nastupny.bazavyHuk==BAZAVY_HUK.f || nastupny.bazavyHuk==BAZAVY_HUK.v
+                        || nastupny.bazavyHuk==BAZAVY_HUK.β) {
                     why.add("'m' перад 'f', 'v', 'β' пераходзіць у 'ɱ'");
-                    huk.bazavyHuk = "ɱ";
+                    huk.bazavyHuk = BAZAVY_HUK.ɱ;
                 }
             }
         }
@@ -484,12 +515,12 @@ public class Fanetyka3 {
         for (int i = 1; i < huki.size(); i++) {
             Huk papiaredni = huki.get(i - 1);
             Huk huk = huki.get(i);
-            if (huk.bazavyHuk.equals("i") && (papiaredni.bazavyHuk.equals("d") || papiaredni.bazavyHuk.equals("t")
-                    || papiaredni.bazavyHuk.equals("ʐ") || papiaredni.bazavyHuk.equals("ʂ")
-                    || papiaredni.bazavyHuk.equals("t͡ʂ") || papiaredni.bazavyHuk.equals("d͡ʐ")
-                    || papiaredni.bazavyHuk.equals("r"))) {
+            if (huk.bazavyHuk==BAZAVY_HUK.i && (papiaredni.bazavyHuk==BAZAVY_HUK.d || papiaredni.bazavyHuk==BAZAVY_HUK.t
+                    || papiaredni.bazavyHuk==BAZAVY_HUK.ʐ || papiaredni.bazavyHuk==BAZAVY_HUK.ʂ
+                    || papiaredni.bazavyHuk==BAZAVY_HUK.t͡ʂ || papiaredni.bazavyHuk==BAZAVY_HUK.d͡ʐ
+                    || papiaredni.bazavyHuk==BAZAVY_HUK.r)) {
                 why.add("'і' перад д т ж ш ч дж пераходзіць у ɨ");
-                huk.bazavyHuk = "ɨ";
+                huk.bazavyHuk = BAZAVY_HUK.ɨ;
                 huk.miakkajaHalosnaja = false;
             }
         }
@@ -502,12 +533,12 @@ public class Fanetyka3 {
         for (int i = 0; i < huki.size() - 1; i++) {
             Huk huk = huki.get(i);
             Huk nastupny = huki.get(i + 1);
-            if (huk.is("d", 0, false, null) && nastupny.is("t͡ʂ", 0, false, null)) {
+            if (huk.is(BAZAVY_HUK.d, 0, false, null) && nastupny.is(BAZAVY_HUK.t͡ʂ, 0, false, null)) {
                 why.add("Падваенне:");
-                huk.bazavyHuk = "t";
-            } else if (huk.is("d", 0, false, null) && nastupny.is("t͡s", 0, false, null)) {
+                huk.bazavyHuk = BAZAVY_HUK.t;
+            } else if (huk.is(BAZAVY_HUK.d, 0, false, null) && nastupny.is(BAZAVY_HUK.t͡s, 0, false, null)) {
                 why.add("Падваенне:");
-                huk.bazavyHuk = "t";
+                huk.bazavyHuk = BAZAVY_HUK.t;
             }
         }
     }
@@ -529,8 +560,8 @@ public class Fanetyka3 {
                 why.add("Падваенне:");
                 huk.padvojeny = true;// halosnyPasla && halosnyPierad;
                 /*
-                 * if (halosnyPierad && (huk.bazavyHuk.equals("s") || huk.bazavyHuk.equals("ʂ")
-                 * || huk.bazavyHuk.equals("z") || huk.bazavyHuk.equals("p"))) { // cc+зычны,
+                 * if (halosnyPierad && (huk.bazavyHuk==BAZAVY_HUK.s") || huk.bazavyHuk==BAZAVY_HUK.ʂ")
+                 * || huk.bazavyHuk==BAZAVY_HUK.z") || huk.bazavyHuk==BAZAVY_HUK.p"))) { // cc+зычны,
                  * шш+зычны, зз+зычны, пп+зычны - звычайна ў прыстаўках huk.padvojeny = true; }
                  */
                 huki.remove(i - 1);
@@ -542,25 +573,25 @@ public class Fanetyka3 {
                 // 5. дасць швагру с'+ш=>ш: 6. дасць жабе з'+ж=>ж: 7. дасць чалавеку с'+ч=>ш+ч
                 // 8. дасць джону
                 // з'+дж=>ж+жд
-            } else if (huk.bazavyHuk.equals("d͡ʐ") && papiaredni.bazavyHuk.equals("d")) {
+            } else if (huk.bazavyHuk==BAZAVY_HUK.d͡ʐ && papiaredni.bazavyHuk==BAZAVY_HUK.d) {
                 why.add("Падваенне: д+дж => дж:");
                 huk.padvojeny = true;// halosnyPasla && halosnyPierad;
                 huki.remove(i - 1);
                 huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
                 i--;
-            } else if (huk.bazavyHuk.equals("d͡z") && papiaredni.bazavyHuk.equals("d")) {
+            } else if (huk.bazavyHuk==BAZAVY_HUK.d͡z && papiaredni.bazavyHuk==BAZAVY_HUK.d) {
                 why.add("Падваенне: ддз => дз:");
                 huk.padvojeny = true;// halosnyPasla && halosnyPierad;
                 huki.remove(i - 1);
                 huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
                 i--;
-            } else if (huk.bazavyHuk.equals("t͡ʂ") && papiaredni.bazavyHuk.equals("t")) {
+            } else if (huk.bazavyHuk==BAZAVY_HUK.t͡ʂ && papiaredni.bazavyHuk==BAZAVY_HUK.t) {
                 why.add("Падваенне: т+ч => ч:");
                 huk.padvojeny = true;// halosnyPasla && halosnyPierad;
                 huki.remove(i - 1);
                 huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
                 i--;
-            } else if (huk.bazavyHuk.equals("t͡s") && papiaredni.bazavyHuk.equals("t")) {
+            } else if (huk.bazavyHuk==BAZAVY_HUK.t͡s && papiaredni.bazavyHuk==BAZAVY_HUK.t) {
                 why.add("Падваенне: т+ш => ш:");
                 huk.padvojeny = true;// halosnyPasla && halosnyPierad;
                 huki.remove(i - 1);
@@ -574,16 +605,16 @@ public class Fanetyka3 {
         if (huk.miakki != 0) {
             return false;
         }
-        return huk.bazavyHuk.equals("ʂ") || huk.bazavyHuk.equals("ʐ") || huk.bazavyHuk.equals("d͡ʐ")
-                || huk.bazavyHuk.equals("t͡ʂ");
+        return huk.bazavyHuk==BAZAVY_HUK.ʂ || huk.bazavyHuk==BAZAVY_HUK.ʐ || huk.bazavyHuk==BAZAVY_HUK.d͡ʐ
+                || huk.bazavyHuk==BAZAVY_HUK.t͡ʂ;
     }
 
     boolean isSvisciacy(Huk huk) {
         if (huk.miakki != 0) {
             return false;
         }
-        return huk.bazavyHuk.equals("s") || huk.bazavyHuk.equals("z") || huk.bazavyHuk.equals("d͡z")
-                || huk.bazavyHuk.equals("t͡s");
+        return huk.bazavyHuk==BAZAVY_HUK.s || huk.bazavyHuk==BAZAVY_HUK.z || huk.bazavyHuk==BAZAVY_HUK.d͡z
+                || huk.bazavyHuk==BAZAVY_HUK.t͡s;
     }
 
     /**
@@ -601,21 +632,21 @@ public class Fanetyka3 {
             if (isSvisciacy(nastupny) && huk.miakki == 0 && huk.padzielPasla == 0) {
                 // пераходзіць у сьвісьцячы
                 switch (huk.bazavyHuk) {
-                case "ʂ":
+                case ʂ:
                     why.add("Пераход у свісцячыя");
-                    huk.bazavyHuk = "s";
+                    huk.bazavyHuk = BAZAVY_HUK.s;
                     break;
-                case "ʐ":
+                case ʐ:
                     why.add("Пераход у свісцячыя");
-                    huk.bazavyHuk = "z";
+                    huk.bazavyHuk = BAZAVY_HUK.z;
                     break;
-                case "d͡ʐ":
+                case d͡ʐ:
                     why.add("Пераход у свісцячыя");
-                    huk.bazavyHuk = "d͡z";
+                    huk.bazavyHuk = BAZAVY_HUK.d͡z;
                     break;
-                case "t͡ʂ":
+                case t͡ʂ:
                     why.add("Пераход у свісцячыя");
-                    huk.bazavyHuk = "t͡s";
+                    huk.bazavyHuk = BAZAVY_HUK.t͡s;
                     break;
                 }
             } else if (isSypiacy(nastupny) /* && !huk.miakki */) {
@@ -629,32 +660,32 @@ public class Fanetyka3 {
                     throw new RuntimeException("Ня можа пераходзіць пазначаная мяккасць");
                 }
                 switch (huk.bazavyHuk) {
-                case "t":
-                    why.add("Пераход у шыпячыя");
-                    huk.bazavyHuk = "t͡ʂ";
+                case t:
+                    why.add("Пераход у шыпячыя: т->ч");
+                    huk.bazavyHuk = BAZAVY_HUK.t͡ʂ;
                     huk.miakki = 0;
                     break;
-                case "s":
-                    why.add("Пераход у шыпячыя");
-                    huk.bazavyHuk = "ʂ";
+                case s:
+                    why.add("Пераход у шыпячыя: с->ш");
+                    huk.bazavyHuk = BAZAVY_HUK.ʂ;
                     huk.miakki = 0;
                     break;
-                case "z":
+                case z:
                     // праблема: бязьджаўковая
-                    why.add("Пераход у шыпячыя");
-                    huk.bazavyHuk = "ʐ";
+                    why.add("Пераход у шыпячыя: з->ж");
+                    huk.bazavyHuk = BAZAVY_HUK.ʐ;
                     huk.miakki = 0;
                     break;
-                case "d͡z":
+                case d͡z:
                     // праблема: "сядзь жа"
-                    why.add("Пераход у шыпячыя");
-                    huk.bazavyHuk = "d͡ʐ";
+                    why.add("Пераход у шыпячыя: дз->дж");
+                    huk.bazavyHuk = BAZAVY_HUK.d͡ʐ;
                     huk.miakki = 0;
                     break;
-                case "t͡s":
+                case t͡s:
                     // праблема: "сядзь шалёны"
-                    why.add("Пераход у шыпячыя");
-                    huk.bazavyHuk = "t͡ʂ";
+                    why.add("Пераход у шыпячыя: ц->ч");
+                    huk.bazavyHuk = BAZAVY_HUK.t͡ʂ;
                     huk.miakki = 0;
                     break;
                 }
@@ -673,78 +704,78 @@ public class Fanetyka3 {
             if (nastupny != null && isZvonki(nastupny)) {
                 // азванчэньне
                 switch (huk.bazavyHuk) {
-                case "p":
+                case p:
                     why.add("Азванчэнне");
-                    huk.bazavyHuk = "b";
+                    huk.bazavyHuk = BAZAVY_HUK.b;
                     break;
-                case "t":
+                case t:
                     why.add("Азванчэнне");
-                    huk.bazavyHuk = "d";
+                    huk.bazavyHuk = BAZAVY_HUK.d;
                     break;
-                case "t͡s":
+                case t͡s:
                     why.add("Азванчэнне");
                     if (huk.padzielPasla != 0 && huk.miakki != 0 && nastupny.miakki == 0) {
                         // мяккі зычны перад цьвёрдым звонкім на сутыку
-                        huk.bazavyHuk = "d";
+                        huk.bazavyHuk = BAZAVY_HUK.d;
                     } else {
-                        huk.bazavyHuk = "d͡z";
+                        huk.bazavyHuk = BAZAVY_HUK.d͡z;
                     }
                     break;
-                case "s":
+                case s:
                     why.add("Азванчэнне");
-                    huk.bazavyHuk = "z";
+                    huk.bazavyHuk = BAZAVY_HUK.z;
                     break;
-                case "ʂ":
+                case ʂ:
                     why.add("Азванчэнне");
-                    huk.bazavyHuk = "ʐ";
+                    huk.bazavyHuk = BAZAVY_HUK.ʐ;
                     break;
-                case "t͡ʂ":
+                case t͡ʂ:
                     why.add("Азванчэнне");
-                    huk.bazavyHuk = "d͡ʐ";
+                    huk.bazavyHuk = BAZAVY_HUK.d͡ʐ;
                     break;
-                case "x":
+                case x:
                     why.add("Азванчэнне");
-                    huk.bazavyHuk = "ɣ";
+                    huk.bazavyHuk = BAZAVY_HUK.ɣ;
                     break;
-                case "k":
+                case k:
                     why.add("Азванчэнне");
-                    huk.bazavyHuk = "g";
+                    huk.bazavyHuk = BAZAVY_HUK.g;
                     break;
                 }
             } else if (nastupny == null || isHluchi(nastupny)) {
                 // аглушэньне
                 switch (huk.bazavyHuk) {
-                case "b":
+                case b:
                     why.add("Аглушэнне");
-                    huk.bazavyHuk = "p";
+                    huk.bazavyHuk = BAZAVY_HUK.p;
                     break;
-                case "d":
+                case d:
                     why.add("Аглушэнне");
-                    huk.bazavyHuk = "t";
+                    huk.bazavyHuk = BAZAVY_HUK.t;
                     break;
-                case "d͡z":
+                case d͡z:
                     why.add("Аглушэнне");
-                    huk.bazavyHuk = "t͡s";
+                    huk.bazavyHuk = BAZAVY_HUK.t͡s;
                     break;
-                case "z":
+                case z:
                     why.add("Аглушэнне");
-                    huk.bazavyHuk = "s";
+                    huk.bazavyHuk = BAZAVY_HUK.s;
                     break;
-                case "ʐ":
+                case ʐ:
                     why.add("Аглушэнне");
-                    huk.bazavyHuk = "ʂ";
+                    huk.bazavyHuk = BAZAVY_HUK.ʂ;
                     break;
-                case "d͡ʐ":
+                case d͡ʐ:
                     why.add("Аглушэнне");
-                    huk.bazavyHuk = "t͡ʂ";
+                    huk.bazavyHuk = BAZAVY_HUK.t͡ʂ;
                     break;
-                case "ɣ":
+                case ɣ:
                     why.add("Аглушэнне");
-                    huk.bazavyHuk = "x";
+                    huk.bazavyHuk = BAZAVY_HUK.x;
                     break;
-                case "g":
+                case g:
                     why.add("Аглушэнне");
-                    huk.bazavyHuk = "k";
+                    huk.bazavyHuk = BAZAVY_HUK.k;
                     break;
                 }
             }
@@ -753,23 +784,23 @@ public class Fanetyka3 {
 
     boolean isZvonki(Huk huk) {
         if (huk.miakki != 0) {
-            return huk.bazavyHuk.equals("b") || huk.bazavyHuk.equals("d") || huk.bazavyHuk.equals("d͡z")
-                    || huk.bazavyHuk.equals("z") || huk.bazavyHuk.equals("g") || huk.bazavyHuk.equals("ɣ");
+            return huk.bazavyHuk==BAZAVY_HUK.b || huk.bazavyHuk==BAZAVY_HUK.d || huk.bazavyHuk==BAZAVY_HUK.d͡z
+                    || huk.bazavyHuk==BAZAVY_HUK.z || huk.bazavyHuk==BAZAVY_HUK.g || huk.bazavyHuk==BAZAVY_HUK.ɣ;
         } else {
-            return huk.bazavyHuk.equals("b") || huk.bazavyHuk.equals("d") || huk.bazavyHuk.equals("d͡z")
-                    || huk.bazavyHuk.equals("z") || huk.bazavyHuk.equals("ʐ") || huk.bazavyHuk.equals("d͡ʐ")
-                    || huk.bazavyHuk.equals("ɣ") || huk.bazavyHuk.equals("g");
+            return huk.bazavyHuk==BAZAVY_HUK.b || huk.bazavyHuk==BAZAVY_HUK.d || huk.bazavyHuk==BAZAVY_HUK.d͡z
+                    || huk.bazavyHuk==BAZAVY_HUK.z || huk.bazavyHuk==BAZAVY_HUK.ʐ || huk.bazavyHuk==BAZAVY_HUK.d͡ʐ
+                    || huk.bazavyHuk==BAZAVY_HUK.ɣ || huk.bazavyHuk==BAZAVY_HUK.g;
         }
     }
 
     boolean isHluchi(Huk huk) {
         if (huk.miakki != 0) {
-            return huk.bazavyHuk.equals("p") || huk.bazavyHuk.equals("t͡s") || huk.bazavyHuk.equals("s")
-                    || huk.bazavyHuk.equals("k") || huk.bazavyHuk.equals("x") || huk.bazavyHuk.equals("f");
+            return huk.bazavyHuk==BAZAVY_HUK.p || huk.bazavyHuk==BAZAVY_HUK.t͡s || huk.bazavyHuk==BAZAVY_HUK.s
+                    || huk.bazavyHuk==BAZAVY_HUK.k || huk.bazavyHuk==BAZAVY_HUK.x || huk.bazavyHuk==BAZAVY_HUK.f;
         } else {
-            return huk.bazavyHuk.equals("p") || huk.bazavyHuk.equals("t") || huk.bazavyHuk.equals("t͡s")
-                    || huk.bazavyHuk.equals("s") || huk.bazavyHuk.equals("ʂ") || huk.bazavyHuk.equals("t͡ʂ")
-                    || huk.bazavyHuk.equals("x") || huk.bazavyHuk.equals("k") || huk.bazavyHuk.equals("f");
+            return huk.bazavyHuk==BAZAVY_HUK.p || huk.bazavyHuk==BAZAVY_HUK.t || huk.bazavyHuk==BAZAVY_HUK.t͡s
+                    || huk.bazavyHuk==BAZAVY_HUK.s || huk.bazavyHuk==BAZAVY_HUK.ʂ || huk.bazavyHuk==BAZAVY_HUK.t͡ʂ
+                    || huk.bazavyHuk==BAZAVY_HUK.x || huk.bazavyHuk==BAZAVY_HUK.k || huk.bazavyHuk==BAZAVY_HUK.f;
         }
     }
 
@@ -787,27 +818,25 @@ public class Fanetyka3 {
             }
             if (huk.halosnaja) {
                 // зьмягчаеццца перад мяккімі галоснымі
-                why.add("Мяккасць: перад галоснымі");
                 miakkasc = huk.miakkajaHalosnaja;
             } else if (huk.apostrafPasla) {
-                why.add("Мяккасць: перад апострафам");
+                why.add("Перад апострафам '" + huk + "' не змякчаецца");
                 miakkasc = false;
                 huk.setMiakkasc(false);
-            } else if (huk.bazavyHuk.equals("r") || huk.bazavyHuk.equals("t͡ʂ") || huk.bazavyHuk.equals("d͡ʐ")
-                    || huk.bazavyHuk.equals("ʂ") || huk.bazavyHuk.equals("ʐ")) {
-                why.add("Мяккасць: ніколі не бываюць мяккімі - зацьвярдзелыя р ж ш дж ч");
+            } else if (huk.bazavyHuk==BAZAVY_HUK.r || huk.bazavyHuk==BAZAVY_HUK.t͡ʂ || huk.bazavyHuk==BAZAVY_HUK.d͡ʐ
+                    || huk.bazavyHuk==BAZAVY_HUK.ʂ || huk.bazavyHuk==BAZAVY_HUK.ʐ) {
+                why.add("Не змякчаецца '" + huk + "' бо зацьвярдзелыя р ж ш дж ч ніколі не бываюць мяккімі");
                 miakkasc = false;
                 huk.setMiakkasc(false);
-            } else if (huk.bazavyHuk.equals("u̯") || huk.bazavyHuk.equals("j")) {
+            } else if (huk.bazavyHuk==BAZAVY_HUK.u̯ || huk.bazavyHuk==BAZAVY_HUK.j) {
                 // паўгалосны
-                why.add("Мяккасць: паўгалосны");
+                why.add("Не змякчаецца '" + huk + "' бо ён паўгалосны");
                 miakkasc = false;
                 huk.setMiakkasc(false);
-            } else if (huk.bazavyHuk.equals("b") || huk.bazavyHuk.equals("p") || huk.bazavyHuk.equals("m")
-                    || huk.bazavyHuk.equals("ɱ") || huk.bazavyHuk.equals("f")
-                    || (huk.bazavyHuk.equals("ɫ") && huk.miakki == 0)) {
+            } else if (huk.bazavyHuk==BAZAVY_HUK.b || huk.bazavyHuk==BAZAVY_HUK.p || huk.bazavyHuk==BAZAVY_HUK.m
+                    || huk.bazavyHuk==BAZAVY_HUK.ɱ || huk.bazavyHuk==BAZAVY_HUK.f
+                    || (huk.bazavyHuk==BAZAVY_HUK.ɫ && huk.miakki == 0)) {
                 // бпмфл не зьмягчаецца перад наступным мяккім зычным
-                why.add("Мяккасць: ");
                 if (nastupny != null) {
                     if (huk.bazavyHuk.equals(nastupny.bazavyHuk)) {
                         // акрамя выпадкаў калі далей ідзе такі самы зычны(бпмфл)
@@ -819,12 +848,11 @@ public class Fanetyka3 {
                     }
                 }
                 huk.setMiakkasc(miakkasc);
-            } else if (huk.bazavyHuk.equals("g") || huk.bazavyHuk.equals("ɣ") || huk.bazavyHuk.equals("k")
-                    || huk.bazavyHuk.equals("x")) {
+            } else if (huk.bazavyHuk==BAZAVY_HUK.g || huk.bazavyHuk==BAZAVY_HUK.ɣ || huk.bazavyHuk==BAZAVY_HUK.k
+                    || huk.bazavyHuk==BAZAVY_HUK.x) {
                 // яны самі зьмягчаюцца толькі перад галоснымі(але не перад зычнымі), і не даюць
                 // зьмягчацца гукам
                 // перад імі: аб'едкі, вянгляр
-                why.add("Мяккасць: ");
                 if (nastupny != null) {
                     if (huk.bazavyHuk.equals(nastupny.bazavyHuk)) {
                         // акрамя выпадкаў калі далей ідзе такі самы зычны(бпмгкх)
@@ -834,32 +862,28 @@ public class Fanetyka3 {
                 }
                 // не даюць зьмягчацца гукам перад імі
                 miakkasc = false; // TODO праверыць падваеньне гкх
-            } else if (huk.bazavyHuk.equals("d")) {
-                why.add("Мяккасць: ");
-                if (nastupny != null && nastupny.miakki != 0 && (nastupny.bazavyHuk.equals("n")
-                        || nastupny.bazavyHuk.equals("s") || nastupny.bazavyHuk.equals("z"))) {
+            } else if (huk.bazavyHuk==BAZAVY_HUK.d) {
+                if (nastupny != null && nastupny.miakki != 0 && (nastupny.bazavyHuk==BAZAVY_HUK.n
+                        || nastupny.bazavyHuk==BAZAVY_HUK.s || nastupny.bazavyHuk==BAZAVY_HUK.z)) {
                     huk.setMiakkasc(miakkasc);
                 } else {
                     huk.setMiakkasc(false);
                     miakkasc = false;
                 }
-            } else if (huk.bazavyHuk.equals("t")) {
-                why.add("Мяккасць: ");
-                if (nastupny != null && nastupny.miakki != 0 && (nastupny.bazavyHuk.equals("n")
-                        || nastupny.bazavyHuk.equals("s") || nastupny.bazavyHuk.equals("z"))) {
+            } else if (huk.bazavyHuk==BAZAVY_HUK.t) {
+                if (nastupny != null && nastupny.miakki != 0 && (nastupny.bazavyHuk==BAZAVY_HUK.n
+                        || nastupny.bazavyHuk==BAZAVY_HUK.s || nastupny.bazavyHuk==BAZAVY_HUK.z)) {
                     huk.setMiakkasc(miakkasc);
                 } else {
                     huk.setMiakkasc(false);
                     miakkasc = false;
                 }
-            } else if (huk.bazavyHuk.equals("d͡z") && nastupny != null && nastupny.bazavyHuk.equals("ɫ")) {
-                why.add("Мяккасць: ");
+            } else if (huk.bazavyHuk==BAZAVY_HUK.d͡z && nastupny != null && nastupny.bazavyHuk==BAZAVY_HUK.ɫ) {
                 huk.setMiakkasc(false);
                 miakkasc = false;
-            } else if (nastupny != null && huk.is("n", null, false, null)
-                    && (nastupny.is("v", Huk.MASK_MIAKKASC_USIE, false, null)
-                            || nastupny.is("f", Huk.MASK_MIAKKASC_USIE, false, null))) {
-                why.add("Мяккасць: ");
+            } else if (nastupny != null && huk.is(BAZAVY_HUK.n, null, false, null)
+                    && (nastupny.is(BAZAVY_HUK.v, Huk.MASK_MIAKKASC_USIE, false, null)
+                            || nastupny.is(BAZAVY_HUK.f, Huk.MASK_MIAKKASC_USIE, false, null))) {
                 // Перад губнымі [в’], [ф’] у двухчленных спалучэннях часцей сустракаецца цвёрды
                 // н
                 if (huk.miakki != Huk.MIAKKASC_PAZNACANAJA) {
@@ -869,11 +893,9 @@ public class Fanetyka3 {
                     miakkasc = true;
                 }
             } else if (huk.miakki != 0) {
-                why.add("Мяккасць: ");
                 // зьмягчаеццца перад мяккімі зычнымі(калі быў 'ь')
                 miakkasc = true;
             } else {
-                why.add("Мяккасць: ");
                 // цьвёрды зычны - зьмягчаецца ў залежнасьці ад таго што ідзе далей
                 huk.setMiakkasc(miakkasc);
             }
@@ -927,33 +949,33 @@ public class Fanetyka3 {
             }
             switch (c) {
             case 'а':
-                novyHuk = new Huk("а", "a");
+                novyHuk = new Huk("а", BAZAVY_HUK.a);
                 novyHuk.halosnaja = true;
                 break;
             case 'б':
-                novyHuk = new Huk("б", "b");
+                novyHuk = new Huk("б", BAZAVY_HUK.b);
                 break;
             case 'в':
-                novyHuk = new Huk("в", "v");
+                novyHuk = new Huk("в", BAZAVY_HUK.v);
                 break;
             case 'г':
-                novyHuk = new Huk("г", "ɣ");
+                novyHuk = new Huk("г", BAZAVY_HUK.ɣ);
                 break;
             case 'ґ':
-                novyHuk = new Huk("ґ", "g");
+                novyHuk = new Huk("ґ", BAZAVY_HUK.g);
                 break;
             case 'д':
-                novyHuk = new Huk("д", "d");
+                novyHuk = new Huk("д", BAZAVY_HUK.d);
                 break;
             case 'е':
                 dadacJotKaliPatrebny(papiaredniHuk, c, next);
-                novyHuk = new Huk("е", "ɛ");
+                novyHuk = new Huk("е", BAZAVY_HUK.ɛ);
                 novyHuk.halosnaja = true;
                 novyHuk.miakkajaHalosnaja = true;
                 break;
             case 'ё':
                 dadacJotKaliPatrebny(papiaredniHuk, c, next);
-                novyHuk = new Huk("ё", "ɔ");
+                novyHuk = new Huk("ё", BAZAVY_HUK.ɔ);
                 novyHuk.halosnaja = true;
                 novyHuk.miakkajaHalosnaja = true;
                 break;
@@ -962,9 +984,9 @@ public class Fanetyka3 {
                         && papiaredniHuk.padzielPasla == 0) {
                     // дж
                     papiaredniHuk.zychodnyjaLitary = "дж";
-                    papiaredniHuk.bazavyHuk = "d͡ʐ";
+                    papiaredniHuk.bazavyHuk = BAZAVY_HUK.d͡ʐ;
                 } else {
-                    novyHuk = new Huk("ж", "ʐ");
+                    novyHuk = new Huk("ж", BAZAVY_HUK.ʐ);
                 }
                 break;
             case 'з':
@@ -972,72 +994,72 @@ public class Fanetyka3 {
                         && papiaredniHuk.padzielPasla == 0) {
                     // дз
                     papiaredniHuk.zychodnyjaLitary = "дз";
-                    papiaredniHuk.bazavyHuk = "d͡z";
+                    papiaredniHuk.bazavyHuk = BAZAVY_HUK.d͡z;
                 } else {
-                    novyHuk = new Huk("з", "z");
+                    novyHuk = new Huk("з", BAZAVY_HUK.z);
                 }
                 break;
             case 'і':
                 dadacJotKaliPatrebny(papiaredniHuk, c, next);
-                novyHuk = new Huk("і", "i");
+                novyHuk = new Huk("і", BAZAVY_HUK.i);
                 novyHuk.halosnaja = true;
                 novyHuk.miakkajaHalosnaja = true;
                 break;
             case 'й':
-                novyHuk = new Huk("й", "j");
+                novyHuk = new Huk("й", BAZAVY_HUK.j);
                 break;
             case 'к':
-                novyHuk = new Huk("к", "k");
+                novyHuk = new Huk("к", BAZAVY_HUK.k);
                 break;
             case 'л':
-                novyHuk = new Huk("л", "ɫ");
+                novyHuk = new Huk("л", BAZAVY_HUK.ɫ);
                 break;
             case 'м':
-                novyHuk = new Huk("м", "m");
+                novyHuk = new Huk("м", BAZAVY_HUK.m);
                 break;
             case 'н':
-                novyHuk = new Huk("н", "n");
+                novyHuk = new Huk("н", BAZAVY_HUK.n);
                 break;
             case 'о':
-                novyHuk = new Huk("о", "ɔ");
+                novyHuk = new Huk("о", BAZAVY_HUK.ɔ);
                 novyHuk.halosnaja = true;
                 break;
             case 'п':
-                novyHuk = new Huk("п", "p");
+                novyHuk = new Huk("п", BAZAVY_HUK.p);
                 break;
             case 'р':
-                novyHuk = new Huk("р", "r");
+                novyHuk = new Huk("р", BAZAVY_HUK.r);
                 break;
             case 'с':
-                novyHuk = new Huk("с", "s");
+                novyHuk = new Huk("с", BAZAVY_HUK.s);
                 break;
             case 'т':
-                novyHuk = new Huk("т", "t");
+                novyHuk = new Huk("т", BAZAVY_HUK.t);
                 break;
             case 'у':
-                novyHuk = new Huk("у", "u");
+                novyHuk = new Huk("у", BAZAVY_HUK.u);
                 novyHuk.halosnaja = true;
                 break;
             case 'ў':
-                novyHuk = new Huk("ў", "u̯");
+                novyHuk = new Huk("ў", BAZAVY_HUK.u̯);
                 break;
             case 'ф':
-                novyHuk = new Huk("ф", "f");
+                novyHuk = new Huk("ф", BAZAVY_HUK.f);
                 break;
             case 'х':
-                novyHuk = new Huk("х", "x");
+                novyHuk = new Huk("х", BAZAVY_HUK.x);
                 break;
             case 'ц':
-                novyHuk = new Huk("ц", "t͡s");
+                novyHuk = new Huk("ц", BAZAVY_HUK.t͡s);
                 break;
             case 'ч':
-                novyHuk = new Huk("ч", "t͡ʂ");
+                novyHuk = new Huk("ч", BAZAVY_HUK.t͡ʂ);
                 break;
             case 'ш':
-                novyHuk = new Huk("ш", "ʂ");
+                novyHuk = new Huk("ш", BAZAVY_HUK.ʂ);
                 break;
             case 'ы':
-                novyHuk = new Huk("ы", "ɨ");
+                novyHuk = new Huk("ы", BAZAVY_HUK.ɨ);
                 novyHuk.halosnaja = true;
                 break;
             case 'ь':
@@ -1046,18 +1068,18 @@ public class Fanetyka3 {
                 }
                 break;
             case 'э':
-                novyHuk = new Huk("э", "ɛ");
+                novyHuk = new Huk("э", BAZAVY_HUK.ɛ);
                 novyHuk.halosnaja = true;
                 break;
             case 'ю':
                 dadacJotKaliPatrebny(papiaredniHuk, c, next);
-                novyHuk = new Huk("ю", "u");
+                novyHuk = new Huk("ю", BAZAVY_HUK.u);
                 novyHuk.halosnaja = true;
                 novyHuk.miakkajaHalosnaja = true;
                 break;
             case 'я':
                 dadacJotKaliPatrebny(papiaredniHuk, c, next);
-                novyHuk = new Huk("я", "a");
+                novyHuk = new Huk("я", BAZAVY_HUK.a);
                 novyHuk.halosnaja = true;
                 novyHuk.miakkajaHalosnaja = true;
                 break;
@@ -1109,7 +1131,7 @@ public class Fanetyka3 {
                 }
             }
             // першая літара ці пасьля пералічаных
-            Huk jot = new Huk("", "j");
+            Huk jot = new Huk("", BAZAVY_HUK.j);
             jot.miakkajaHalosnaja = true;
             jot.halosnaja = true;
             jot.setMiakkasc(true);
@@ -1117,7 +1139,7 @@ public class Fanetyka3 {
         } else if (papiaredni != null && "еёюя".indexOf(current) >= 0
                 && ("тдржшч".indexOf(papiaredni.zychodnyjaLitary) >= 0 || papiaredni.padzielPasla != 0)) {
             // звычайна сутык прыстаўкі і кораня
-            Huk jot = new Huk("", "j");
+            Huk jot = new Huk("", BAZAVY_HUK.j);
             jot.miakkajaHalosnaja = true;
             jot.halosnaja = true;
             jot.setMiakkasc(true);

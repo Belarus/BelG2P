@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
+
 public class Huk {
     public static int PADZIEL_PRYSTAUKA = 1;
     public static int PADZIEL_KORANI = 2;
@@ -15,8 +17,20 @@ public class Huk {
     public static int MIAKKASC_PAZNACANAJA = 2;
     public static int MASK_MIAKKASC_USIE = 3;
 
+    public enum BAZAVY_HUK {
+        a, b, v, β, ɣ, g, d, ɛ, d͡ʐ, d͡z, ʐ, z, i, k, ɫ, m, ɱ, n, ɔ, p, r, s, t, u, u̯, f, x, t͡s, t͡ʂ, ʂ, ɨ, j
+    }
+
+    public enum IPA {
+        a, b, bʲ, v, vʲ, β, ɣ, ɣʲ, g, gʲ, d, dʲ, ɛ, d͡ʐ, d͡z, d͡zʲ, ʐ, z, zʲ, i, k, kʲ, ɫ, lʲ, m, mʲ, ɱ, n, nʲ, ɔ, p,
+        pʲ, r, s, sʲ, t, tʲ, u, u̯, f, fʲ, x, xʲ, t͡s, t͡sʲ, t͡ʂ, ʂ, ɨ, j
+    }
+
+    public List<IPA> sanornyja = Arrays.asList(IPA.r, IPA.ɫ, IPA.lʲ, IPA.m, IPA.mʲ, IPA.n, IPA.nʲ, IPA.v, IPA.vʲ, IPA.ɱ,
+            IPA.u̯, IPA.j);
+
     public String zychodnyjaLitary;
-    public String bazavyHuk;
+    public BAZAVY_HUK bazavyHuk;
     public int miakki;
     public boolean padvojeny;
     public boolean halosnaja, miakkajaHalosnaja;
@@ -33,7 +47,7 @@ public class Huk {
         initMaps();
     }
 
-    public Huk(String z, String b) {
+    public Huk(String z, BAZAVY_HUK b) {
         zychodnyjaLitary = z;
         bazavyHuk = b;
     }
@@ -58,128 +72,120 @@ public class Huk {
 
     @Override
     public String toString() {
-        return ipa.apply(this);
+        return skolny.apply(this);
     }
-
-    public enum IPA {
-        a, b, bʲ, v, vʲ, β, ɣ, ɣʲ, g, gʲ, d, dʲ, ɛ, d͡ʐ, d͡z, d͡zʲ, ʐ, z, zʲ, i, k, kʲ, ɫ, lʲ, m, mʲ, ɱ, n, nʲ, ɔ, p, pʲ, r, s, sʲ, t, tʲ, u, u̯, f, fʲ, x, xʲ, t͡s, t͡sʲ, t͡ʂ, ʂ, ɨ, j
-    }
-
-    public List<IPA> sanornyja = Arrays.asList(IPA.r, IPA.ɫ, IPA.lʲ, IPA.m, IPA.mʲ, IPA.n, IPA.nʲ, IPA.v, IPA.vʲ, IPA.ɱ,
-            IPA.u̯, IPA.j);
 
     public static Function<Huk, IPA> ipa_enum = h -> {
         switch (h.bazavyHuk) {
-        case "a":
+        case a:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.a;
-        case "b":
+        case b:
             return h.miakki == 0 ? IPA.b : IPA.bʲ;
-        case "v":
+        case v:
             return h.miakki == 0 ? IPA.v : IPA.vʲ;
-        case "β":
+        case β:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.β;
-        case "ɣ":
+        case ɣ:
             return h.miakki == 0 ? IPA.ɣ : IPA.ɣʲ;
-        case "g":
+        case g:
             return h.miakki == 0 ? IPA.g : IPA.gʲ;
-        case "d":
+        case d:
             return h.miakki == 0 ? IPA.d : IPA.dʲ;
-        case "ɛ":
+        case ɛ:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.ɛ;
-        case "d͡ʐ":
+        case d͡ʐ:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.d͡ʐ;
-        case "d͡z":
+        case d͡z:
             return h.miakki == 0 ? IPA.d͡z : IPA.d͡zʲ;
-        case "ʐ":
+        case ʐ:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.ʐ;
-        case "z":
+        case z:
             return h.miakki == 0 ? IPA.z : IPA.zʲ;
-        case "i":
+        case i:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.i;
-        case "k":
+        case k:
             return h.miakki == 0 ? IPA.k : IPA.kʲ;
-        case "ɫ":
+        case ɫ:
             return h.miakki == 0 ? IPA.ɫ : IPA.lʲ;
-        case "m":
+        case m:
             return h.miakki == 0 ? IPA.m : IPA.mʲ;
-        case "ɱ":
+        case ɱ:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.ɱ;
-        case "n":
+        case n:
             return h.miakki == 0 ? IPA.n : IPA.nʲ;
-        case "ɔ":
+        case ɔ:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.ɔ;
-        case "p":
+        case p:
             return h.miakki == 0 ? IPA.p : IPA.pʲ;
-        case "r":
+        case r:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.r;
-        case "s":
+        case s:
             return h.miakki == 0 ? IPA.s : IPA.sʲ;
-        case "t":
+        case t:
             return h.miakki == 0 ? IPA.t : IPA.tʲ;
-        case "u":
+        case u:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.u;
-        case "u̯":
+        case u̯:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.u̯;
-        case "f":
+        case f:
             return h.miakki == 0 ? IPA.f : IPA.fʲ;
-        case "x":
+        case x:
             return h.miakki == 0 ? IPA.x : IPA.xʲ;
-        case "t͡s":
+        case t͡s:
             return h.miakki == 0 ? IPA.t͡s : IPA.t͡sʲ;
-        case "t͡ʂ":
+        case t͡ʂ:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.t͡ʂ;
-        case "ʂ":
+        case ʂ:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.ʂ;
-        case "ɨ":
+        case ɨ:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.ɨ;
-        case "j":
+        case j:
             // ён заўсёды аднолькавы
             return IPA.j;
-        default:
-            throw new RuntimeException("Невядомы базавы гук: " + h.bazavyHuk);
         }
+        throw new RuntimeException("Невядомы базавы гук: " + h.bazavyHuk);
     };
 
     static void initMaps() {
@@ -299,8 +305,8 @@ public class Huk {
         return o;
     };
 
-    public boolean is(String bazavy, Integer miakkasc, Boolean padvajennie, Integer padziel) {
-        if (!bazavyHuk.equals(bazavy)) {
+    public boolean is(BAZAVY_HUK bazavy, Integer miakkasc, Boolean padvajennie, Integer padziel) {
+        if (bazavyHuk != bazavy) {
             return false;
         }
         if (!isInt(miakkasc, miakki)) {
