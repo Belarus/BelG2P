@@ -178,6 +178,8 @@ public class Fanetyka3 {
         case "HSZZJH":
         case "HSZZSH":
         case "HSZZZH":
+        case "HZSJH":
+        case "HJZZZH":
             pierad=2;
             break;
         default:
@@ -348,6 +350,10 @@ public class Fanetyka3 {
      * з-д-н' пераходзіць у з'-н'
      * 
      * з-д-ч пераходзіць у ш-ч
+     * 
+     * н-т-ш-ч пераходзіць у н-ш-ч  TODO
+     * 
+     * н-д-ш пераходзіць у н-ш  TODO
      * 
      * с-с-к пераходзіць у c-к
      * 
