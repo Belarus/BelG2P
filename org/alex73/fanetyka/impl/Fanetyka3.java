@@ -353,7 +353,7 @@ public class Fanetyka3 {
      * 
      * з-д-ч пераходзіць у ш-ч
      * 
-     * н-т-ш-ч пераходзіць у н-ш-ч  TODO
+     * н-т-ш-ч пераходзіць у н-ш-ч
      * 
      * н-д-ш пераходзіць у н-ш  TODO
      * 
@@ -369,93 +369,114 @@ public class Fanetyka3 {
      * на канцы слова мяккія і цвёрдыя) - ч выпадае, як "дасць шырокі"
      */
     void sprascennie() {
-        for (int i = 1; i < huki.size()-1; i++) {
-            Huk h1=null,h2=null,h3=null,h4=null;
+        for (int i = 0; i < huki.size(); i++) {
+            Huk h1 = null, h2 = null, h3 = null, h4 = null;
             try {
-                h1=huki.get(i);
-            }catch(IndexOutOfBoundsException ex) {}
-            try {
-                h2=huki.get(i+1);
-            }catch(IndexOutOfBoundsException ex) {}
-            try {
-                h3=huki.get(i+2);
-            }catch(IndexOutOfBoundsException ex) {}
-            try {
-                h4=huki.get(i+3);
-            }catch(IndexOutOfBoundsException ex) {}
-            Huk huk = huki.get(i);
-            Huk nastupny = huki.get(i + 1);
-            Huk papiaredni = huki.get(i - 1);
-            if (areHuki(i, BAZAVY_HUK.s,BAZAVY_HUK.t͡s,BAZAVY_HUK.k)) { // с-ц-к
-                //if (h1)
+                h1 = huki.get(i);
+            } catch (IndexOutOfBoundsException ex) {
             }
-            if (huk.miakki == 0 && papiaredni.miakki == 0 && papiaredni.bazavyHuk==BAZAVY_HUK.s
-                    && huk.bazavyHuk==BAZAVY_HUK.t͡s && nastupny.bazavyHuk==BAZAVY_HUK.k) {
-                why.add("Спрашчэнне: сярэдні выпадае");
-                papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
-                huki.remove(i);
-            } else if (huk.miakki == 0 && papiaredni.miakki == 0 && nastupny.miakki == 0
-                    && papiaredni.bazavyHuk==BAZAVY_HUK.s && huk.bazavyHuk==BAZAVY_HUK.t
-                    && nastupny.bazavyHuk==BAZAVY_HUK.t͡ʂ) {
-                // сярэдні выпадае
-                why.add("Спрашчэнне: сярэдні выпадае, с->ш");
-                papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
-                huki.remove(i);
-                papiaredni.bazavyHuk = BAZAVY_HUK.ʂ;
-            } else if (papiaredni.bazavyHuk==BAZAVY_HUK.s && huk.bazavyHuk==BAZAVY_HUK.t
-                    && nastupny.bazavyHuk==BAZAVY_HUK.n) {
-                why.add("Спрашчэнне: сярэдні выпадае");
-                papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
-                huki.remove(i);
-            } else if (papiaredni.bazavyHuk==BAZAVY_HUK.z && huk.bazavyHuk==BAZAVY_HUK.d
-                    && nastupny.bazavyHuk==BAZAVY_HUK.n) {
-                why.add("Спрашчэнне: сярэдні выпадае");
-                papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
-                huki.remove(i);
-                papiaredni.miakki = nastupny.miakki;
-            } else if (papiaredni.is(BAZAVY_HUK.s, null, false, 0) && huk.is(BAZAVY_HUK.s, null, false, 0)
-                    && nastupny.is(BAZAVY_HUK.k, null, false, null)) {
-                why.add("Спрашчэнне: с-с-к пераходзіць у c-к: першы выпадае, але не на сутыку, як 'бяссківічны'");
-                huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
-                huki.remove(i - 1);
-            } else if (papiaredni.is(BAZAVY_HUK.z, 0, false, 0) && huk.is(BAZAVY_HUK.d, 0, false, 0)
-                    && nastupny.is(BAZAVY_HUK.t͡ʂ, 0, false, null)) {
-                why.add("Спрашчэнне: з-д-ч пераходзіць у ш-ч: як 'аб’ездчык'");
-                huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
-                huk.bazavyHuk = BAZAVY_HUK.ʂ;
-                huki.remove(i - 1);
-            } else if (huk.miakki == 0 && huk.padzielPasla == 0 && huk.bazavyHuk==BAZAVY_HUK.ʂ
-                    && nastupny.bazavyHuk==BAZAVY_HUK.s) {
-                why.add("Спрашчэнне: ш->с");
-                huk.bazavyHuk = BAZAVY_HUK.s;
-            } else if (huk.is(BAZAVY_HUK.t͡s, Huk.MASK_MIAKKASC_USIE, null, Huk.PADZIEL_PRYSTAUKA)
-                    && nastupny.is(BAZAVY_HUK.t, 0, null, 0)) {
-                why.add("Спрашчэнне: ц'-т -> т'-т");
-                huk.bazavyHuk = BAZAVY_HUK.t;
-            } else if (huk.is(BAZAVY_HUK.t͡s, Huk.MASK_MIAKKASC_USIE, null, Huk.PADZIEL_PRYSTAUKA)
-                    && nastupny.is(BAZAVY_HUK.t͡s, 0, null, 0)) {
-                why.add("Спрашчэнне: ц'-ц -> т'-ц");
-                huk.bazavyHuk = BAZAVY_HUK.t;
-            } else if (papiaredni.is(BAZAVY_HUK.s, Huk.MASK_MIAKKASC_USIE, null, 0)
-                    && huk.is(BAZAVY_HUK.t͡s, Huk.MASK_MIAKKASC_USIE, false, Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) {
-                why.add("Спрашчэнне: с'-ц'(толькі на канцы слова) пераходзіць у c', як 'дасць талацэ'");
-                papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
-                huki.remove(i);
-            } else if (papiaredni.is(BAZAVY_HUK.z, Huk.MASK_MIAKKASC_USIE, null, 0)
-                    && huk.is(BAZAVY_HUK.d, Huk.MASK_MIAKKASC_USIE, false, Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) {
-                why.add("Спрашчэнне: з'-д'(толькі на канцы слова) пераходзіць у з', як 'дасць заснуць'");
-                papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
-                huki.remove(i);
-            } else if (papiaredni.is(BAZAVY_HUK.ʐ, null, null, 0)
-                    && huk.is(BAZAVY_HUK.d͡ʐ, null, false, Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) {
-                why.add("Спрашчэнне: ж-дж-зычны(толькі на канцы слова мяккія і цвёрдыя) - дз выпадае, як 'дасць жыцця'");
-                papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
-                huki.remove(i);
-            } else if (papiaredni.is(BAZAVY_HUK.ʂ, null, null, 0)
-                    && huk.is(BAZAVY_HUK.t͡ʂ, null, false, Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) {
-                why.add("Спрашчэнне: ш-ч-зычны(толькі на канцы слова мяккія і цвёрдыя) - ч выпадае, як 'дасць шырокі'");
-                papiaredni.zychodnyjaLitary += huk.zychodnyjaLitary;
-                huki.remove(i);
+            try {
+                h2 = huki.get(i + 1);
+            } catch (IndexOutOfBoundsException ex) {
+            }
+            try {
+                h3 = huki.get(i + 2);
+            } catch (IndexOutOfBoundsException ex) {
+            }
+            try {
+                h4 = huki.get(i + 3);
+            } catch (IndexOutOfBoundsException ex) {
+            }
+            if (areHuki(i, BAZAVY_HUK.s, BAZAVY_HUK.t͡s, BAZAVY_HUK.k)) { // с-ц-к
+                if (h1.miakki == 0 && h2.miakki == 0) {
+                    why.add("Спрашчэнне: с-ц-к -> с-к");
+                    h1.zychodnyjaLitary += h2.zychodnyjaLitary;
+                    huki.remove(i+1);
+                }
+            } else if (areHuki(i, BAZAVY_HUK.s, BAZAVY_HUK.t, BAZAVY_HUK.t͡ʂ)) { // с-т-ч
+                if (h2.miakki == 0 && h1.miakki == 0 && h3.miakki == 0) {
+                    // сярэдні выпадае
+                    why.add("Спрашчэнне: с-т-ч -> с-ш");
+                    h1.zychodnyjaLitary += h2.zychodnyjaLitary;
+                    huki.remove(i+1);
+                    h3.bazavyHuk = BAZAVY_HUK.ʂ;
+                }
+            } else if (areHuki(i, BAZAVY_HUK.s, BAZAVY_HUK.t, BAZAVY_HUK.n)) { // с-т-н
+                why.add("Спрашчэнне: с-т-н -> с-н");
+                h1.zychodnyjaLitary += h2.zychodnyjaLitary;
+                huki.remove(i+1);
+            } else if (areHuki(i, BAZAVY_HUK.z, BAZAVY_HUK.d, BAZAVY_HUK.n)) { // з-д-н
+                why.add("Спрашчэнне: з-д-н -> з-н");
+                h1.zychodnyjaLitary += h2.zychodnyjaLitary;
+                huki.remove(i+1);
+                h1.miakki = h3.miakki;
+            } else if (areHuki(i, BAZAVY_HUK.s, BAZAVY_HUK.s, BAZAVY_HUK.k)) { // с-с-к
+                if (!h1.padvojeny && !h2.padvojeny && !h3.padvojeny && h1.padzielPasla == 0 && h2.padzielPasla == 0) {
+                    why.add("Спрашчэнне: с-с-к -> c-к, але не на сутыку, як 'бяссківічны'");
+                    h2.zychodnyjaLitary = h1.zychodnyjaLitary + h2.zychodnyjaLitary;
+                    huki.remove(i);
+                }
+            } else if (areHuki(i, BAZAVY_HUK.z, BAZAVY_HUK.d, BAZAVY_HUK.t͡ʂ)) { // з-д-ч
+                if (!h1.padvojeny && h2.padvojeny && h3.padvojeny && h1.padzielPasla == 0 && h2.padzielPasla == 0
+                        && h1.miakki == 0 && h2.miakki == 0 && h3.miakki == 0) {
+                    why.add("Спрашчэнне: з-д-ч -> ш-ч: як 'аб’ездчык'");
+                    h2.zychodnyjaLitary = h1.zychodnyjaLitary + h2.zychodnyjaLitary;
+                    h2.bazavyHuk = BAZAVY_HUK.ʂ;
+                    huki.remove(i);
+                }
+            } else if (areHuki(i, BAZAVY_HUK.ʂ, BAZAVY_HUK.s)) { // ш-с
+                if (h1.miakki == 0 && h1.padzielPasla == 0) {
+                    why.add("Спрашчэнне: ш-с -> с-с");
+                    h1.bazavyHuk = BAZAVY_HUK.s;
+                }
+            } else if (areHuki(i, BAZAVY_HUK.t͡s, BAZAVY_HUK.t)) { // ц-т
+                if (h1.miakki != 0 && (h1.padzielPasla & Huk.PADZIEL_PRYSTAUKA) != 0 && h2.miakki == 0
+                        && h2.padzielPasla == 0) {
+                    why.add("Спрашчэнне: ц'-т -> т'-т");
+                    h1.bazavyHuk = BAZAVY_HUK.t;
+                }
+            } else if (areHuki(i, BAZAVY_HUK.t͡s, BAZAVY_HUK.t͡s)) { // ц-ц
+                if (h1.miakki != 0 && (h1.padzielPasla & Huk.PADZIEL_PRYSTAUKA) != 0 && h2.miakki == 0
+                        && h2.padzielPasla == 0) {
+                    why.add("Спрашчэнне: ц'-ц -> т'-ц");
+                    h2.bazavyHuk = BAZAVY_HUK.t;
+                }
+            } else if (areHuki(i, BAZAVY_HUK.s, BAZAVY_HUK.t͡s)) { // с-ц
+                if (h1.miakki != 0 && h1.padzielPasla == 0 && h2.miakki != 0
+                        && (h2.padzielPasla & (Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) != 0) {
+                    why.add("Спрашчэнне: с'-ц' -> c' (толькі на канцы слова), як 'дасць талацэ'");
+                    h1.zychodnyjaLitary += h2.zychodnyjaLitary;
+                    huki.remove(i+1);
+                }
+            } else if (areHuki(i, BAZAVY_HUK.z, BAZAVY_HUK.d)) { // з-д
+                if (h1.miakki != 0 && h1.padzielPasla == 0 && h2.miakki != 0 && !h2.padvojeny
+                        && (h2.padzielPasla & (Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) != 0) {
+                    why.add("Спрашчэнне: з'-д' -> з' (толькі на канцы слова), як 'дасць заснуць'");
+                    h1.zychodnyjaLitary += h2.zychodnyjaLitary;
+                    huki.remove(i+1);
+                }
+            } else if (areHuki(i, BAZAVY_HUK.ʐ, BAZAVY_HUK.d͡ʐ)) { // ж-дж
+                if (h1.padzielPasla == 0 && !h2.padvojeny
+                        && (h2.padzielPasla & (Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) != 0) {
+                    why.add("Спрашчэнне: ж-дж -> ж (толькі на канцы слова)");
+                    h1.zychodnyjaLitary += h2.zychodnyjaLitary;
+                    huki.remove(i+1);
+                }
+            } else if (areHuki(i, BAZAVY_HUK.ʂ, BAZAVY_HUK.t͡ʂ)) { // ш-ч
+                if (h1.padzielPasla == 0 && !h2.padvojeny
+                        && (h2.padzielPasla & (Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) != 0) {
+                    why.add("Спрашчэнне: ш-ч -> ш (толькі на канцы)");
+                    h1.zychodnyjaLitary += h2.zychodnyjaLitary;
+                    huki.remove(i+1);
+                }
+            } else if (areHuki(i,BAZAVY_HUK.n,BAZAVY_HUK.t, BAZAVY_HUK.ʂ, BAZAVY_HUK.t͡ʂ)) { // н-т-ш-ч
+                why.add("Спрашчэнне: н-т-ш-ч -> н-ш-ч");
+                h1.zychodnyjaLitary += h2.zychodnyjaLitary;
+                huki.remove(i+1);
+            } else if (areHuki(i,BAZAVY_HUK.n,BAZAVY_HUK.d, BAZAVY_HUK.ʂ)) { // н-д-ш
+                why.add("Спрашчэнне: н-д-ш -> н-ш");
+                h1.zychodnyjaLitary += h2.zychodnyjaLitary;
+                huki.remove(i+1);
             }
         }
     }
