@@ -363,9 +363,9 @@ public class Fanetyka3 {
      * 
      * ц'-ц пераходзіць у т'-ц
      * 
-     * с'-ц'(толькі на канцы слова) пераходзіць у c', як "дасць талацэ" з'-д'(толькі
-     * на канцы слова) пераходзіць у з', як "дасць заснуць" ж-дж-зычны(толькі на
-     * канцы слова мяккія і цвёрдыя) - дз выпадае, як "дасць жыцця" ш-ч-зычны(толькі
+     * ж-дж-зычны(толькі на канцы слова мяккія і цвёрдыя) - дз выпадае, як "дасць жыцця"
+     * 
+     * ш-ч-зычны(толькі
      * на канцы слова мяккія і цвёрдыя) - ч выпадае, як "дасць шырокі"
      */
     void sprascennie() {
@@ -410,6 +410,12 @@ public class Fanetyka3 {
                 h1.zychodnyjaLitary += h2.zychodnyjaLitary;
                 huki.remove(i+1);
                 h1.miakki = h3.miakki;
+            } else if (areHuki(i, BAZAVY_HUK.r, BAZAVY_HUK.k, BAZAVY_HUK.s, BAZAVY_HUK.k)) { // р-к-с-к
+                if (!h1.padvojeny && !h2.padvojeny && !h3.padvojeny && !h4.padvojeny) {
+                    why.add("Спрашчэнне: р-к-с-к -> р-c-к, як 'цюркскі'");
+                    h1.zychodnyjaLitary = h1.zychodnyjaLitary + h2.zychodnyjaLitary;
+                    huki.remove(i+1);
+                }
             } else if (areHuki(i, BAZAVY_HUK.s, BAZAVY_HUK.s, BAZAVY_HUK.k)) { // с-с-к
                 if (!h1.padvojeny && !h2.padvojeny && !h3.padvojeny && h1.padzielPasla == 0 && h2.padzielPasla == 0) {
                     why.add("Спрашчэнне: с-с-к -> c-к, але не на сутыку, як 'бяссківічны'");
@@ -439,19 +445,45 @@ public class Fanetyka3 {
                 if (h1.miakki != 0 && (h1.padzielPasla & Huk.PADZIEL_PRYSTAUKA) != 0 && h2.miakki == 0
                         && h2.padzielPasla == 0) {
                     why.add("Спрашчэнне: ц'-ц -> т'-ц");
-                    h2.bazavyHuk = BAZAVY_HUK.t;
+                    h1.bazavyHuk = BAZAVY_HUK.t;
                 }
-            } else if (areHuki(i, BAZAVY_HUK.s, BAZAVY_HUK.t͡s)) { // с-ц
+            } else if (areHuki(i, BAZAVY_HUK.s, BAZAVY_HUK.t͡s, BAZAVY_HUK.t) && h3 != null && isHluchi(h3) && !isSypiacy(h3)) { // с-ц_глухі-нешыпячы
                 if (h1.miakki != 0 && h1.padzielPasla == 0 && h2.miakki != 0
                         && (h2.padzielPasla & (Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) != 0) {
-                    why.add("Спрашчэнне: с'-ц' -> c' (толькі на канцы слова), як 'дасць талацэ'");
+                    why.add("Спрашчэнне: с'-ц' +(глухі нешыпячы ў наступным слове) -> c', як 'дасць талацэ'");
                     h1.zychodnyjaLitary += h2.zychodnyjaLitary;
-                    huki.remove(i+1);
+                    huki.remove(i + 1);
                 }
-            } else if (areHuki(i, BAZAVY_HUK.z, BAZAVY_HUK.d)) { // з-д
+            } else if (areHuki(i, BAZAVY_HUK.s, BAZAVY_HUK.t͡s, BAZAVY_HUK.t) && h3 != null && isHluchi(h3) && isSypiacy(h3)) { // с-ц_глухі-шыпячы
+                if (h1.miakki != 0 && h1.padzielPasla == 0 && h2.miakki != 0
+                        && (h2.padzielPasla & (Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) != 0) {
+                    why.add("Спрашчэнне: с'-ц' +(глухі шыпячы ў наступным слове) -> ш, як 'дасць шырокі'");
+                    h1.zychodnyjaLitary += h2.zychodnyjaLitary;
+                    h1.bazavyHuk = Huk.BAZAVY_HUK.ʂ;
+                    h1.miakki = 0;
+                    huki.remove(i + 1);
+                }
+            } else if (areHuki(i, BAZAVY_HUK.s, BAZAVY_HUK.t͡s, BAZAVY_HUK.t) && h3 != null && isZvonki(h3) && !isSypiacy(h3)) { // с-ц_звонкі-нешыпячы
+                if (h1.miakki != 0 && h1.padzielPasla == 0 && h2.miakki != 0
+                        && (h2.padzielPasla & (Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) != 0) {
+                    why.add("Спрашчэнне: с'-ц' +(звонкі нешыпячы ў наступным слове) -> з', як 'дасць дачцэ'");
+                    h1.zychodnyjaLitary += h2.zychodnyjaLitary;
+                    h1.bazavyHuk = Huk.BAZAVY_HUK.z;
+                    huki.remove(i + 1);
+                }
+            } else if (areHuki(i, BAZAVY_HUK.s, BAZAVY_HUK.t͡s, BAZAVY_HUK.t) && h3 != null && isZvonki(h3) && isSypiacy(h3)) { // с-ц_звонкі-шыпячы
+                if (h1.miakki != 0 && h1.padzielPasla == 0 && h2.miakki != 0
+                        && (h2.padzielPasla & (Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) != 0) {
+                    why.add("Спрашчэнне: с'-ц' +(звонкі шыпячы ў наступным слове) -> ж, як 'дасць жыцця'");
+                    h1.zychodnyjaLitary += h2.zychodnyjaLitary;
+                    h1.bazavyHuk = Huk.BAZAVY_HUK.ʐ;
+                    h1.miakki = 0;
+                    huki.remove(i + 1);
+                }
+            } else if (areHuki(i, BAZAVY_HUK.z, BAZAVY_HUK.d) && h3 != null && isZvonki(h3)) { // з-д // TODO небывае ? трэба прыклад
                 if (h1.miakki != 0 && h1.padzielPasla == 0 && h2.miakki != 0 && !h2.padvojeny
                         && (h2.padzielPasla & (Huk.PADZIEL_SLOVY | Huk.PADZIEL_MINUS)) != 0) {
-                    why.add("Спрашчэнне: з'-д' -> з' (толькі на канцы слова), як 'дасць заснуць'");
+                    why.add("Спрашчэнне: з'-д' +(звонкі ў наступным слове) -> з', як 'дасць заснуць'");
                     h1.zychodnyjaLitary += h2.zychodnyjaLitary;
                     huki.remove(i+1);
                 }
@@ -477,6 +509,20 @@ public class Fanetyka3 {
                 why.add("Спрашчэнне: н-д-ш -> н-ш");
                 h1.zychodnyjaLitary += h2.zychodnyjaLitary;
                 huki.remove(i+1);
+            } else if (areHuki(i,BAZAVY_HUK.n,BAZAVY_HUK.t, BAZAVY_HUK.s)) { // н-т-с
+                why.add("Спрашчэнне: н-т-с -> н-с, як 'бургундскі'");
+                h1.zychodnyjaLitary += h2.zychodnyjaLitary;
+                huki.remove(i+1);
+            } else if (areHuki(i,BAZAVY_HUK.b,BAZAVY_HUK.r, BAZAVY_HUK.s)) { // б-р-с
+                why.add("Спрашчэнне: б-р-с -> б-с, як 'акцябрскі'");
+                h1.zychodnyjaLitary += h2.zychodnyjaLitary;
+                huki.remove(i+1);
+            } else if (areHuki(i, BAZAVY_HUK.m, BAZAVY_HUK.ɫ, BAZAVY_HUK.s)) { // м-ль-с
+                if (h2.miakki == Huk.MIAKKASC_PAZNACANAJA) {
+                    why.add("Спрашчэнне: м-ль-с -> м-с, як 'бягомльскі'");
+                    h1.zychodnyjaLitary += h2.zychodnyjaLitary;
+                    huki.remove(i + 1);
+                }
             }
         }
     }
@@ -618,6 +664,13 @@ public class Fanetyka3 {
                 huki.remove(i - 1);
                 huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
                 i--;
+            } else if (papiaredni.is(BAZAVY_HUK.g, 0, false, null) && huk.is(BAZAVY_HUK.ɣ, null, false, null)) {
+                why.add("Падваенне: ґ+г => г:, як 'банк-гарант'");
+                huk.bazavyHuk = BAZAVY_HUK.ɣ;
+                huk.padvojeny = true;
+                huki.remove(i - 1);
+                huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
+                i--;
             }
         }
     }
@@ -671,15 +724,8 @@ public class Fanetyka3 {
                     break;
                 }
             } else if (isSypiacy(nastupny) /* && !huk.miakki */) {
-                /*
-                 * на сутыку: шыпячых мяккіх у беларускай мове няма(усярэдзіне слоў), але каб
-                 * зрабіць пераход "вось што" у "ш:", трэба апрацоўваць "сьш", таму праверка на
-                 * мяккасць папярэдняга - неабавязковая
-                 */
                 // пераходзіць у шыпячы
-                if (huk.miakki == Huk.MIAKKASC_PAZNACANAJA) {
-                    throw new RuntimeException("Ня можа пераходзіць пазначаная мяккасць");
-                }
+                // пры пераходзе ў шыпячыя мяккасць знікае, нават калі была пазначаная: бязьджаўковая
                 switch (huk.bazavyHuk) {
                 case t:
                     why.add("Пераход у шыпячыя: т->ч");
@@ -699,6 +745,11 @@ public class Fanetyka3 {
                     break;
                 case d͡z:
                     // праблема: "сядзь жа"
+                    /*
+                     * на сутыку: шыпячых мяккіх у беларускай мове няма(усярэдзіне слоў), але каб
+                     * зрабіць пераход "вось што" у "ш:", трэба апрацоўваць "сьш", таму праверка на
+                     * мяккасць папярэдняга - неабавязковая
+                     */
                     why.add("Пераход у шыпячыя: дз->дж");
                     huk.bazavyHuk = BAZAVY_HUK.d͡ʐ;
                     huk.miakki = 0;
@@ -726,7 +777,7 @@ public class Fanetyka3 {
                 // азванчэньне
                 switch (huk.bazavyHuk) {
                 case p:
-                    why.add("Азванчэнне");
+                    why.add("Азванчэнне п->б");
                     huk.bazavyHuk = BAZAVY_HUK.b;
                     break;
                 case t:
@@ -759,7 +810,7 @@ public class Fanetyka3 {
                     huk.bazavyHuk = BAZAVY_HUK.ɣ;
                     break;
                 case k:
-                    why.add("Азванчэнне");
+                    why.add("Азванчэнне к->ґ");
                     huk.bazavyHuk = BAZAVY_HUK.g;
                     break;
                 }
@@ -1085,7 +1136,7 @@ public class Fanetyka3 {
                 break;
             case 'ь':
                 if (papiaredniHuk != null) {
-                    papiaredniHuk.setMiakkasc(true);
+                    papiaredniHuk.miakki = Huk.MIAKKASC_PAZNACANAJA;
                 }
                 break;
             case 'э':

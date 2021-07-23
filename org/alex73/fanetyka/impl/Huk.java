@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
-
 public class Huk {
     public static int PADZIEL_PRYSTAUKA = 1;
     public static int PADZIEL_KORANI = 2;
@@ -56,7 +54,7 @@ public class Huk {
      * Пазначае асіміляцыйную мяккасць ці цвёрдасць. Не павінен канфліктаваць з пазначанай.
      */
     public void setMiakkasc(boolean m) {
-        if (miakki == MIAKKASC_PAZNACANAJA) {
+        if (miakki == MIAKKASC_PAZNACANAJA && bazavyHuk == BAZAVY_HUK.ɨ) {
             if (!m) {
                 throw new RuntimeException("Спроба асіміляцыйнай цвёрдасці ў пазначаным мяккім");
             }
