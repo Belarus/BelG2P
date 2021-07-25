@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
+import org.alex73.korpus.base.GrammarDB2;
+import org.alex73.korpus.base.GrammarFinder;
+import org.alex73.korpus.base.GrammarMorphFinder;
 
 /*
  * Праверыць - [й] перад галоснымі - гэта галосны ці змяніць на зычны
@@ -16,10 +19,15 @@ import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
  * TODO брск - бск (Акцябрскі)     стм - см (пластмаса)     мюзікл mʲuzʲikl
  */
 public class Fanetyka3 {
+    private final GrammarMorphFinder morphFinder;
     List<Huk> huki = new ArrayList<>();
     List<String> words = new ArrayList<>();
     List<String> why = new ArrayList<>(); // як адбываюцца пераходы
 
+    public Fanetyka3(GrammarMorphFinder finder) {
+        morphFinder = finder;
+    }
+    
     public void addWord(String w) {
         words.add(w);
     }
@@ -47,7 +55,7 @@ public class Fanetyka3 {
                     break;
                 }
             }
-            stvarajemBazavyjaHuji(w.toLowerCase());
+            stvarajemBazavyjaHuji(castkiSlova(w.toLowerCase()));
         }
         String prev = toString();
         int pass = 0;
@@ -68,12 +76,13 @@ public class Fanetyka3 {
             pierachodZG();
             String hnew = toString();
             if (hnew.equals(prev)) {
+                // нічога не змянілася
                 break;
             }
             prev = hnew;
             pass++;
             if (pass >= 100) {
-                throw new RuntimeException("Too many passes");
+                throw new RuntimeException("Зашмат крокаў канверсіі");
             }
         }
         setIpaStress();
@@ -194,8 +203,7 @@ public class Fanetyka3 {
         }
     }
 
-    public static String fanetykaSlova(String w) {
-        Fanetyka3 r = new Fanetyka3();
+    public static String fanetykaSlova(Fanetyka3 r, String w) {
         r.addWord(w);
         r.calcFanetyka();
         return r.toString(Huk.ipa);
@@ -998,17 +1006,37 @@ public class Fanetyka3 {
     }
 
     /**
+     * Бярэм падзел слова на часткі з базы ці пазначаем найбольш распаўсюджаныя
+     * прыстаўкі.
+     */
+    String castkiSlova(String w) {
+        if (w.contains("|")) {
+            // ужо пазначана
+            return w;
+        }
+
+        String dbMorph = morphFinder.get(w);
+        if (dbMorph != null) {
+            // ёсць у базе
+            why.add("Марфалогія з базы: " + dbMorph);
+            return dbMorph;
+        }
+
+        // у базе не знойдзена - пазначаем найбольш распаўсюджаныя прыстаўкі
+        for (String p : PRYSTAUKI) {
+            if (w.length() > p.length() + 2 && w.startsWith(p)) {
+                w = w.substring(0, p.length()) + '|' + w.substring(p.length());
+                why.add("Пазначана прыстаўка '" + p + "'");
+            }
+        }
+        return w;
+    }
+
+    /**
      * Канвэртуем літары ў базавыя гукі, ўлічваючы дж/дз як адзін гук і пазначаючы
      * мяккі знак як мяккасьць папярэдняга гуку.
      */
     void stvarajemBazavyjaHuji(String w) {
-        // пазначаем прыстаўкі
-        for (String p : PRYSTAUKI) {
-            if (w.length() > p.length() + 2 && w.startsWith(p)) {
-                w = w.substring(0, p.length()) + '|' + w.substring(p.length());
-            }
-        }
-
         Huk papiaredniHuk = null;
         for (int i = 0; i < w.length(); i++) {
             char c = w.charAt(i);
@@ -1232,9 +1260,11 @@ public class Fanetyka3 {
         return false;
     }
 
-    public static void main(String[] words) {
+    public static void main(String[] words) throws Exception {
+        GrammarDB2 db = GrammarDB2.initializeFromDir("/data/gits/GrammarDB");
+        Fanetyka3 f = new Fanetyka3(new GrammarMorphFinder(db));
         for (String w : words) {
-            System.out.println(w + " -> " + fanetykaSlova(w));
+            System.out.println(w + " -> " + fanetykaSlova(f, w));
         }
     }
 }
