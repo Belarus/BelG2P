@@ -6,9 +6,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 
+import org.alex73.corpus.paradigm.Form;
+import org.alex73.corpus.paradigm.Paradigm;
+import org.alex73.corpus.paradigm.Variant;
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 import org.alex73.korpus.base.GrammarDB2;
-import org.alex73.korpus.base.GrammarMorphFinder;
+import org.alex73.korpus.base.GrammarFinder;
+import org.alex73.korpus.belarusian.BelarusianWordNormalizer;
+import org.alex73.korpus.utils.SetUtils;
 
 /*
  * Праверыць - [й] перад галоснымі - гэта галосны ці змяніць на зычны
@@ -21,13 +26,15 @@ import org.alex73.korpus.base.GrammarMorphFinder;
  * Ф1989 - Фанетыка беларускай літаратурнай мовы / І.Р.Бурлыка,Л.Ц.Выгонная,Г.В.Лосік,А.І.Падлужны. - Мн. : Навука і тэхніка, 1989. - 335с.
  */
 public class Fanetyka3 {
-    private final GrammarMorphFinder morphFinder;
+    private static final char STRESS_CHAR = '´';
+    
+    private final GrammarFinder finder;
     List<Huk> huki = new ArrayList<>();
     List<String> words = new ArrayList<>();
     List<String> why = new ArrayList<>(); // як адбываюцца пераходы
 
-    public Fanetyka3(GrammarMorphFinder finder) {
-        morphFinder = finder;
+    public Fanetyka3(GrammarFinder finder) {
+        this.finder = finder;
     }
     
     public void addWord(String w) {
@@ -57,7 +64,7 @@ public class Fanetyka3 {
                     break;
                 }
             }
-            stvarajemBazavyjaHuji(castkiSlova(w.toLowerCase()));
+            stvarajemBazavyjaHuji(narmalizacyjaSlova(w.toLowerCase()));
         }
         String prev = toString();
         int pass = 0;
@@ -995,6 +1002,7 @@ public class Fanetyka3 {
         }
     }
 
+    // TODO дадаць націскі
     static final String[] PRYSTAUKI = new String[] { "ад", "безад", "беспад", "вод", "звод", "наад", "навод",
             "напад", "над", "неад", "непад", "непрад", "павод", "панад", "папад", "падад", "пад", "перапад", "перад",
             "под", "прад", "прыад", "прыпад", "спад", "спрад", "за","з",
@@ -1019,22 +1027,37 @@ public class Fanetyka3 {
     }
 
     /**
-     * Бярэм падзел слова на часткі з базы ці пазначаем найбольш распаўсюджаныя
-     * прыстаўкі.
+     * Бярэм падзел слова на часткі з базы, ці толькі націскі і ґ, ці пазначаем
+     * найбольш распаўсюджаныя прыстаўкі. TODO +аб'яднаць finder
      */
-    String castkiSlova(String w) {
-        if (w.contains("|")) {
+    String narmalizacyjaSlova(String w) {
+        if (w.indexOf(STRESS_CHAR) >= 0 || w.contains("|")) {
             // ужо пазначана
             return w;
         }
 
-        String dbMorph = morphFinder.get(w);
+        String dbMorph = finder.getMorph(w);
         if (dbMorph != null) {
             // ёсць у базе
             why.add("Марфалогія з базы: " + dbMorph);
             return dbMorph;
         }
 
+        // у базе няма марфалогіі - спрабуем выцягнуць націскі і ґ
+        f1: for (Paradigm p : finder.getParadigms(w)) {
+            for (Variant v : p.getVariant()) {
+                for (Form f : v.getForm()) {
+                    if (f.getValue().isEmpty()) {
+                        continue;
+                    }
+                    if (BelarusianWordNormalizer.equals(f.getValue(), w)) {
+                        w = f.getValue().replace('+', STRESS_CHAR);
+                        break f1;
+                    }
+                }
+            }
+        }
+        
         // у базе не знойдзена - пазначаем найбольш распаўсюджаныя прыстаўкі
         for (String p : PRYSTAUKI) {
             if (w.length() > p.length() + 2 && w.startsWith(p)) {
@@ -1208,7 +1231,7 @@ public class Fanetyka3 {
             case '-':
                 papiaredniHuk.padzielPasla = Huk.PADZIEL_MINUS;
                 break;
-            case '´':
+            case STRESS_CHAR:
                 if (papiaredniHuk==null || !papiaredniHuk.halosnaja || papiaredniHuk.padzielPasla!=0) {
                     throw new RuntimeException("Няправільная пазнака націску");
                 }
@@ -1271,13 +1294,5 @@ public class Fanetyka3 {
             }
         }
         return false;
-    }
-
-    public static void main(String[] words) throws Exception {
-        GrammarDB2 db = GrammarDB2.initializeFromDir("/data/gits/GrammarDB");
-        Fanetyka3 f = new Fanetyka3(new GrammarMorphFinder(db));
-        for (String w : words) {
-            System.out.println(w + " -> " + fanetykaSlova(f, w));
-        }
     }
 }

@@ -289,6 +289,20 @@ public class Huk {
         return o;
     };
 
+    public static Function<Huk, String> arfaepNoStress = h -> {
+        String o = ARFAEP_MAP.get(ipa_enum.apply(h));
+        if (h.stressIpa) {
+            //o = 'ˈ' + o;
+        }
+        if (h.stress) {
+            //o += '´';
+        }
+        if (h.padvojeny) {
+            o += ":";
+        }
+        return o;
+    };
+
     public static Function<Huk, String> skolny = h -> {
         String o = SKOLNY_MAP.get(ipa_enum.apply(h));
         if (h.stressIpa) {

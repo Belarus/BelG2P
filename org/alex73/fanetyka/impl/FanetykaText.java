@@ -3,14 +3,14 @@ package org.alex73.fanetyka.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.alex73.korpus.base.GrammarMorphFinder;
+import org.alex73.korpus.base.GrammarFinder;
 
 public class FanetykaText {
     public String ipa = "";
     public String skola = "";
     public List<String> why = new ArrayList<>();
 
-    public FanetykaText(GrammarMorphFinder finder, String text) {
+    public FanetykaText(GrammarFinder finder, String text) {
         String word = "";
         Fanetyka3 f = new Fanetyka3(finder);
         for (int i = 0; i < text.length(); i++) {
