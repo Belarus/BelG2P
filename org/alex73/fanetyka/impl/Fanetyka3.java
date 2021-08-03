@@ -64,7 +64,10 @@ public class Fanetyka3 {
                     break;
                 }
             }
-            stvarajemBazavyjaHuji(narmalizacyjaSlova(w.toLowerCase()));
+            if (!fanetykaBazy(w)) {
+                w = narmalizacyjaSlova(w.toLowerCase());
+                stvarajemBazavyjaHuki(w);
+            }
         }
         String prev = toString();
         int pass = 0;
@@ -1049,6 +1052,28 @@ public class Fanetyka3 {
         });
     }
 
+    boolean fanetykaBazy(String word) {
+        String fan = finder.getFan(word);
+        if (fan == null) {
+            return false;
+        }
+        why.add("Фанетыка з базы: " + fan);
+        Huk.ParseIpaContext p = new Huk.ParseIpaContext(fan);
+        while (p.fan.length() > 0) {
+            Huk h = Huk.parseIpa(p);
+            if (h != null) {
+                huki.add(h);
+            }
+        }
+        if (p.stress) {
+            throw new RuntimeException("Няправільнае аднаўленне націску: " + word);
+        }
+        if (!huki.isEmpty()) {
+            huki.get(huki.size() - 1).padzielPasla |= Huk.PADZIEL_SLOVY;
+        }
+        return true;
+    }
+
     /**
      * Бярэм падзел слова на часткі з базы, ці толькі націскі і ґ, ці пазначаем
      * найбольш распаўсюджаныя прыстаўкі. TODO +аб'яднаць finder
@@ -1061,8 +1086,7 @@ public class Fanetyka3 {
 
         String dbMorph = finder.getMorph(w);
         if (dbMorph != null) {
-            // ёсць у базе
-            why.add("Марфалогія з базы: " + dbMorph);
+            why.add("Марфемы з базы: " + dbMorph);
             return dbMorph;
         }
 
@@ -1096,7 +1120,7 @@ public class Fanetyka3 {
      * Канвэртуем літары ў базавыя гукі, ўлічваючы дж/дз як адзін гук і пазначаючы
      * мяккі знак як мяккасьць папярэдняга гуку.
      */
-    void stvarajemBazavyjaHuji(String w) {
+    void stvarajemBazavyjaHuki(String w) {
         Huk papiaredniHuk = null;
         for (int i = 0; i < w.length(); i++) {
             char c = w.charAt(i);
