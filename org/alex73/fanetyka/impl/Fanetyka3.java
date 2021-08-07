@@ -1076,7 +1076,7 @@ public class Fanetyka3 {
 
     /**
      * Бярэм падзел слова на часткі з базы, ці толькі націскі і ґ, ці пазначаем
-     * найбольш распаўсюджаныя прыстаўкі. TODO +аб'яднаць finder
+     * найбольш распаўсюджаныя прыстаўкі.
      */
     String narmalizacyjaSlova(String w) {
         if (w.indexOf(STRESS_CHAR) >= 0 || w.contains("|")) {
@@ -1113,6 +1113,7 @@ public class Fanetyka3 {
                 why.add("Мяркуем, што прыстаўка '" + p + "'");
             }
         }
+        // і націскі на о, ё
         return w;
     }
 
