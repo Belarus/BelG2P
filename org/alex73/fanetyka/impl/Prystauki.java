@@ -1,6 +1,7 @@
 package org.alex73.fanetyka.impl;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.text.Collator;
 import java.util.Comparator;
 import java.util.List;
@@ -13,37 +14,47 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 
 public class Prystauki {
+    // static final String FN =
+    // "src-fanetyka/org/alex73/fanetyka/impl/slovautvarennie.2.txt";
+    static final String FN = "src-fanetyka/org/alex73/fanetyka/impl/slovautvarennie.2.txt";
+    static final String MAR = "src-fanetyka/org/alex73/fanetyka/impl/marfiemy.txt";
     static final Pattern RE1 = Pattern.compile("(\\{[0-9]+[abа]?\\. ?\\} ?).+");
     static final Pattern RE2 = Pattern.compile("(\\[[0-9]+\\.\\] ).+");
     static final Pattern RE3 = Pattern.compile("([0-9]+a?\\. ).+");
 
     public static void main(String[] args) throws Exception {
-        List<String> lines = FileUtils
-                .readLines(new File("src-fanetyka/org/alex73/fanetyka/impl/slovautv_teza.txt"), "UTF-8");
-        for (int i = 0; i < lines.size(); i++) {
-            StringBuilder s = new StringBuilder(lines.get(i));
-            if (s.toString().trim().isEmpty()) {
-                continue;
-            }
-
-            if (fix(RE1, s)) {
-                lines.set(i, s.toString().trim());
-            } else if (fix(RE2, s)) {
-                lines.set(i, s.toString().trim());
-            } else if (fix(RE3, s)) {
-                lines.set(i, s.toString().trim());
-            } else {
-                System.err.println(s.toString());
-            }
-        }
-        FileUtils.writeLines(new File("src-fanetyka/org/alex73/fanetyka/impl/slovautv_teza.txt"), lines);
-        for (String line : lines) {
-            String[] ws = line.split("\t");
+        List<String> lines = FileUtils.readLines(new File(FN), "UTF-8");
+        List<String> mar = FileUtils.readLines(new File(MAR), "UTF-8");
+        nnn: for (int i = 0, m = 0; i < lines.size();) {
+            String[] ws = lines.get(i).trim().split("\t");
             if (ws.length != 3) {
-                continue;
+                throw new Exception(lines.get(i));
             }
-            process(ws[2]);
+            String mline = mar.get(m).trim().replace('%', '!');
+            if (mline.equals(ws[2])) {
+                i++;
+                m++;
+            } else {
+                for (int inext = i; inext - i < 20; inext++) {
+                    for (int mnext = m; mnext < m + 20; mnext++) {
+                        String mlinenext = mar.get(mnext).trim().replace('%', '!');
+                        String[] wsnext = lines.get(inext).trim().split("\t");
+                        if (mlinenext.equals(wsnext[2])) {
+                            i = inext;
+                            for (int mfrom = m; mfrom < mnext; mfrom++) {
+                                String mlinefrom = mar.get(mfrom).trim().replace('%', '!');
+                                lines.add(i, "???\t???\t" + mlinefrom);
+                                i++;
+                            }
+                            m = mnext;
+                            continue nnn;
+                        }
+                    }
+                }
+                throw new Exception();
+            }
         }
+        FileUtils.writeLines(new File(FN), lines);
 
         // prystauki.entrySet().stream().filter(p -> p.getValue() > 0).forEach(w ->
         // System.out.println(w));
