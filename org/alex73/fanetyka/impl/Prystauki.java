@@ -12,8 +12,6 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
-
 public class Prystauki {
     // static final String FN =
     // "src-fanetyka/org/alex73/fanetyka/impl/slovautvarennie.2.txt";
@@ -42,7 +40,7 @@ public class Prystauki {
     }
 
     static void k2() throws Exception {
-        List<String> lines = FileUtils.readLines(new File(FN3), "UTF-8");
+        List<String> lines = Files.readAllLines(Paths.get(FN3));
         for (String line : lines) {
             String[] ws = line.split("\t");
             if (ws[1].equals("???") && ws[2].replaceAll("\\([^\\)]+\\)", "").replaceAll("[^/]", "").length() >= 6) {
@@ -52,7 +50,7 @@ public class Prystauki {
     }
 
     static void uzn() throws Exception {
-        List<String> lines = FileUtils.readLines(new File(FN3), "UTF-8");
+        List<String> lines = Files.readAllLines(Paths.get(FN3));
         for (int i = 0; i < lines.size(); i++) {
             String[] ws = lines.get(i).trim().split("\t");
             if (ws[0].equals("???")) {
@@ -60,12 +58,12 @@ public class Prystauki {
             }
             lines.set(i, String.join("\t", ws));
         }
-        FileUtils.writeLines(new File(FN3), lines);
+        Files.write(Paths.get(FN3), lines);
     }
 
     static void merge() throws Exception {
-        List<String> lines = FileUtils.readLines(new File(FN), "UTF-8");
-        List<String> mar = FileUtils.readLines(new File(MAR), "UTF-8");
+        List<String> lines = Files.readAllLines(Paths.get(FN));
+        List<String> mar = Files.readAllLines(Paths.get(MAR));
         nnn: for (int i = 0, m = 0; i < lines.size();) {
             String[] ws = lines.get(i).trim().split("\t");
             if (ws.length != 3) {
@@ -95,7 +93,7 @@ public class Prystauki {
                 throw new Exception();
             }
         }
-        FileUtils.writeLines(new File(FN), lines);
+        Files.write(Paths.get(FN), lines);
 
         // prystauki.entrySet().stream().filter(p -> p.getValue() > 0).forEach(w ->
         // System.out.println(w));
