@@ -26,7 +26,7 @@ import org.alex73.korpus.utils.SetUtils;
  * Ф1989 - Фанетыка беларускай літаратурнай мовы / І.Р.Бурлыка,Л.Ц.Выгонная,Г.В.Лосік,А.І.Падлужны. - Мн. : Навука і тэхніка, 1989. - 335с.
  */
 public class Fanetyka3 {
-    private static final char STRESS_CHAR = '´';
+    private static final char STRESS_CHAR = '\u0301';
     
     private final GrammarFinder finder;
     List<Huk> huki = new ArrayList<>();
