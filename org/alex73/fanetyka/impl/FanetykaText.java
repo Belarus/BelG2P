@@ -3,6 +3,7 @@ package org.alex73.fanetyka.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.alex73.korpus.base.GrammarDB2;
 import org.alex73.korpus.base.GrammarFinder;
 
 public class FanetykaText {
@@ -51,6 +52,13 @@ public class FanetykaText {
 
     boolean isLetter(char c) {
         c = Character.toLowerCase(c);
-        return "ёйцукенгшўзх'фывапролджэячсмітьбюґ|-´".indexOf(c) >= 0;
+        return "ёйцукенгшўзх'фывапролджэячсмітьбюґ|-\u0301".indexOf(c) >= 0;
+    }
+
+    public static void main(String[] a) throws Exception {
+        GrammarDB2 db = GrammarDB2.initializeFromDir("/data/gits/GrammarDB/");
+        GrammarFinder finder = new GrammarFinder(db);
+        FanetykaText t = new FanetykaText(finder, "кола\u0301с");
+        System.out.println(t.skola);
     }
 }
