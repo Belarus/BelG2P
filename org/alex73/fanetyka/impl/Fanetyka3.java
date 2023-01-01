@@ -10,10 +10,8 @@ import org.alex73.corpus.paradigm.Form;
 import org.alex73.corpus.paradigm.Paradigm;
 import org.alex73.corpus.paradigm.Variant;
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
-import org.alex73.korpus.base.GrammarDB2;
 import org.alex73.korpus.base.GrammarFinder;
-import org.alex73.korpus.belarusian.BelarusianWordNormalizer;
-import org.alex73.korpus.utils.SetUtils;
+import org.alex73.korpus.languages.LanguageFactory;
 
 /*
  * Праверыць - [й] перад галоснымі - гэта галосны ці змяніць на зычны
@@ -1097,7 +1095,7 @@ public class Fanetyka3 {
                     if (f.getValue().isEmpty()) {
                         continue;
                     }
-                    if (BelarusianWordNormalizer.equals(f.getValue(), w)) {
+                    if (LanguageFactory.get("bel").getNormalizer().equals(f.getValue(), w)) {
                         w = f.getValue().replace('+', STRESS_CHAR);
                         why.add("Націскі з базы: " + w);
                         break f1;
