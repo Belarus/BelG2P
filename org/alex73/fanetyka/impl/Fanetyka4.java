@@ -2,6 +2,8 @@ package org.alex73.fanetyka.impl;
 
 /**
  * Замяняем гукі паміж словамі.
+ * 
+ * TODO праверыць, ці так працуе
  */
 public class Fanetyka4 {
     public static String fixWords(String text) {
