@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="Fanetyka" default="all" basedir=".">
+
+	<target name="clean">
+		<delete dir="build" failonerror="false" />
+	</target>
+
+	<target name="build">
+		<mkdir dir="build/classes" />
+		<javac srcdir="src" encoding="utf-8" destdir="build/classes">
+			<classpath>
+				<fileset dir="lib" includes="**/*.jar" />
+			</classpath>
+		</javac>
+		<copy todir="build/classes">
+			<fileset dir="src" />
+		</copy>
+		<jar jarfile="build/Fanetyka.jar" basedir="build/classes">
+			<zipgroupfileset dir="lib" includes="**/*.jar" />
+		</jar>
+	</target>
+
+	<target name="all" depends="clean,build" />
+</project>
