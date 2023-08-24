@@ -7,5 +7,10 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/Korpus-Common.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb/istack-commons-runtime-3.0.12.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb/jakarta.activation-1.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb/jakarta.xml.bind-api-2.3.3.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb/jaxb-runtime-2.3.5.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb/txw2-2.3.5.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
