@@ -8,7 +8,7 @@ import java.util.function.Function;
 
 public class Huk {
     public static int PADZIEL_PRYSTAUKA = 1;
-    public static int PADZIEL_KORANI = 2;
+    public static int PADZIEL_KARANI = 2;
     public static int PADZIEL_SLOVY = 4;
     public static int PADZIEL_MINUS = 8;
     public static int MIAKKASC_ASIMILACYJNAJA = 1;
@@ -16,7 +16,7 @@ public class Huk {
     public static int MASK_MIAKKASC_USIE = 3;
 
     public enum BAZAVY_HUK {
-        a, b, v, β, ɣ, g, d, ɛ, d͡ʐ, d͡z, ʐ, z, i, k, ɫ, m, ɱ, n, ɔ, p, r, s, t, u, u̯, f, x, t͡s, t͡ʂ, ʂ, ɨ, j
+        а, б, в, β, г, ґ, д, э, дж, дз, ж, з, і, к, л, м, ɱ, н, о, п, р, с, т, у, ў, ф, x, ц, ч, ш, ы, j
     }
 
     public enum IPA {
@@ -54,7 +54,7 @@ public class Huk {
      * Пазначае асіміляцыйную мяккасць ці цвёрдасць. Не павінен канфліктаваць з пазначанай.
      */
     public void setMiakkasc(boolean m) {
-        if (miakki == MIAKKASC_PAZNACANAJA && bazavyHuk == BAZAVY_HUK.ɨ) {
+        if (miakki == MIAKKASC_PAZNACANAJA && bazavyHuk == BAZAVY_HUK.ы) {
             if (!m) {
                 throw new RuntimeException("Спроба асіміляцыйнай цвёрдасці ў пазначаным мяккім");
             }
@@ -75,106 +75,106 @@ public class Huk {
 
     public static Function<Huk, IPA> ipa_enum = h -> {
         switch (h.bazavyHuk) {
-        case a:
+        case а:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.a;
-        case b:
+        case б:
             return h.miakki == 0 ? IPA.b : IPA.bʲ;
-        case v:
+        case в:
             return h.miakki == 0 ? IPA.v : IPA.vʲ;
         case β:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.β;
-        case ɣ:
+        case г:
             return h.miakki == 0 ? IPA.ɣ : IPA.ɣʲ;
-        case g:
+        case ґ:
             return h.miakki == 0 ? IPA.g : IPA.gʲ;
-        case d:
+        case д:
             return h.miakki == 0 ? IPA.d : IPA.dʲ;
-        case ɛ:
+        case э:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.ɛ;
-        case d͡ʐ:
+        case дж:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.d͡ʐ;
-        case d͡z:
+        case дз:
             return h.miakki == 0 ? IPA.d͡z : IPA.d͡zʲ;
-        case ʐ:
+        case ж:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.ʐ;
-        case z:
+        case з:
             return h.miakki == 0 ? IPA.z : IPA.zʲ;
-        case i:
+        case і:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.i;
-        case k:
+        case к:
             return h.miakki == 0 ? IPA.k : IPA.kʲ;
-        case ɫ:
+        case л:
             return h.miakki == 0 ? IPA.ɫ : IPA.lʲ;
-        case m:
+        case м:
             return h.miakki == 0 ? IPA.m : IPA.mʲ;
         case ɱ:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.ɱ;
-        case n:
+        case н:
             return h.miakki == 0 ? IPA.n : IPA.nʲ;
-        case ɔ:
+        case о:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.ɔ;
-        case p:
+        case п:
             return h.miakki == 0 ? IPA.p : IPA.pʲ;
-        case r:
+        case р:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.r;
-        case s:
+        case с:
             return h.miakki == 0 ? IPA.s : IPA.sʲ;
-        case t:
+        case т:
             return h.miakki == 0 ? IPA.t : IPA.tʲ;
-        case u:
+        case у:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.u;
-        case u̯:
+        case ў:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.u̯;
-        case f:
+        case ф:
             return h.miakki == 0 ? IPA.f : IPA.fʲ;
         case x:
             return h.miakki == 0 ? IPA.x : IPA.xʲ;
-        case t͡s:
+        case ц:
             return h.miakki == 0 ? IPA.t͡s : IPA.t͡sʲ;
-        case t͡ʂ:
+        case ч:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.t͡ʂ;
-        case ʂ:
+        case ш:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.ʂ;
-        case ɨ:
+        case ы:
             if (h.miakki != 0) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
@@ -190,21 +190,21 @@ public class Huk {
         String s = context.fan;
         Huk huk;
         if (s.startsWith("u̯")) {
-            huk = new Huk(s.substring(0, 2), BAZAVY_HUK.u̯);
+            huk = new Huk(s.substring(0, 2), BAZAVY_HUK.ў);
         } else if (s.startsWith("d͡ʐ")) {
-            huk = new Huk(s.substring(0, 3), BAZAVY_HUK.d͡ʐ);
+            huk = new Huk(s.substring(0, 3), BAZAVY_HUK.дж);
         } else if (s.startsWith("d͡zʲ")) {
-            huk = new Huk(s.substring(0, 4), BAZAVY_HUK.d͡z);
+            huk = new Huk(s.substring(0, 4), BAZAVY_HUK.дз);
             huk.miakki = MIAKKASC_PAZNACANAJA;
         } else if (s.startsWith("d͡z")) {
-            huk = new Huk(s.substring(0, 3), BAZAVY_HUK.d͡z);
+            huk = new Huk(s.substring(0, 3), BAZAVY_HUK.дз);
         } else if (s.startsWith("t͡ʂ")) {
-            huk = new Huk(s.substring(0, 3), BAZAVY_HUK.t͡ʂ);
+            huk = new Huk(s.substring(0, 3), BAZAVY_HUK.ч);
         } else if (s.startsWith("t͡sʲ")) {
-            huk = new Huk(s.substring(0, 4), BAZAVY_HUK.t͡s);
+            huk = new Huk(s.substring(0, 4), BAZAVY_HUK.ц);
             huk.miakki = MIAKKASC_PAZNACANAJA;
         } else if (s.startsWith("t͡s")) {
-            huk = new Huk(s.substring(0, 3), BAZAVY_HUK.t͡s);
+            huk = new Huk(s.substring(0, 3), BAZAVY_HUK.ц);
         } else {
             char c1;
             try {
@@ -218,23 +218,23 @@ public class Huk {
                 context.fan = context.fan.substring(1);
                 return null;
             case 'a':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.a);
+                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.а);
                 huk.halosnaja = true;
                 break;
             case 'b':
                 if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.b);
+                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.б);
                     huk.miakki = MIAKKASC_PAZNACANAJA;
                 } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.b);
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.б);
                 }
                 break;
             case 'v':
                 if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.v);
+                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.в);
                     huk.miakki = MIAKKASC_PAZNACANAJA;
                 } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.v);
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.в);
                 }
                 break;
             case 'β':
@@ -242,73 +242,73 @@ public class Huk {
                 break;
             case 'ɣ':
                 if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.ɣ);
+                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.г);
                     huk.miakki = MIAKKASC_PAZNACANAJA;
                 } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ɣ);
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.г);
                 }
                 break;
             case 'g':
                 if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.g);
+                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.ґ);
                     huk.miakki = MIAKKASC_PAZNACANAJA;
                 } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.g);
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ґ);
                 }
                 break;
             case 'd':
                 if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.d);
+                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.д);
                     huk.miakki = MIAKKASC_PAZNACANAJA;
                 } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.d);
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.д);
                 }
                 break;
             case 'ɛ':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ɛ);
+                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.э);
                 huk.halosnaja = true;
                 huk.miakkajaHalosnaja = true;
                 break;
             case 'ʐ':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ʐ);
+                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ж);
                 break;
             case 'z':
                 if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.z);
+                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.з);
                     huk.miakki = MIAKKASC_PAZNACANAJA;
                 } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.z);
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.з);
                 }
                 break;
             case 'i':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.i);
+                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.і);
                 huk.halosnaja = true;
                 huk.miakkajaHalosnaja = true;
                 break;
             case 'k':
                 if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.k);
+                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.к);
                     huk.miakki = MIAKKASC_PAZNACANAJA;
                 } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.k);
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.к);
                 }
                 break;
             case 'ɫ':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ɫ);
+                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.л);
                 break;
             case 'l':
                 if (c1 != 'ʲ') {
                     throw new RuntimeException("Няправільнае аднаўленне гуку: " + s);
                 }
-                huk = new Huk(s.substring(0, 2), BAZAVY_HUK.ɫ);
+                huk = new Huk(s.substring(0, 2), BAZAVY_HUK.л);
                 huk.miakki = MIAKKASC_PAZNACANAJA;
                 break;
             case 'm':
                 if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.m);
+                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.м);
                     huk.miakki = MIAKKASC_PAZNACANAJA;
                 } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.m);
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.м);
                 }
                 break;
             case 'ɱ':
@@ -316,53 +316,53 @@ public class Huk {
                 break;
             case 'n':
                 if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.n);
+                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.н);
                     huk.miakki = MIAKKASC_PAZNACANAJA;
                 } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.n);
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.н);
                 }
                 break;
             case 'ɔ':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ɔ);
+                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.о);
                 huk.halosnaja = true;
                 break;
             case 'p':
                 if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.p);
+                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.п);
                     huk.miakki = MIAKKASC_PAZNACANAJA;
                 } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.p);
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.п);
                 }
                 break;
             case 'r':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.r);
+                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.р);
                 break;
             case 's':
                 if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.s);
+                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.с);
                     huk.miakki = MIAKKASC_PAZNACANAJA;
                 } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.s);
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.с);
                 }
                 break;
             case 't':
                 if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.t);
+                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.т);
                     huk.miakki = MIAKKASC_PAZNACANAJA;
                 } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.t);
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.т);
                 }
                 break;
             case 'u':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.u);
+                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.у);
                 huk.halosnaja = true;
                 break;
             case 'f':
                 if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.f);
+                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.ф);
                     huk.miakki = MIAKKASC_PAZNACANAJA;
                 } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.f);
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ф);
                 }
                 break;
             case 'x':
@@ -374,10 +374,10 @@ public class Huk {
                 }
                 break;
             case 'ʂ':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ʂ);
+                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ш);
                 break;
             case 'ɨ':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ɨ);
+                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ы);
                 huk.halosnaja = true;
                 break;
             case 'j':
