@@ -9,14 +9,15 @@ import java.util.function.Function;
 public class Huk {
     public static int PADZIEL_PRYSTAUKA = 1;
     public static int PADZIEL_KARANI = 2;
-    public static int PADZIEL_SLOVY = 4;
-    public static int PADZIEL_MINUS = 8;
+    public static int PADZIEL_SUFIX = 4;
+    public static int PADZIEL_SLOVY = 8;
+    public static int PADZIEL_MINUS = 16;
     public static int MIAKKASC_ASIMILACYJNAJA = 1;
     public static int MIAKKASC_PAZNACANAJA = 2;
     public static int MASK_MIAKKASC_USIE = 3;
 
     public enum BAZAVY_HUK {
-        а, б, в, β, г, ґ, д, э, дж, дз, ж, з, і, к, л, м, ɱ, н, о, п, р, с, т, у, ў, ф, x, ц, ч, ш, ы, j
+        а, б, в, β, г, ґ, д, э, дж, дз, ж, з, і, к, л, м, ɱ, н, о, п, р, с, т, у, ў, ф, х, ц, ч, ш, ы, j
     }
 
     public enum IPA {
@@ -66,6 +67,26 @@ public class Huk {
     public boolean isSanorny() {
         IPA ipa = ipa_enum.apply(this);
         return sanornyja.contains(ipa);
+    }
+
+    public boolean isZvonki() {
+        if (miakki != 0) {
+            return bazavyHuk == BAZAVY_HUK.б || bazavyHuk == BAZAVY_HUK.д || bazavyHuk == BAZAVY_HUK.дз || bazavyHuk == BAZAVY_HUK.з
+                    || bazavyHuk == BAZAVY_HUK.ґ || bazavyHuk == BAZAVY_HUK.г;
+        } else {
+            return bazavyHuk == BAZAVY_HUK.б || bazavyHuk == BAZAVY_HUK.д || bazavyHuk == BAZAVY_HUK.дз || bazavyHuk == BAZAVY_HUK.з
+                    || bazavyHuk == BAZAVY_HUK.ж || bazavyHuk == BAZAVY_HUK.дж || bazavyHuk == BAZAVY_HUK.г || bazavyHuk == BAZAVY_HUK.ґ;
+        }
+    }
+
+    public boolean isHluchi() {
+        if (miakki != 0) {
+            return bazavyHuk == BAZAVY_HUK.п || bazavyHuk == BAZAVY_HUK.ц || bazavyHuk == BAZAVY_HUK.с || bazavyHuk == BAZAVY_HUK.к || bazavyHuk == BAZAVY_HUK.х
+                    || bazavyHuk == BAZAVY_HUK.ф;
+        } else {
+            return bazavyHuk == BAZAVY_HUK.п || bazavyHuk == BAZAVY_HUK.т || bazavyHuk == BAZAVY_HUK.ц || bazavyHuk == BAZAVY_HUK.с || bazavyHuk == BAZAVY_HUK.ш
+                    || bazavyHuk == BAZAVY_HUK.ч || bazavyHuk == BAZAVY_HUK.х || bazavyHuk == BAZAVY_HUK.к || bazavyHuk == BAZAVY_HUK.ф;
+        }
     }
 
     @Override
@@ -160,7 +181,7 @@ public class Huk {
             return IPA.u̯;
         case ф:
             return h.miakki == 0 ? IPA.f : IPA.fʲ;
-        case x:
+        case х:
             return h.miakki == 0 ? IPA.x : IPA.xʲ;
         case ц:
             return h.miakki == 0 ? IPA.t͡s : IPA.t͡sʲ;
@@ -367,10 +388,10 @@ public class Huk {
                 break;
             case 'x':
                 if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.x);
+                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.х);
                     huk.miakki = MIAKKASC_PAZNACANAJA;
                 } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.x);
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.х);
                 }
                 break;
             case 'ʂ':

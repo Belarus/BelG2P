@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
@@ -12,6 +13,7 @@ import org.alex73.corpus.paradigm.Form;
 import org.alex73.corpus.paradigm.Paradigm;
 import org.alex73.corpus.paradigm.Variant;
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
+import org.alex73.fanetyka.processes.AhlusennieAzvancennie;
 import org.alex73.korpus.base.GrammarFinder;
 import org.alex73.korpus.languages.belarusian.BelarusianWordNormalizer;
 
@@ -29,17 +31,20 @@ public class Fanetyka3 {
     private final GrammarFinder finder;
     List<Huk> huki = new ArrayList<>();
     List<String> words = new ArrayList<>();
-    List<String> why = new ArrayList<>(); // як адбываюцца пераходы
+    public List<String> why = new ArrayList<>(); // як адбываюцца пераходы
 
-    public Fanetyka3(GrammarFinder finder) {
+    ProcessRunner processAhlusennieAzvancennie;
+
+    public Fanetyka3(GrammarFinder finder, Map<String, byte[]> configs) throws Exception {
         this.finder = finder;
+        processAhlusennieAzvancennie = new ProcessRunner(AhlusennieAzvancennie.class, configs);
     }
 
     public void addWord(String w) {
         words.add(normalize(w));
     }
 
-    public void calcFanetyka() {
+    public void calcFanetyka() throws Exception {
         for (int i = 0; i < words.size(); i++) {
             String w = words.get(i);
             if (i < words.size() - 1) {
@@ -73,7 +78,8 @@ public class Fanetyka3 {
             pierachodZHA();
             pierachodI();
             paznacajemMiakkasc();
-            ahlusennieIazvancennie();
+            //ahlusennieIazvancennie();
+            processAhlusennieAzvancennie.process(huki, why);
             sprascennie();
             prypadabniennie();
             sypiacyjaSvisciacyja();
@@ -213,7 +219,7 @@ public class Fanetyka3 {
         }
     }
 
-    public static String fanetykaSlova(Fanetyka3 r, String w) {
+    public static String fanetykaSlova(Fanetyka3 r, String w) throws Exception {
         r.addWord(w);
         r.calcFanetyka();
         return r.toString(Huk.ipa);
@@ -275,7 +281,7 @@ public class Fanetyka3 {
             } else if (nastupny.bazavyHuk == BAZAVY_HUK.л && nastupny.miakki != 0) {
                 if (huk.bazavyHuk == BAZAVY_HUK.р || huk.bazavyHuk == BAZAVY_HUK.ч || huk.bazavyHuk == BAZAVY_HUK.дж || huk.bazavyHuk == BAZAVY_HUK.ш
                         || huk.bazavyHuk == BAZAVY_HUK.ж || huk.bazavyHuk == BAZAVY_HUK.б || huk.bazavyHuk == BAZAVY_HUK.п || huk.bazavyHuk == BAZAVY_HUK.м
-                        || huk.bazavyHuk == BAZAVY_HUK.ф || huk.bazavyHuk == BAZAVY_HUK.г || huk.bazavyHuk == BAZAVY_HUK.к || huk.bazavyHuk == BAZAVY_HUK.x) {
+                        || huk.bazavyHuk == BAZAVY_HUK.ф || huk.bazavyHuk == BAZAVY_HUK.г || huk.bazavyHuk == BAZAVY_HUK.к || huk.bazavyHuk == BAZAVY_HUK.х) {
                     Huk a = new Huk("", BAZAVY_HUK.а);
                     a.halosnaja = true;
                     huki.add(i + 1, a);
@@ -848,7 +854,7 @@ public class Fanetyka3 {
                     why.add("Азванчэнне ч->дж");
                     huk.bazavyHuk = BAZAVY_HUK.дж;
                     break;
-                case x:
+                case х:
                     why.add("Азванчэнне х->г");
                     huk.bazavyHuk = BAZAVY_HUK.г;
                     break;
@@ -886,7 +892,7 @@ public class Fanetyka3 {
                     break;
                 case г:
                     why.add("Аглушэнне г->х");
-                    huk.bazavyHuk = BAZAVY_HUK.x;
+                    huk.bazavyHuk = BAZAVY_HUK.х;
                     break;
                 case ґ:
                     why.add("Аглушэнне ґ->к");
@@ -910,10 +916,10 @@ public class Fanetyka3 {
     boolean isHluchi(Huk huk) {
         if (huk.miakki != 0) {
             return huk.bazavyHuk == BAZAVY_HUK.п || huk.bazavyHuk == BAZAVY_HUK.ц || huk.bazavyHuk == BAZAVY_HUK.с || huk.bazavyHuk == BAZAVY_HUK.к
-                    || huk.bazavyHuk == BAZAVY_HUK.x || huk.bazavyHuk == BAZAVY_HUK.ф;
+                    || huk.bazavyHuk == BAZAVY_HUK.х || huk.bazavyHuk == BAZAVY_HUK.ф;
         } else {
             return huk.bazavyHuk == BAZAVY_HUK.п || huk.bazavyHuk == BAZAVY_HUK.т || huk.bazavyHuk == BAZAVY_HUK.ц || huk.bazavyHuk == BAZAVY_HUK.с
-                    || huk.bazavyHuk == BAZAVY_HUK.ш || huk.bazavyHuk == BAZAVY_HUK.ч || huk.bazavyHuk == BAZAVY_HUK.x || huk.bazavyHuk == BAZAVY_HUK.к
+                    || huk.bazavyHuk == BAZAVY_HUK.ш || huk.bazavyHuk == BAZAVY_HUK.ч || huk.bazavyHuk == BAZAVY_HUK.х || huk.bazavyHuk == BAZAVY_HUK.к
                     || huk.bazavyHuk == BAZAVY_HUK.ф;
         }
     }
@@ -962,7 +968,7 @@ public class Fanetyka3 {
                     }
                 }
                 huk.setMiakkasc(miakkasc);
-            } else if (huk.bazavyHuk == BAZAVY_HUK.ґ || huk.bazavyHuk == BAZAVY_HUK.г || huk.bazavyHuk == BAZAVY_HUK.к || huk.bazavyHuk == BAZAVY_HUK.x) {
+            } else if (huk.bazavyHuk == BAZAVY_HUK.ґ || huk.bazavyHuk == BAZAVY_HUK.г || huk.bazavyHuk == BAZAVY_HUK.к || huk.bazavyHuk == BAZAVY_HUK.х) {
                 // яны самі зьмягчаюцца толькі перад галоснымі(але не перад зычнымі), і не даюць
                 // зьмягчацца гукам
                 // перад імі: аб'едкі, вянгляр
@@ -1101,7 +1107,7 @@ public class Fanetyka3 {
                 p = w.indexOf('ё');
             }
             if (p >= 0) {
-                w = w.substring(0, p+1) + BelarusianWordNormalizer.pravilny_nacisk + w.substring(p+1);
+                w = w.substring(0, p + 1) + BelarusianWordNormalizer.pravilny_nacisk + w.substring(p + 1);
             }
         }
 
@@ -1229,7 +1235,7 @@ public class Fanetyka3 {
                 novyHuk = new Huk("ф", BAZAVY_HUK.ф);
                 break;
             case 'х':
-                novyHuk = new Huk("х", BAZAVY_HUK.x);
+                novyHuk = new Huk("х", BAZAVY_HUK.х);
                 break;
             case 'ц':
                 novyHuk = new Huk("ц", BAZAVY_HUK.ц);

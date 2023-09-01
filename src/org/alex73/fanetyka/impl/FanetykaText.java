@@ -12,9 +12,9 @@ public class FanetykaText {
     public String skola = "";
     public List<String> why = new ArrayList<>();
 
-    public FanetykaText(GrammarFinder finder, String text) {
+    public FanetykaText(GrammarFinder finder, String text) throws Exception {
         String word = "";
-        Fanetyka3 f = new Fanetyka3(finder);
+        Fanetyka3 f = new Fanetyka3(finder, null);
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
             boolean letter = isLetter(c);
@@ -36,7 +36,7 @@ public class FanetykaText {
                     ipa += f.toString(Huk.ipa);
                     skola += f.toString(Huk.skolny);
                     why.addAll(f.why);
-                    f = new Fanetyka3(finder);
+                    f = new Fanetyka3(finder, null);
                     ipa += c;
                     skola += c;
                 }
