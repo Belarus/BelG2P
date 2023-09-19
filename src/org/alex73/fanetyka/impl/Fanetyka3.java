@@ -11,11 +11,11 @@ import java.util.function.Function;
 
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 import org.alex73.fanetyka.processes.AhlusennieAzvancennie;
+import org.alex73.grammardb.GrammarDB2;
+import org.alex73.grammardb.GrammarFinder;
 import org.alex73.grammardb.structures.Form;
 import org.alex73.grammardb.structures.Paradigm;
 import org.alex73.grammardb.structures.Variant;
-import org.alex73.korpus.base.GrammarFinder;
-import org.alex73.korpus.languages.belarusian.BelarusianWordNormalizer;
 
 /*
  * Праверыць - [й] перад галоснымі - гэта галосны ці змяніць на зычны
@@ -52,14 +52,14 @@ public class Fanetyka3 {
                 String wl = w.toLowerCase();
                 switch (wl) {
                 case "не":
-                case "не" + BelarusianWordNormalizer.pravilny_nacisk:
+                case "не" + GrammarDB2.pravilny_nacisk:
                     if (firstSkladNacisk(words.get(i + 1))) {
                         w = "ня";
                         why.add("'не' пераходзіць у 'ня' перад словам з націскам на першы склад");
                     }
                     break;
                 case "без":
-                case "без" + BelarusianWordNormalizer.pravilny_nacisk:
+                case "без" + GrammarDB2.pravilny_nacisk:
                     if (firstSkladNacisk(words.get(i + 1))) {
                         w = "бяз";
                         why.add("'без' пераходзіць у 'бяз' перад словам з націскам на першы склад");
@@ -1072,7 +1072,7 @@ public class Fanetyka3 {
      * найбольш распаўсюджаныя прыстаўкі.
      */
     String narmalizacyjaSlova(String w) {
-        if (w.indexOf(BelarusianWordNormalizer.pravilny_nacisk) >= 0 || w.contains("|")) {
+        if (w.indexOf(GrammarDB2.pravilny_nacisk) >= 0 || w.contains("|")) {
             // ужо пазначана
             return w;
         }
@@ -1093,7 +1093,7 @@ public class Fanetyka3 {
                     }
                     if (compareWord(w, f.getValue())) {
                         foundForms.add(f.getValue().toLowerCase());
-                        w = f.getValue().replace('+', BelarusianWordNormalizer.pravilny_nacisk);
+                        w = f.getValue().replace('+', GrammarDB2.pravilny_nacisk);
                         why.add("Націскі з базы: " + w);
                         break f1;
                     }
@@ -1101,7 +1101,7 @@ public class Fanetyka3 {
             }
         }
         if (foundForms.size() == 1) {
-            w = foundForms.iterator().next().replace('+', BelarusianWordNormalizer.pravilny_nacisk);
+            w = foundForms.iterator().next().replace('+', GrammarDB2.pravilny_nacisk);
             why.add("Націскі і пазначэнне ґ з базы: " + w);
         } else {
             // націскі на о, ё
@@ -1110,7 +1110,7 @@ public class Fanetyka3 {
                 p = w.indexOf('ё');
             }
             if (p >= 0) {
-                w = w.substring(0, p + 1) + BelarusianWordNormalizer.pravilny_nacisk + w.substring(p + 1);
+                w = w.substring(0, p + 1) + GrammarDB2.pravilny_nacisk + w.substring(p + 1);
             }
         }
 
@@ -1274,7 +1274,7 @@ public class Fanetyka3 {
                 novyHuk.halosnaja = true;
                 novyHuk.miakkajaHalosnaja = true;
                 break;
-            case BelarusianWordNormalizer.pravilny_apostraf:
+            case GrammarDB2.pravilny_apostraf:
                 if (papiaredniHuk != null) {
                     papiaredniHuk.apostrafPasla = true;
                 }
@@ -1285,7 +1285,7 @@ public class Fanetyka3 {
             case '-':
                 papiaredniHuk.padzielPasla = Huk.PADZIEL_MINUS;
                 break;
-            case BelarusianWordNormalizer.pravilny_nacisk:
+            case GrammarDB2.pravilny_nacisk:
                 if (papiaredniHuk == null || !papiaredniHuk.halosnaja || papiaredniHuk.padzielPasla == Huk.PADZIEL_MINUS
                         || papiaredniHuk.padzielPasla == Huk.PADZIEL_SLOVY) {
                     throw new RuntimeException("Няправільная пазнака націску - пасля " + papiaredniHuk);
@@ -1312,11 +1312,11 @@ public class Fanetyka3 {
             }
             // перад ненаціскным 'і' - непатрэбна
             if (papiaredni == null) {
-                if (current == 'і' && next != BelarusianWordNormalizer.pravilny_nacisk) {
+                if (current == 'і' && next != GrammarDB2.pravilny_nacisk) {
                     return;
                 }
             } else {
-                if (!papiaredni.halosnaja && !papiaredni.apostrafPasla && current == 'і' && next != BelarusianWordNormalizer.pravilny_nacisk) {
+                if (!papiaredni.halosnaja && !papiaredni.apostrafPasla && current == 'і' && next != GrammarDB2.pravilny_nacisk) {
                     return;
                 }
             }
@@ -1342,21 +1342,24 @@ public class Fanetyka3 {
             if ("ёуеыаоэяію".indexOf(c) >= 0) {
                 if (i < word.length() - 1) {
                     char c1 = word.charAt(i + 1);
-                    return c1 == BelarusianWordNormalizer.pravilny_nacisk;
+                    return c1 == GrammarDB2.pravilny_nacisk;
                 }
             }
         }
         return false;
     }
 
+    public static final String usie_naciski = GrammarDB2.pravilny_nacisk + "\u00B4";
+    public static final String usie_apostrafy = GrammarDB2.pravilny_apostraf + "\'\u2019";
+
     static String normalize(String inputWord) {
         StringBuilder s = new StringBuilder();
         for (char c : inputWord.toCharArray()) {
-            if (BelarusianWordNormalizer.usie_apostrafy.indexOf(c) >= 0) {
-                c = BelarusianWordNormalizer.pravilny_apostraf;
+            if (usie_apostrafy.indexOf(c) >= 0) {
+                c = GrammarDB2.pravilny_apostraf;
             }
-            if (BelarusianWordNormalizer.usie_naciski.indexOf(c) >= 0) {
-                c = BelarusianWordNormalizer.pravilny_nacisk;
+            if (usie_naciski.indexOf(c) >= 0) {
+                c = GrammarDB2.pravilny_nacisk;
             }
             s.append(c);
         }
@@ -1389,16 +1392,16 @@ public class Fanetyka3 {
                 ci = 'у';
             }
             if (cg == '+') {
-                cg = BelarusianWordNormalizer.pravilny_nacisk;
+                cg = GrammarDB2.pravilny_nacisk;
             }
             if (cg == 'ґ' && ci == 'г') {
                 ci = 'ґ';
             }
-            if (ci == BelarusianWordNormalizer.pravilny_nacisk && cg != BelarusianWordNormalizer.pravilny_nacisk) {
+            if (ci == GrammarDB2.pravilny_nacisk && cg != GrammarDB2.pravilny_nacisk) {
                 ii++;
                 continue;
             }
-            if (ci != BelarusianWordNormalizer.pravilny_nacisk && cg == BelarusianWordNormalizer.pravilny_nacisk) {
+            if (ci != GrammarDB2.pravilny_nacisk && cg == GrammarDB2.pravilny_nacisk) {
                 ig++;
                 continue;
             }

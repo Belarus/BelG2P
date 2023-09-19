@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.alex73.grammardb.GrammarDB2;
-import org.alex73.korpus.base.GrammarFinder;
-import org.alex73.korpus.languages.belarusian.BelarusianWordNormalizer;
+import org.alex73.grammardb.GrammarFinder;
 
 public class FanetykaText {
     public String ipa = "";
@@ -53,7 +52,7 @@ public class FanetykaText {
 
     boolean isLetter(char c) {
         c = Character.toLowerCase(c);
-        return ("ёйцукенгшўзх'фывапролджэячсмітьбюґ|-\u0301" + BelarusianWordNormalizer.usie_apostrafy + BelarusianWordNormalizer.usie_naciski).indexOf(c) >= 0;
+        return ("ёйцукенгшўзх'фывапролджэячсмітьбюґ|-\u0301" + Fanetyka3.usie_apostrafy + Fanetyka3.usie_naciski).indexOf(c) >= 0;
     }
 
     public static void main(String[] a) throws Exception {

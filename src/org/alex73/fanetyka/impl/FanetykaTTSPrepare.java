@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.alex73.grammardb.GrammarDB2;
-import org.alex73.korpus.base.GrammarFinder;
+import org.alex73.grammardb.GrammarFinder;
 
 /**
  * Файл для канвертацыі тэкста ў фанетыку для сінтэза маўлення.
