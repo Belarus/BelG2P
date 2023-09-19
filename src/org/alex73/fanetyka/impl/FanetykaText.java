@@ -3,7 +3,7 @@ package org.alex73.fanetyka.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.alex73.korpus.base.GrammarDB2;
+import org.alex73.grammardb.GrammarDB2;
 import org.alex73.korpus.base.GrammarFinder;
 import org.alex73.korpus.languages.belarusian.BelarusianWordNormalizer;
 

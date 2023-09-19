@@ -15,7 +15,12 @@
 		<copy todir="build/classes">
 			<fileset dir="src" />
 		</copy>
-		<jar jarfile="build/Fanetyka.jar" basedir="build/classes">
+		<jar jarfile="build/Fanetyka.jar" basedir="build/classes" />
+
+		<copy todir="build/classes">
+			<fileset dir="db/" />
+		</copy>
+		<jar jarfile="build/Fanetyka-full.jar" basedir="build/classes">
 			<zipgroupfileset dir="lib" includes="**/*.jar" />
 		</jar>
 	</target>

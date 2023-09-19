@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.alex73.korpus.base.GrammarDB2;
+import org.alex73.grammardb.GrammarDB2;
 import org.alex73.korpus.base.GrammarFinder;
 
 /**

@@ -9,11 +9,11 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
 
-import org.alex73.corpus.paradigm.Form;
-import org.alex73.corpus.paradigm.Paradigm;
-import org.alex73.corpus.paradigm.Variant;
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 import org.alex73.fanetyka.processes.AhlusennieAzvancennie;
+import org.alex73.grammardb.structures.Form;
+import org.alex73.grammardb.structures.Paradigm;
+import org.alex73.grammardb.structures.Variant;
 import org.alex73.korpus.base.GrammarFinder;
 import org.alex73.korpus.languages.belarusian.BelarusianWordNormalizer;
 
@@ -78,8 +78,11 @@ public class Fanetyka3 {
             pierachodZHA();
             pierachodI();
             paznacajemMiakkasc();
-            //ahlusennieIazvancennie();
-            processAhlusennieAzvancennie.process(huki, why);
+            if (processAhlusennieAzvancennie.isConfigExists()) {
+                processAhlusennieAzvancennie.process(huki, why);
+            } else {
+                ahlusennieIazvancennie();
+            }
             sprascennie();
             prypadabniennie();
             sypiacyjaSvisciacyja();

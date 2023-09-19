@@ -22,8 +22,15 @@ public class ProcessRunner {
 
     public ProcessRunner(Class<?> process, Map<String, byte[]> configs) throws Exception {
         ProcessConfig pc = process.getAnnotation(ProcessConfig.class);
-        config = configs == null ? new TsvConfig(pc.value()) : new TsvConfig(pc.value(), new ByteArrayInputStream(configs.get(pc.value())));
         processor = process.getDeclaredConstructor().newInstance();
+        if (configs == null) {
+            config = new TsvConfig(pc.value());
+        } else if (configs.containsKey(pc.value())) {
+            config = new TsvConfig(pc.value(), new ByteArrayInputStream(configs.get(pc.value())));
+        } else {
+            config = null; // for debug only
+            return;
+        }
 
         Set<String> usedCases = new TreeSet<>();
         for (Method m : process.getMethods()) {
@@ -37,6 +44,10 @@ public class ProcessRunner {
             throw new Exception("Wrong list of cases in config and class " + process.getSimpleName() + ": \n    class : "
                     + String.join(",", config.cases.keySet()) + "\n    config:" + String.join(",", usedCases));
         }
+    }
+
+    public boolean isConfigExists() {
+        return config != null;
     }
 
     public void process(List<Huk> huki, List<String> log) throws Exception {
