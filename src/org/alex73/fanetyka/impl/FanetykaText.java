@@ -12,8 +12,9 @@ public class FanetykaText {
     public List<String> why = new ArrayList<>();
 
     public FanetykaText(GrammarFinder finder, String text) throws Exception {
+        FanetykaConfig config = new FanetykaConfig(finder, null);
         String word = "";
-        Fanetyka3 f = new Fanetyka3(finder, null);
+        Fanetyka3 f = new Fanetyka3(config);
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
             boolean letter = isLetter(c);
@@ -35,7 +36,7 @@ public class FanetykaText {
                     ipa += f.toString(Huk.ipa);
                     skola += f.toString(Huk.skolny);
                     why.addAll(f.why);
-                    f = new Fanetyka3(finder, null);
+                    f = new Fanetyka3(config);
                     ipa += c;
                     skola += c;
                 }
@@ -56,10 +57,10 @@ public class FanetykaText {
     }
 
     public static void main(String[] a) throws Exception {
-        GrammarDB2 db = GrammarDB2.initializeFromDir("/data/gits/GrammarDB/");
+        GrammarDB2 db = GrammarDB2.empty();
         GrammarFinder finder = new GrammarFinder(db);
 
-        String text = new String(System.in.readAllBytes());
+        String text ="абвод";// new String(System.in.readAllBytes());
         FanetykaText t = new FanetykaText(finder, text);
         System.out.println(t.skola);
     }

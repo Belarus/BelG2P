@@ -20,16 +20,16 @@ public class ProcessRunnerTest {
     }
 
     void shouldPass() {
-        assertTrue(ProcessRunner.check("", c, h));
+        assertTrue(ProcessRunner.checkRules("", c, h));
     }
 
     void shouldNotPass() {
-        assertFalse(ProcessRunner.check("", c, h));
+        assertFalse(ProcessRunner.checkRules("", c, h));
     }
 
     void shouldBeError() {
         try {
-            ProcessRunner.check("", c, h);
+            ProcessRunner.checkRules("", c, h);
             fail();
         } catch (Exception ex) {
         }

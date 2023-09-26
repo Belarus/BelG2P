@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
+
 public class Huk {
     public static int PADZIEL_PRYSTAUKA = 1;
     public static int PADZIEL_KARANI = 2;
@@ -87,6 +89,20 @@ public class Huk {
             return bazavyHuk == BAZAVY_HUK.п || bazavyHuk == BAZAVY_HUK.т || bazavyHuk == BAZAVY_HUK.ц || bazavyHuk == BAZAVY_HUK.с || bazavyHuk == BAZAVY_HUK.ш
                     || bazavyHuk == BAZAVY_HUK.ч || bazavyHuk == BAZAVY_HUK.х || bazavyHuk == BAZAVY_HUK.к || bazavyHuk == BAZAVY_HUK.ф;
         }
+    }
+
+    public boolean isSypiacy() {
+        if (miakki != 0) {
+            return false;
+        }
+        return bazavyHuk == BAZAVY_HUK.ш || bazavyHuk == BAZAVY_HUK.ж || bazavyHuk == BAZAVY_HUK.дж || bazavyHuk == BAZAVY_HUK.ч;
+    }
+
+    public boolean isSvisciacy() {
+        if (miakki != 0) {
+            return false;
+        }
+        return bazavyHuk == BAZAVY_HUK.с || bazavyHuk == BAZAVY_HUK.з || bazavyHuk == BAZAVY_HUK.дз || bazavyHuk == BAZAVY_HUK.ц;
     }
 
     @Override

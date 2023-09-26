@@ -19,13 +19,13 @@ public class TsvConfig {
     public final Map<String, Case> cases = new TreeMap<>();
 
     public static void main(String[] args) throws Exception {
-        new TsvConfig("/ahlusennieIazvancennie.tsv");
+        new TsvConfig("AhlusennieAzvancennie");
 
     }
 
     public TsvConfig(String name) throws Exception {
         this.configName = name;
-        try (InputStream in = TsvConfig.class.getResourceAsStream(name)) {
+        try (InputStream in = TsvConfig.class.getResourceAsStream("/" + name + ".tsv")) {
             load(in);
         }
     }
@@ -64,7 +64,7 @@ public class TsvConfig {
 
         // правяраем першы радок - назву з'явы
         String[] line = lines.get(lineIndex);
-        if (!"З'ява:".equals(line[0])) {
+        if (!"З'ява:".equals(line[0].trim())) {
             err(0, "мусіць быць \"З'ява:\"");
         }
         if (line[1].isBlank()) {
@@ -77,7 +77,7 @@ public class TsvConfig {
         lineIndex++;
         // правяраем другі радок - паведамленне ў log
         line = lines.get(lineIndex);
-        if (!"Log:".equals(line[0])) {
+        if (!"Log:".equals(line[0].trim())) {
             err(0, "мусіць быць \"Log:\"");
         }
         if (line[1].isBlank()) {
@@ -157,6 +157,7 @@ public class TsvConfig {
                     err(c, 0, "слупок гуку пасля папярэдняга слупку гуку");
                 }
                 t.checks.add(check = new HukCheck());
+                check.which = readHuki(1, c);
                 readMultiMode(8, c, check.miakkasc, Huk.MIAKKASC_ASIMILACYJNAJA);
                 readMultiMode(9, c, check.miakkasc, Huk.MIAKKASC_PAZNACANAJA);
                 if (check.miakkasc.maskYes != 0 && check.miakkasc.maskNo != 0) {
@@ -204,9 +205,16 @@ public class TsvConfig {
             ex.lineIndex = i;
             ex.column = (char) ('A' + column);
             ex.word = line[column].trim();
-            ex.expected = line[column + 1].trim();
+            if (line.length > column + 1) {
+                ex.expected = line[column + 1].trim();
+            }
             t.examples.add(ex);
         }
+    }
+
+    private String[] readHuki(int lineOffset, int column) {
+        String value = lines.get(lineIndex + lineOffset)[column].trim();
+        return value.trim().split("\\s+");
     }
 
     private Case.MODE readMode(int lineOffset, int column) {
@@ -271,6 +279,6 @@ public class TsvConfig {
     }
 
     private void err(int column, int lineOffset, String message) {
-        throw new RuntimeException("Памылка ў канфігурацыі '%2#%d%c': %s".formatted(configName, lineIndex + lineOffset, (char) ('A' + column), message));
+        throw new RuntimeException("Памылка ў канфігурацыі '%s#%d%c': %s".formatted(configName, lineIndex + lineOffset, (char) ('A' + column), message));
     }
 }

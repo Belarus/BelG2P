@@ -16,7 +16,7 @@ public class Case {
 
     public static class HukCheck {
         boolean optionalHuk;
-        String which;
+        public String[] which;
         public MODE apostraf = MODE.DONT_CARE;
         public MultiMode pasziel = new MultiMode();
         public MultiMode miakkasc = new MultiMode();
