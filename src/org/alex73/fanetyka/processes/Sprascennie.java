@@ -144,8 +144,10 @@ public class Sprascennie {
     }
 
     @ProcessCase("Спрашчэнне: ц-ч -> ч")
-    public String cc(Huk h1, Huk h2, ProcessContext context) {
-        throw new RuntimeException("Спрашчэнне: ц-ч -> ч");
+    public String cc(Huk hal, Huk h1, Huk h2, ProcessContext context) {
+        h1.bazavyHuk = Huk.BAZAVY_HUK.ч;
+        h1.miakki = 0;
+        return "ц->ч";
     }
 
     @ProcessCase("Спрашчэнне: з'-с -> с")

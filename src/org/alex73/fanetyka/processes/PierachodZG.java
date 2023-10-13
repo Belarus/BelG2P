@@ -11,7 +11,7 @@ public class PierachodZG {
         return "г -> ґ";
     }
 
-    @ProcessCase("Пераход г -> ґ пасля з, дж, дз напрыканцы слова")
+    @ProcessCase("Пераход г -> ґ пасля з, дж, дз пры канцы слова")
     public String e(Huk hal, Huk huk, Huk nastupny) {
         nastupny.bazavyHuk = BAZAVY_HUK.ґ;
         return "г -> ґ";
