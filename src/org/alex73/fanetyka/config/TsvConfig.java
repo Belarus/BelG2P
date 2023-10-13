@@ -17,6 +17,7 @@ public class TsvConfig {
     private final List<String[]> lines = new ArrayList<>();
     private int lineIndex;
     public final Map<String, Case> cases = new TreeMap<>();
+    public final List<String> casesOrder = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
         new TsvConfig("AhlusennieAzvancennie");
@@ -74,6 +75,7 @@ public class TsvConfig {
         if (cases.put(t.name, t) != null) {
             err(1, "паўтараецца назва з'явы: " + t.name);
         }
+        casesOrder.add(t.name);
         lineIndex++;
         // правяраем другі радок - паведамленне ў log
         line = lines.get(lineIndex);
@@ -136,7 +138,7 @@ public class TsvConfig {
             if ("мяжа".equals(header)) {
                 if (byuHuk == null) {
                     // мяжа перад першым гукам
-                    t.checks.add(check = new HukCheck());
+                    t.borderCheckBefore = check = new HukCheck();
                 } else if (!byuHuk.booleanValue()) {
                     // была мяжа
                     err(c, 0, "слупок мяжы пасля папярэдняга слупку мяжы");

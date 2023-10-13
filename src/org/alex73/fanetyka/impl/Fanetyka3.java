@@ -4,28 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
 
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
-import org.alex73.fanetyka.processes.AhlusennieAzvancennie;
-import org.alex73.fanetyka.processes.Padvajennie;
-import org.alex73.fanetyka.processes.PaznacajemMiakkasc;
-import org.alex73.fanetyka.processes.PierachodFH;
-import org.alex73.fanetyka.processes.PierachodI;
-import org.alex73.fanetyka.processes.PierachodM;
-import org.alex73.fanetyka.processes.PierachodTS;
-import org.alex73.fanetyka.processes.PierachodV;
-import org.alex73.fanetyka.processes.PierachodZG;
-import org.alex73.fanetyka.processes.PierachodZHA;
-import org.alex73.fanetyka.processes.Prypadabniennie;
-import org.alex73.fanetyka.processes.Sprascennie;
-import org.alex73.fanetyka.processes.SypiacyjaSvisciacyja;
-import org.alex73.fanetyka.processes.UstaunojeA;
 import org.alex73.grammardb.GrammarDB2;
-import org.alex73.grammardb.GrammarFinder;
 import org.alex73.grammardb.structures.Form;
 import org.alex73.grammardb.structures.Paradigm;
 import org.alex73.grammardb.structures.Variant;
@@ -85,75 +69,70 @@ public class Fanetyka3 {
         String prev = toString();
         int pass = 0;
         while (true) {
-            if (config.processPierachodZHA != null && config.processPierachodZHA.isConfigExists()) {
-                config.processPierachodZHA.process(huki, why);
+            if (config.processPierachodZG != null && config.processPierachodZG.isConfigExists()) {
+                config.processPierachodZG.process(this);
             } else {
-                pierachodZHA();
+                pierachodZG();
             }
             if (config.processPierachodI != null && config.processPierachodI.isConfigExists()) {
-                config.processPierachodI.process(huki, why);
+                config.processPierachodI.process(this);
             } else {
                 pierachodI();
             }
             if (config.processPaznacajemMiakkasc != null && config.processPaznacajemMiakkasc.isConfigExists()) {
-                config.processPaznacajemMiakkasc.process(huki, why);
+                config.processPaznacajemMiakkasc.process(this);
             } else {
                 paznacajemMiakkasc();
             }
             if (config.processAhlusennieAzvancennie.isConfigExists()) {
-                config.processAhlusennieAzvancennie.process(huki, why);
+                config.processAhlusennieAzvancennie.process(this);
             } else {
                 ahlusennieIazvancennie();
             }
             if (config.processSprascennie != null && config.processSprascennie.isConfigExists()) {
-                config.processSprascennie.process(huki, why);
+                config.processSprascennie.process(this);
             } else {
                 sprascennie();
             }
             if (config.processPrypadabniennie != null && config.processPrypadabniennie.isConfigExists()) {
-                config.processPrypadabniennie.process(huki, why);
+                config.processPrypadabniennie.process(this);
             } else {
                 prypadabniennie();
             }
             if (config.processSypiacyjaSvisciacyja != null && config.processSypiacyjaSvisciacyja.isConfigExists()) {
-                config.processSypiacyjaSvisciacyja.process(huki, why);
+                config.processSypiacyjaSvisciacyja.process(this);
             } else {
                 sypiacyjaSvisciacyja();
             }
             if (config.processPierachodTS != null && config.processPierachodTS.isConfigExists()) {
-                config.processPierachodTS.process(huki, why);
+                config.processPierachodTS.process(this);
             } else {
                 pierachodTS();
             }
             if (config.processPierachodV != null && config.processPierachodV.isConfigExists()) {
-                config.processPierachodV.process(huki, why);
+                config.processPierachodV.process(this);
             } else {
                 pierachodV();
             }
             if (config.processPierachodM != null && config.processPierachodM.isConfigExists()) {
-                config.processPierachodM.process(huki, why);
+                config.processPierachodM.process(this);
             } else {
                 pierachodM();
             }
             if (config.processPadvajennie != null && config.processPadvajennie.isConfigExists()) {
-                config.processPadvajennie.process(huki, why);
+                config.processPadvajennie.process(this);
             } else {
                 padvajennie();
             }
             if (config.processUstaunojeA != null && config.processUstaunojeA.isConfigExists()) {
-                config.processUstaunojeA.process(huki, why);
+                config.processUstaunojeA.process(this);
             } else {
                 ustaunojeA();
             }
             if (config.processPierachodFH != null && config.processPierachodFH.isConfigExists()) {
-                config.processPierachodFH.process(huki, why);
+                config.processPierachodFH.process(this);
             } else {
                 pierachodFH();
-            }
-            if (config.processPierachodZG != null && config.processPierachodZG.isConfigExists()) {
-                config.processPierachodZG.process(huki, why);
-            } else {
-                pierachodZG();
             }
             String hnew = toString();
             if (hnew.equals(prev)) {
@@ -371,7 +350,7 @@ public class Fanetyka3 {
     }
 
     /**
-     * зг, дзг, джг паміж галосных(ці напачатку слова) пераходзяць у зґ, дзґ, джґ
+     * з+г, дз+г, дж+г паміж галосных(ці напачатку слова і напрыканцы слова) пераходзяць у з+ґ, дз+ґ, дж+ґ
      */
     void pierachodZG() {
         for (int i = 0; i < huki.size() - 3; i++) {
@@ -386,24 +365,6 @@ public class Fanetyka3 {
                         h3.bazavyHuk = BAZAVY_HUK.ґ;
                         why.add("Пераход 'зг, дзг, джг' -> 'зґ, дзґ, джґ' паміж галосных і не на сутыку прыстаўкі і кораня");
                     }
-                }
-            }
-        }
-    }
-
-    /**
-     * zɣ -> zaɣ, zg -> zag
-     */
-    void pierachodZHA() {
-        for (int i = 0; i < huki.size() - 1; i++) {
-            Huk huk = huki.get(i);
-            Huk nastupny = huki.get(i + 1);
-            if (huk.is(BAZAVY_HUK.з, 0, false, 0) && (nastupny.is(BAZAVY_HUK.г, 0, false, null) || nastupny.is(BAZAVY_HUK.ґ, 0, false, null))) {
-                if (nastupny.padzielPasla == Huk.PADZIEL_SLOVY) {
-                    why.add("Устаўное 'а': zɣ -> zaɣ, zg -> zag"); // TODO толькі для "мозг" ? ён па-за сістэмны
-                    Huk a = new Huk("", BAZAVY_HUK.а);
-                    a.halosnaja = true;
-                    huki.add(i + 1, a);
                 }
             }
         }

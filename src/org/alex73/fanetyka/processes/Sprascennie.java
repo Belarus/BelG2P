@@ -143,6 +143,21 @@ public class Sprascennie {
         return "";
     }
 
+    @ProcessCase("Спрашчэнне: ц-ч -> ч")
+    public String cc(Huk h1, Huk h2, ProcessContext context) {
+        throw new RuntimeException("Спрашчэнне: ц-ч -> ч");
+    }
+
+    @ProcessCase("Спрашчэнне: з'-с -> с")
+    public String zs(Huk h1, Huk h2, ProcessContext context) {
+        throw new RuntimeException("Спрашчэнне: з'-с -> с");
+    }
+
+    @ProcessCase("Спрашчэнне: з'-з -> з")
+    public String zz(Huk h1, Huk h2, ProcessContext context) {
+        throw new RuntimeException("Спрашчэнне: з'-з -> з");
+    }
+
     private void vydalic(ProcessContext context, int offsetFromCurrent) {
         int pos = context.currentPosition + offsetFromCurrent;
         context.huki.get(pos - 1).zychodnyjaLitary += context.huki.get(pos).zychodnyjaLitary;

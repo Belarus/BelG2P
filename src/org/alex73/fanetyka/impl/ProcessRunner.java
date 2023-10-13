@@ -6,8 +6,7 @@ import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.TreeMap;
 
 import org.alex73.fanetyka.config.Case;
 import org.alex73.fanetyka.config.ProcessCase;
@@ -17,7 +16,7 @@ import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 public class ProcessRunner {
     protected final TsvConfig config;
     private final Object processor;
-    private final List<Method> methods = new ArrayList<>();
+    private final Map<String, Method> methods = new TreeMap<>();
 
     public ProcessRunner(Class<?> process, Map<String, byte[]> configs) throws Exception {
         processor = process.getDeclaredConstructor().newInstance();
@@ -31,17 +30,17 @@ public class ProcessRunner {
             return;
         }
 
-        Set<String> usedCases = new TreeSet<>();
         for (Method m : process.getMethods()) {
             ProcessCase ca = m.getAnnotation(ProcessCase.class);
             if (ca != null) {
-                methods.add(m);
-                usedCases.add(ca.value());
+                if (methods.put(ca.value(), m) != null) {
+                    throw new Exception("Duplicate cases in methods in class " + process.getSimpleName());
+                }
             }
         }
-        if (!config.cases.keySet().equals(usedCases)) {
+        if (!config.cases.keySet().equals(methods.keySet())) {
             throw new Exception("Wrong list of cases in config and class " + process.getSimpleName() + ": \n    class : "
-                    + String.join(",", config.cases.keySet()) + "\n    config: " + String.join(",", usedCases));
+                    + String.join(",", config.cases.keySet()) + "\n    config: " + String.join(",", methods.keySet()));
         }
     }
 
@@ -52,13 +51,14 @@ public class ProcessRunner {
     /**
      * Для кожнай табліцы праходзіць па ўсіх гуках.
      */
-    public void process(List<Huk> huki, List<String> log) throws Exception {
+    public void process(Fanetyka3 instance) throws Exception {
         ProcessContext context = new ProcessContext();
-        context.huki = huki;
-        for (Method m : methods) {
-            Case ca = config.cases.get(m.getAnnotation(ProcessCase.class).value());
+        context.huki = instance.huki;
+        for(String caseName: config.casesOrder) {
+            Method m = methods.get(caseName);
+            Case ca = config.cases.get(caseName);
             // ад канца да пачатка
-            for (int pos = huki.size() - ca.requiresHuks; pos >= 0; pos--) {
+            for (int pos = instance.huki.size() - ca.requiresHuks; pos >= 0; pos--) {
                 context.currentPosition = pos;
                 if (!check(ca, context)) {
                     continue;
@@ -87,9 +87,10 @@ public class ProcessRunner {
                 }
                 // спачатку выклікаем метад, і ён ужо можа выклікаць праверку па табліцы, пасля
                 // таго як сам зробіць іншыя праверкі
+                String before = instance.toString(Huk.ipa);
                 String change = (String) m.invoke(processor, parameters.toArray());
                 if (change != null) {
-                    log.add(ca.logMessage.replace("()", "(" + change + ")"));
+                    instance.why.add(ca.logMessage.replace("()", "(" + change + ")") + ": " + before + " -> " + instance.toString(Huk.ipa));
                 }
             }
         }
@@ -100,6 +101,20 @@ public class ProcessRunner {
      */
     private boolean check(Case ca, ProcessContext context) {
         int before = Math.min(context.currentPosition + ca.checks.size(), context.huki.size());
+        if (ca.borderCheckBefore != null) {
+            // мяжа перад першым гукам табліцы
+            Huk h;
+            if (context.currentPosition > 0) {
+                h = context.huki.get(context.currentPosition - 1);
+            } else {
+                // перад пачаткам слова
+                h = new Huk(null, null);
+                h.padzielPasla = Huk.PADZIEL_SLOVY;
+            }
+            if (!checkRules(ca.name, ca.borderCheckBefore, h)) {
+                return false;
+            }
+        }
         for (int i = context.currentPosition; i < before; i++) {
             if (!checkHuk(ca.name, ca.checks.get(i - context.currentPosition), context.huki.get(i))) {
                 return false;
@@ -117,6 +132,9 @@ public class ProcessRunner {
      * Правяраем адзін гук на адпаведнасць гукам у табліцы.
      */
     static boolean checkHuk(String zjava, Case.HukCheck c, Huk huk) {
+        if (c.which == null) {
+       //     return true; // табліца пачынаецца з мяжы слова, а не з гука
+        }
         for (String h : c.which) {
             switch (h) {
             case "звонкі":
@@ -129,8 +147,23 @@ public class ProcessRunner {
                     return true;
                 }
                 break;
+            case "галосны":
+                if (huk.halosnaja) {
+                    return true;
+                }
+                break;
             case "зычны":
                 if (!huk.halosnaja) { // TODO
+                    return true;
+                }
+                break;
+            case "шыпячы":
+                if (huk.isSypiacy()) {
+                    return true;
+                }
+                break;
+            case "свісцячы":
+                if (huk.isSvisciacy()) {
                     return true;
                 }
                 break;
