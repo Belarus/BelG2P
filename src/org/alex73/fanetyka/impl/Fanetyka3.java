@@ -93,39 +93,31 @@ public class Fanetyka3 {
                 config.processSprascennie.process(this);
             } else {
                 sprascennie();
+                pierachodTS();
             }
             if (config.processPrypadabniennie != null && config.processPrypadabniennie.isConfigExists()) {
                 config.processPrypadabniennie.process(this);
             } else {
                 prypadabniennie();
+                padvajennie();
             }
             if (config.processSypiacyjaSvisciacyja != null && config.processSypiacyjaSvisciacyja.isConfigExists()) {
                 config.processSypiacyjaSvisciacyja.process(this);
             } else {
                 sypiacyjaSvisciacyja();
             }
-            if (config.processPierachodTS != null && config.processPierachodTS.isConfigExists()) {
-                config.processPierachodTS.process(this);
-            } else {
-                pierachodTS();
-            }
-            if (config.processPierachodV != null && config.processPierachodV.isConfigExists()) {
-                config.processPierachodV.process(this);
+            if (config.processBilabijalnyV != null && config.processBilabijalnyV.isConfigExists()) {
+                config.processBilabijalnyV.process(this);
             } else {
                 pierachodV();
             }
-            if (config.processPierachodM != null && config.processPierachodM.isConfigExists()) {
-                config.processPierachodM.process(this);
+            if (config.processHubnaZubnyM != null && config.processHubnaZubnyM.isConfigExists()) {
+                config.processHubnaZubnyM.process(this);
             } else {
                 pierachodM();
             }
-            if (config.processPadvajennie != null && config.processPadvajennie.isConfigExists()) {
-                config.processPadvajennie.process(this);
-            } else {
-                padvajennie();
-            }
-            if (config.processUstaunojeA != null && config.processUstaunojeA.isConfigExists()) {
-                config.processUstaunojeA.process(this);
+            if (config.processUstaunyA != null && config.processUstaunyA.isConfigExists()) {
+                config.processUstaunyA.process(this);
             } else {
                 ustaunojeA();
             }
@@ -371,7 +363,7 @@ public class Fanetyka3 {
     }
 
     /**
-     * 't' і 's' пераходзіць у 'c', толькі калі няма падзелу
+     * 't' і 's' пераходзіць у 'c', толькі калі няма падзелу - спрашчэнне. Можа на мяжы прыстаўкі і кораня не мусіць быць ?
      */
     void pierachodTS() {
         for (int i = 0; i < huki.size() - 1; i++) {
@@ -598,7 +590,7 @@ public class Fanetyka3 {
     }
 
     /**
-     * 'v' перад 'о' і 'у' пераходзіць у 'β'
+     * 'v' перад 'о' і 'у' пераходзіць у 'β'. Білабіяльны 'в'.
      */
     void pierachodV() {
         for (int i = 0; i < huki.size() - 1; i++) {
@@ -614,7 +606,7 @@ public class Fanetyka3 {
     }
 
     /**
-     * 'm' перад 'f', 'v', 'β' пераходзіць у 'ɱ'
+     * 'm' перад 'f', 'v', 'β' пераходзіць у 'ɱ'. Губна-зубны 'м'.
      */
     void pierachodM() {
         for (int i = 0; i < huki.size() - 1; i++) {
@@ -682,11 +674,11 @@ public class Fanetyka3 {
             if (huk.bazavyHuk.equals(papiaredni.bazavyHuk) && !huk.halosnaja) {
                 if (halosnyPasla && halosnyPierad) {
                     huk.padvojeny = true;
-                    why.add("Падваенне: " + huk);
+                    why.add("Падваенне: " + huk); // на старонку "Падваенне"
                 } else {
                     // як 'пражскі'
                     huk.padvojeny = false;
-                    why.add("Спрашчэнне: " + huk);
+                    why.add("Спрашчэнне: " + huk); // на старонку "Спрашчэнне"
                 }
                 /*
                  * if (halosnyPierad &&
@@ -705,6 +697,7 @@ public class Fanetyka3 {
                 // 8. дасць джону
                 // з'+дж=>ж+жд
             } else if (huk.bazavyHuk == BAZAVY_HUK.дж && papiaredni.bazavyHuk == BAZAVY_HUK.д) {
+                // прыпадабненне
                 if (halosnyPasla && halosnyPierad) {
                     why.add("Падваенне: д+дж => дж:");
                     huk.padvojeny = true;
@@ -716,18 +709,21 @@ public class Fanetyka3 {
                 huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
                 i--;
             } else if (huk.bazavyHuk == BAZAVY_HUK.дз && papiaredni.bazavyHuk == BAZAVY_HUK.д) {
+                // прыпадабненне
                 why.add("Падваенне: д+дз => дз:");
                 huk.padvojeny = true;// halosnyPasla && halosnyPierad;
                 huki.remove(i - 1);
                 huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
                 i--;
             } else if (huk.bazavyHuk == BAZAVY_HUK.ч && papiaredni.bazavyHuk == BAZAVY_HUK.т) {
+                // прыпадабненне
                 why.add("Падваенне: т+ч => ч:");
                 huk.padvojeny = true;// halosnyPasla && halosnyPierad;
                 huki.remove(i - 1);
                 huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
                 i--;
             } else if (huk.bazavyHuk == BAZAVY_HUK.ц && papiaredni.bazavyHuk == BAZAVY_HUK.т) {
+                // прыпадабненне
                 if (halosnyPasla && halosnyPierad) {
                     why.add("Падваенне: т+ц => ц:");
                     huk.padvojeny = true;// halosnyPasla && halosnyPierad;
@@ -740,6 +736,7 @@ public class Fanetyka3 {
                 huk.zychodnyjaLitary = papiaredni.zychodnyjaLitary + huk.zychodnyjaLitary;
                 i--;
             } else if (papiaredni.is(BAZAVY_HUK.ґ, 0, false, null) && huk.is(BAZAVY_HUK.г, null, false, null)) {
+                // прыпадабненне
                 why.add("Падваенне: ґ+г => г:, як 'банк-гарант'");
                 huk.bazavyHuk = BAZAVY_HUK.г;
                 huk.padvojeny = true;

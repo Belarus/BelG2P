@@ -3,11 +3,15 @@ package org.alex73.fanetyka.impl;
 import java.util.Map;
 
 import org.alex73.fanetyka.processes.AhlusennieAzvancennie;
+import org.alex73.fanetyka.processes.BilabijalnyV;
+import org.alex73.fanetyka.processes.HubnaZubnyM;
+import org.alex73.fanetyka.processes.PierachodFH;
 import org.alex73.fanetyka.processes.PierachodI;
 import org.alex73.fanetyka.processes.PierachodZG;
 import org.alex73.fanetyka.processes.Prypadabniennie;
 import org.alex73.fanetyka.processes.Sprascennie;
 import org.alex73.fanetyka.processes.SypiacyjaSvisciacyja;
+import org.alex73.fanetyka.processes.UstaunyA;
 import org.alex73.grammardb.GrammarFinder;
 
 public class FanetykaConfig {
@@ -19,11 +23,9 @@ public class FanetykaConfig {
     protected final ProcessRunner processSprascennie;
     protected final ProcessRunner processPrypadabniennie;
     protected final ProcessRunner processSypiacyjaSvisciacyja;
-    protected ProcessRunner processPierachodTS;
-    protected ProcessRunner processPierachodV;
-    protected ProcessRunner processPierachodM;
-    protected ProcessRunner processPadvajennie;
-    protected ProcessRunner processUstaunojeA;
+    protected ProcessRunner processBilabijalnyV;
+    protected ProcessRunner processHubnaZubnyM;
+    protected ProcessRunner processUstaunyA;
     protected ProcessRunner processPierachodFH;
     protected ProcessRunner processPierachodZG;
 
@@ -36,12 +38,10 @@ public class FanetykaConfig {
         this.processSprascennie = new ProcessRunner(Sprascennie.class, configs);
         this.processPrypadabniennie = new ProcessRunner(Prypadabniennie.class, configs);
         this.processSypiacyjaSvisciacyja = new ProcessRunner(SypiacyjaSvisciacyja.class, configs);
-        // this.processPierachodTS = new ProcessRunner(PierachodTS.class, configs);
-        // this.processPierachodV = new ProcessRunner(PierachodV.class, configs);
-        // this.processPierachodM = new ProcessRunner(PierachodM.class, configs);
-        // this.processPadvajennie = new ProcessRunner(Padvajennie.class, configs);
-        // this.processUstaunojeA = new ProcessRunner(UstaunojeA.class, configs);
-        // this.processPierachodFH = new ProcessRunner(PierachodFH.class, configs);
+        this.processBilabijalnyV = new ProcessRunner(BilabijalnyV.class, configs);
+        this.processHubnaZubnyM = new ProcessRunner(HubnaZubnyM.class, configs);
+        this.processUstaunyA = new ProcessRunner(UstaunyA.class, configs);
+        this.processPierachodFH = new ProcessRunner(PierachodFH.class, configs);
         this.processPierachodZG = new ProcessRunner(PierachodZG.class, configs);
     }
 }

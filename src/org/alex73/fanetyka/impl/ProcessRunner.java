@@ -6,7 +6,9 @@ import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.alex73.fanetyka.config.Case;
 import org.alex73.fanetyka.config.ProcessCase;
@@ -39,9 +41,16 @@ public class ProcessRunner {
             }
         }
         if (!config.cases.keySet().equals(methods.keySet())) {
-            throw new Exception("Wrong list of cases in config and class " + process.getSimpleName() + ": \n    class : "
-                    + String.join(",", config.cases.keySet()) + "\n    config: " + String.join(",", methods.keySet()));
+            throw new Exception("Wrong list of cases in config and class " + process.getSimpleName() + ": \n    exist in class but not in configs : "
+                    + setMinus(methods.keySet(), config.cases.keySet()) + "\n    exist in configs but not in class: "
+                    + setMinus(config.cases.keySet(), methods.keySet()));
         }
+    }
+
+    private String setMinus(Set<String> s1, Set<String> s2) {
+        Set<String> r = new TreeSet<>(s1);
+        r.removeAll(s2);
+        return String.join(",", r);
     }
 
     public boolean isConfigExists() {

@@ -113,6 +113,60 @@ public class Sprascennie {
         return "";
     }
 
+    @ProcessCase("Спрашчэнне: д-дж -> дж, д-дз -> дз (не пасля галоснай)")
+    public String ddz1(ProcessContext context) {
+        int pos = context.currentPosition + 1;
+        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+        context.huki.remove(pos);
+        return "";
+    }
+
+    @ProcessCase("Спрашчэнне: д-дж -> дж, д-дз -> дз (не перад галоснай)")
+    public String ddz2(ProcessContext context) {
+        int pos = context.currentPosition;
+        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+        context.huki.remove(pos);
+        return "";
+    }
+
+    @ProcessCase("Спрашчэнне: т-ч-> ч, т-ц -> ц (не пасля галоснай)")
+    public String tc1(ProcessContext context) {
+        int pos = context.currentPosition + 1;
+        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+        context.huki.remove(pos);
+        return "";
+    }
+
+    @ProcessCase("Спрашчэнне: т-ч-> ч, т-ц -> ц(не перад галоснай)")
+    public String tc2(ProcessContext context) {
+        int pos = context.currentPosition;
+        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+        context.huki.remove(pos);
+        return "";
+    }
+
+    @ProcessCase("Спрашчэнне аднолькавых зычных (не пасля галоснай)")
+    public String eq1(Huk h1, Huk h2, Huk h3, ProcessContext context) {
+        if (h2.bazavyHuk != h3.bazavyHuk) {
+            return null;
+        }
+        int pos = context.currentPosition + 1;
+        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+        context.huki.remove(pos);
+        return "";
+    }
+
+    @ProcessCase("Спрашчэнне аднолькавых зычных (не перад галоснай)")
+    public String eq2(Huk h1, Huk h2, ProcessContext context) {
+        if (h1.bazavyHuk != h2.bazavyHuk) {
+            return null;
+        }
+        int pos = context.currentPosition;
+        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+        context.huki.remove(pos);
+        return "";
+    }
+
     @ProcessCase("Спрашчэнне: н-т-ш-ч -> н-ш-ч")
     public String ntsc(Huk h1, Huk h2, ProcessContext context) {
         vydalic(context, 1);
@@ -127,6 +181,13 @@ public class Sprascennie {
 
     @ProcessCase("Спрашчэнне: н-т-с -> н-с")
     public String nts(Huk h1, Huk h2, ProcessContext context) {
+        vydalic(context, 1);
+        return "";
+    }
+
+    @ProcessCase("Спрашчэнне: т-с -> ц")
+    public String ts(Huk huk, ProcessContext context) {
+        huk.bazavyHuk = BAZAVY_HUK.ц;
         vydalic(context, 1);
         return "";
     }
