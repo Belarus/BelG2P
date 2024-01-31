@@ -1,4 +1,4 @@
-package org.alex73.fanetyka.impl;
+package org.alex73.fanetyka.old;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,8 +8,11 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
 
+import org.alex73.fanetyka.impl.IFanetyka;
+import org.alex73.fanetyka.impl.Huk;
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 import org.alex73.grammardb.GrammarDB2;
+import org.alex73.grammardb.GrammarFinder;
 import org.alex73.grammardb.structures.Form;
 import org.alex73.grammardb.structures.Paradigm;
 import org.alex73.grammardb.structures.Variant;
@@ -24,14 +27,14 @@ import org.alex73.grammardb.structures.Variant;
  * Спасылкі на кнігі:
  * Ф1989 - Фанетыка беларускай літаратурнай мовы / І.Р.Бурлыка,Л.Ц.Выгонная,Г.В.Лосік,А.І.Падлужны. - Мн. : Навука і тэхніка, 1989. - 335с.
  */
-public class Fanetyka3 implements IFanetyka {
-    private final FanetykaConfig config;
+public class Fanetyka3Old implements IFanetyka {
+    private final GrammarFinder finder;
     List<Huk> huki = new ArrayList<>();
     List<String> words = new ArrayList<>();
     public List<String> why = new ArrayList<>(); // як адбываюцца пераходы
 
-    public Fanetyka3(FanetykaConfig config) throws Exception {
-        this.config = config;
+    public Fanetyka3Old(GrammarFinder finder) throws Exception {
+        this.finder = finder;
     }
 
     public void addWord(String w) {
@@ -73,63 +76,19 @@ public class Fanetyka3 implements IFanetyka {
         String prev = toString();
         int pass = 0;
         while (true) {
-            if (config.processPierachodZG != null && config.processPierachodZG.isConfigExists()) {
-                config.processPierachodZG.process(this);
-            } else {
-                pierachodZG();
-            }
-            if (config.processPierachodI != null && config.processPierachodI.isConfigExists()) {
-                config.processPierachodI.process(this);
-            } else {
-                pierachodI();
-            }
-            if (config.processMiakkasc != null && config.processMiakkasc.isConfigExists()) {
-                config.processMiakkasc.process(this);
-            } else {
-                paznacajemMiakkasc();
-            }
-            if (config.processAhlusennieAzvancennie.isConfigExists()) {
-                config.processAhlusennieAzvancennie.process(this);
-            } else {
-                ahlusennieIazvancennie();
-            }
-            if (config.processSprascennie != null && config.processSprascennie.isConfigExists()) {
-                config.processSprascennie.process(this);
-            } else {
-                sprascennie();
-                pierachodTS();
-            }
-            if (config.processPrypadabniennie != null && config.processPrypadabniennie.isConfigExists()) {
-                config.processPrypadabniennie.process(this);
-            } else {
-                prypadabniennie();
-                padvajennie();
-            }
-            if (config.processSypiacyjaSvisciacyja != null && config.processSypiacyjaSvisciacyja.isConfigExists()) {
-                config.processSypiacyjaSvisciacyja.process(this);
-            } else {
-                sypiacyjaSvisciacyja();
-            }
-            if (config.processBilabijalnyV != null && config.processBilabijalnyV.isConfigExists()) {
-                config.processBilabijalnyV.process(this);
-            } else {
-                pierachodV();
-            }
-            if (config.processHubnaZubnyM != null && config.processHubnaZubnyM.isConfigExists()) {
-                config.processHubnaZubnyM.process(this);
-            } else {
-                pierachodM();
-            }
-            if (config.processUstaunyA != null && config.processUstaunyA.isConfigExists()) {
-                config.processUstaunyA.process(this);
-            } else {
-                ustaunojeA();
-            }
-            if (config.processPierachodFH != null && config.processPierachodFH.isConfigExists()) {
-                config.processPierachodFH.process(this);
-            } else {
-                pierachodFH();
-            }
+            pierachodZG();
+            pierachodI();
+            paznacajemMiakkasc();
+            ahlusennieIazvancennie();
+            sprascennie();
+            pierachodTS();
+            prypadabniennie();
+            padvajennie();
+            sypiacyjaSvisciacyja();
+            pierachodV();
+            pierachodM();
+            ustaunojeA();
+            pierachodFH();
             String hnew = toString();
             if (hnew.equals(prev)) {
                 // нічога не змянілася
@@ -259,7 +218,7 @@ public class Fanetyka3 implements IFanetyka {
         }
     }
 
-    public static String fanetykaSlova(Fanetyka3 r, String w) throws Exception {
+    public static String fanetykaSlova(Fanetyka3Old r, String w) throws Exception {
         r.addWord(w);
         r.calcFanetyka();
         return r.toString(Huk.ipa);
@@ -1080,7 +1039,7 @@ public class Fanetyka3 implements IFanetyka {
     }
 
     boolean fanetykaBazy(String word) {
-        String fan = config.finder.getFan(word);
+        String fan = finder.getFan(word);
         if (fan == null) {
             return false;
         }
@@ -1111,7 +1070,7 @@ public class Fanetyka3 implements IFanetyka {
             return w;
         }
 
-        String dbMorph = config.finder.getMorph(w);
+        String dbMorph = finder.getMorph(w);
         if (dbMorph != null) {
             why.add("Марфемы з базы: " + dbMorph);
             return dbMorph;
@@ -1119,7 +1078,7 @@ public class Fanetyka3 implements IFanetyka {
 
         Set<String> foundForms = new TreeSet<>();
         // у базе няма марфалогіі - спрабуем выцягнуць націскі і ґ
-        f1: for (Paradigm p : config.finder.getParadigms(w)) {
+        f1: for (Paradigm p : finder.getParadigms(w)) {
             for (Variant v : p.getVariant()) {
                 for (Form f : v.getForm()) {
                     if (f.getValue().isEmpty()) {

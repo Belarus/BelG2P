@@ -1,4 +1,4 @@
-package org.alex73.fanetyka.impl;
+package org.alex73.fanetyka.old;
 
 /**
  * Замяняем гукі паміж словамі.

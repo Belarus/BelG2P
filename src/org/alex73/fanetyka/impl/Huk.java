@@ -221,7 +221,7 @@ public class Huk {
         throw new RuntimeException("Невядомы базавы гук: " + h.bazavyHuk);
     };
 
-    static Huk parseIpa(ParseIpaContext context) { // TODO check ё, ю, я
+    public static Huk parseIpa(ParseIpaContext context) { // TODO check ё, ю, я
         String s = context.fan;
         Huk huk;
         if (s.startsWith("u̯")) {
@@ -434,9 +434,9 @@ public class Huk {
         return huk;
     }
 
-    static class ParseIpaContext {
-        String fan;
-        boolean stress = false;
+    public static class ParseIpaContext {
+        public String fan;
+        public boolean stress = false;
 
         public ParseIpaContext(String fan) {
             this.fan = fan;
