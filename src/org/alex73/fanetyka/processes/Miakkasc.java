@@ -1,5 +1,5 @@
 package org.alex73.fanetyka.processes;
 
-public class PaznacajemMiakkasc {
+public class Miakkasc {
 
 }

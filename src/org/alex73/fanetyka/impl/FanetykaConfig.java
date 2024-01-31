@@ -5,6 +5,7 @@ import java.util.Map;
 import org.alex73.fanetyka.processes.AhlusennieAzvancennie;
 import org.alex73.fanetyka.processes.BilabijalnyV;
 import org.alex73.fanetyka.processes.HubnaZubnyM;
+import org.alex73.fanetyka.processes.Miakkasc;
 import org.alex73.fanetyka.processes.PierachodFH;
 import org.alex73.fanetyka.processes.PierachodI;
 import org.alex73.fanetyka.processes.PierachodZG;
@@ -18,7 +19,7 @@ public class FanetykaConfig {
     protected final GrammarFinder finder;
 
     protected final ProcessRunner processPierachodI;
-    protected ProcessRunner processPaznacajemMiakkasc;
+    protected final ProcessRunner processMiakkasc;
     protected final ProcessRunner processAhlusennieAzvancennie;
     protected final ProcessRunner processSprascennie;
     protected final ProcessRunner processPrypadabniennie;
@@ -32,8 +33,7 @@ public class FanetykaConfig {
     public FanetykaConfig(GrammarFinder finder, Map<String, byte[]> configs) throws Exception {
         this.finder = finder;
         this.processPierachodI = new ProcessRunner(PierachodI.class, configs);
-        // this.processPaznacajemMiakkasc = new ProcessRunner(PaznacajemMiakkasc.class,
-        // configs);
+        this.processMiakkasc = new ProcessRunner(Miakkasc.class, configs);
         this.processAhlusennieAzvancennie = new ProcessRunner(AhlusennieAzvancennie.class, configs);
         this.processSprascennie = new ProcessRunner(Sprascennie.class, configs);
         this.processPrypadabniennie = new ProcessRunner(Prypadabniennie.class, configs);
