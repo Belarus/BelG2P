@@ -31,14 +31,14 @@ public class Prypadabniennie {
     }
 
     @ProcessCase("Прыпадабненне д+дж => дж:, д+дз => дз:")
-    public String ddz(Huk h1, Huk h2, Huk h3, ProcessContext context) {
-        int pos = context.currentPosition + 1;
+    public String ddz(Huk h1, Huk h2, ProcessContext context) {
+        int pos = context.currentPosition;
         context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
         context.huki.remove(pos);
-        h3.padvojeny = true;
+        h2.padvojeny = true;
         return "";
     }
-
+/*
     @ProcessCase("Падваенне аднолькавых зычных")
     public String eq(Huk h1, Huk h2, Huk h3, ProcessContext context) {
         if (h2.bazavyHuk != h3.bazavyHuk) {
@@ -49,5 +49,5 @@ public class Prypadabniennie {
         context.huki.remove(pos);
         h3.padvojeny = true;
         return "";
-    }
+    }*/
 }

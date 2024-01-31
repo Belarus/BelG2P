@@ -16,11 +16,13 @@ import org.alex73.fanetyka.config.TsvConfig;
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 
 public class ProcessRunner {
+    public final Class<?> processType;
     protected final TsvConfig config;
     private final Object processor;
     private final Map<String, Method> methods = new TreeMap<>();
 
     public ProcessRunner(Class<?> process, Map<String, byte[]> configs) throws Exception {
+        this.processType = process;
         processor = process.getDeclaredConstructor().newInstance();
         String processName = process.getSimpleName();
         if (configs == null) {
@@ -99,7 +101,7 @@ public class ProcessRunner {
                 String before = instance.toString(Huk.ipa);
                 String change = (String) m.invoke(processor, parameters.toArray());
                 if (change != null) {
-                    instance.why.add(ca.logMessage.replace("()", "(" + change + ")") + ": " + before + " -> " + instance.toString(Huk.ipa));
+                    instance.why.add(ca.name + ": " + ca.logMessage.replace("()", "(" + change + ")") + ": " + before + " -> " + instance.toString(Huk.ipa));
                 }
             }
         }

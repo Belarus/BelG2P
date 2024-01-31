@@ -60,7 +60,7 @@ public class FanetykaText {
         GrammarDB2 db = GrammarDB2.empty();
         GrammarFinder finder = new GrammarFinder(db);
 
-        String text ="абвод";// new String(System.in.readAllBytes());
+        String text ="лё";// new String(System.in.readAllBytes());
         FanetykaText t = new FanetykaText(finder, text);
         System.out.println(t.skola);
     }

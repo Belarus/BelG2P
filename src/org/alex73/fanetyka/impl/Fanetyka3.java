@@ -41,6 +41,11 @@ public class Fanetyka3 {
     public void calcFanetyka() throws Exception {
         for (int i = 0; i < words.size(); i++) {
             String w = words.get(i);
+            w = narmalizacyjaSlova(w.toLowerCase());
+            words.set(i, w);
+        }
+        for (int i = 0; i < words.size(); i++) {
+            String w = words.get(i);
             if (i < words.size() - 1) {
                 // "без,не -> бяз,ня" перад словамі з націскам на першы склад
                 String wl = w.toLowerCase();
@@ -62,7 +67,6 @@ public class Fanetyka3 {
                 }
             }
             if (!fanetykaBazy(w)) {
-                w = narmalizacyjaSlova(w.toLowerCase());
                 stvarajemBazavyjaHuki(w);
             }
         }
@@ -963,11 +967,16 @@ public class Fanetyka3 {
                 // miakkasc = huk.miakki != 0;
                 // continue;
             }
+            if (huk.padzielPasla == Huk.PADZIEL_SLOVY || huk.padzielPasla == Huk.PADZIEL_MINUS || huk.padzielPasla == Huk.PADZIEL_PRYSTAUKA) {
+                // мяккасць не перакрочвае мяжу слова: "лёс Ігара", "лёс вядомы"
+                // але калі яна дадатковы элемент іншых працэсаў - то пераходзіць: "лёс сёння"
+                //miakkasc = false;
+            }
             if (huk.halosnaja) {
                 // зьмягчаеццца перад мяккімі галоснымі
                 miakkasc = huk.miakkajaHalosnaja;
             } else if (huk.apostrafPasla) {
-                why.add("Перад апострафам '" + huk + "' не змякчаецца");
+                //why.add("Перад апострафам '" + huk + "' не змякчаецца");
                 miakkasc = false;
                 huk.setMiakkasc(false);
             } else if (huk.bazavyHuk == BAZAVY_HUK.р || huk.bazavyHuk == BAZAVY_HUK.ч || huk.bazavyHuk == BAZAVY_HUK.дж || huk.bazavyHuk == BAZAVY_HUK.ш
@@ -1007,7 +1016,7 @@ public class Fanetyka3 {
                     }
                 }
                 // не даюць зьмягчацца гукам перад імі
-                miakkasc = false; // TODO праверыць падваеньне гкх
+                miakkasc = false; // TODO праверыць падваеньне гкх // не мусіць перакрочваць мяжу слова ?
             } else if (huk.bazavyHuk == BAZAVY_HUK.д) {
                 if (nastupny != null && nastupny.miakki != 0
                         && (nastupny.bazavyHuk == BAZAVY_HUK.н || nastupny.bazavyHuk == BAZAVY_HUK.с || nastupny.bazavyHuk == BAZAVY_HUK.з)) {
@@ -1048,6 +1057,7 @@ public class Fanetyka3 {
     }
 
     // TODO дадаць націскі
+    // TODO прыстаўкі перад еёюя - толькі калі ёсць апостраф
     static final String[] PRYSTAUKI = new String[] { "ад", "безад", "беспад", "вод", "звод", "наад", "навод", "напад", "над", "неад", "непад", "непрад",
             "павод", "панад", "папад", "падад", "пад", "перапад", "перад", "под", "прад", "прыад", "прыпад", "спад", "спрад", "за", "з",
             "супад"/*
@@ -1117,16 +1127,22 @@ public class Fanetyka3 {
                     }
                     if (compareWord(w, f.getValue())) {
                         foundForms.add(f.getValue().toLowerCase());
-                        w = f.getValue().replace('+', GrammarDB2.pravilny_nacisk);
-                        why.add("Націскі з базы: " + w);
+                        String neww = f.getValue().replace('+', GrammarDB2.pravilny_nacisk);
+                        if (!w.equals(neww)) {
+                            w = neww;
+                            why.add("Націскі з базы: " + w);
+                        }
                         break f1;
                     }
                 }
             }
         }
         if (foundForms.size() == 1) {
-            w = foundForms.iterator().next().replace('+', GrammarDB2.pravilny_nacisk);
-            why.add("Націскі і пазначэнне ґ з базы: " + w);
+            String neww = foundForms.iterator().next().replace('+', GrammarDB2.pravilny_nacisk);
+            if (!w.equals(neww)) {
+                w = neww;
+                why.add("Націскі і пазначэнне ґ з базы: " + w);
+            }
         } else {
             // націскі на о, ё
             int p = w.indexOf('о');
@@ -1139,10 +1155,24 @@ public class Fanetyka3 {
         }
 
         // пазначаем найбольш распаўсюджаныя прыстаўкі
+        String wl = w.toLowerCase();
         for (String p : PRYSTAUKI) {
-            if (w.length() > p.length() + 2 && w.startsWith(p)) {
-                w = w.substring(0, p.length()) + '|' + w.substring(p.length());
-                why.add("Мяркуем, што прыстаўка '" + p + "'");
+            if (wl.length() > p.length() + 2 && wl.startsWith(p)) {
+                boolean prystauka = false;
+                char nextLetter = wl.charAt(p.length());
+                char nextLetter2 = wl.charAt(p.length() + 1);
+                if (nextLetter == GrammarDB2.pravilny_apostraf && (nextLetter2 == 'е' || nextLetter2 == 'ё' || nextLetter2 == 'ю' || nextLetter2 == 'я')) {
+                    // прыстаўкі перад еёюя - толькі калі ёсць апостраф
+                    prystauka = true;
+                } else if (nextLetter == 'е' || nextLetter == 'ё' || nextLetter == 'ю' || nextLetter == 'я') {
+                    prystauka = false;
+                } else {
+                    prystauka = true;
+                }
+                if (prystauka) {
+                    w = w.substring(0, p.length()) + '|' + w.substring(p.length());
+                    why.add("Мяркуем, што прыстаўка '" + p + "'");
+                }
             }
         }
 

@@ -92,16 +92,14 @@ public class Huk {
     }
 
     public boolean isSypiacy() {
-        if (miakki != 0) {
-            return false;
-        }
+//        if (miakki != 0) {
+//            // небываюць мяккімі
+//            return false;
+//        }
         return bazavyHuk == BAZAVY_HUK.ш || bazavyHuk == BAZAVY_HUK.ж || bazavyHuk == BAZAVY_HUK.дж || bazavyHuk == BAZAVY_HUK.ч;
     }
 
     public boolean isSvisciacy() {
-        if (miakki != 0) {
-            return false;
-        }
         return bazavyHuk == BAZAVY_HUK.с || bazavyHuk == BAZAVY_HUK.з || bazavyHuk == BAZAVY_HUK.дз || bazavyHuk == BAZAVY_HUK.ц;
     }
 

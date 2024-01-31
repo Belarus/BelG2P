@@ -35,8 +35,16 @@ public class SypiacyjaSvisciacyja {
         }
     }
 
-    @ProcessCase("Пераход шыпячых у свісцячыя")
-    public String sy(Huk huk) {
+    @ProcessCase("Пераход шыпячых ц/дз у свісцячыя")
+    public String sycdz(Huk huk) {
+        BAZAVY_HUK replaceTo = sypiacyja2svisciacyja.get(huk.bazavyHuk);
+        String log = huk.bazavyHuk.name() + "->" + replaceTo.name();
+        huk.bazavyHuk = replaceTo;
+        return log;
+    }
+
+    @ProcessCase("Пераход шыпячых с/з у свісцячыя")
+    public String sysz(Huk huk) {
         BAZAVY_HUK replaceTo = sypiacyja2svisciacyja.get(huk.bazavyHuk);
         String log = huk.bazavyHuk.name() + "->" + replaceTo.name();
         huk.bazavyHuk = replaceTo;
