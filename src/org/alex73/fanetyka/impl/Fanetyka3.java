@@ -640,6 +640,7 @@ public class Fanetyka3 implements IFanetyka {
                 why.add("'і' перад д т ж ш ч дж пераходзіць у ɨ");
                 huk.bazavyHuk = BAZAVY_HUK.ы;
                 huk.miakkajaHalosnaja = false;
+                huk.miakki = 0;
             }
         }
     }
@@ -1219,12 +1220,14 @@ public class Fanetyka3 implements IFanetyka {
                 novyHuk = new Huk("е", BAZAVY_HUK.э);
                 novyHuk.halosnaja = true;
                 novyHuk.miakkajaHalosnaja = true;
+                novyHuk.miakki = Huk.MIAKKASC_PAZNACANAJA;
                 break;
             case 'ё':
                 dadacJotKaliPatrebny(papiaredniHuk, c, next);
                 novyHuk = new Huk("ё", BAZAVY_HUK.о);
                 novyHuk.halosnaja = true;
                 novyHuk.miakkajaHalosnaja = true;
+                novyHuk.miakki = Huk.MIAKKASC_PAZNACANAJA;
                 break;
             case 'ж':
                 if (papiaredniHuk != null && "д".equals(papiaredniHuk.zychodnyjaLitary) && papiaredniHuk.padzielPasla == 0) {
@@ -1249,6 +1252,7 @@ public class Fanetyka3 implements IFanetyka {
                 novyHuk = new Huk("і", BAZAVY_HUK.і);
                 novyHuk.halosnaja = true;
                 novyHuk.miakkajaHalosnaja = true;
+                novyHuk.miakki = Huk.MIAKKASC_PAZNACANAJA;
                 break;
             case 'й':
                 novyHuk = new Huk("й", BAZAVY_HUK.j);
@@ -1321,12 +1325,14 @@ public class Fanetyka3 implements IFanetyka {
                 novyHuk = new Huk("ю", BAZAVY_HUK.у);
                 novyHuk.halosnaja = true;
                 novyHuk.miakkajaHalosnaja = true;
+                novyHuk.miakki = Huk.MIAKKASC_PAZNACANAJA;
                 break;
             case 'я':
                 dadacJotKaliPatrebny(papiaredniHuk, c, next);
                 novyHuk = new Huk("я", BAZAVY_HUK.а);
                 novyHuk.halosnaja = true;
                 novyHuk.miakkajaHalosnaja = true;
+                novyHuk.miakki = Huk.MIAKKASC_PAZNACANAJA;
                 break;
             case GrammarDB2.pravilny_apostraf:
                 if (papiaredniHuk != null) {
@@ -1377,14 +1383,14 @@ public class Fanetyka3 implements IFanetyka {
             // першая літара ці пасьля пералічаных
             Huk jot = new Huk("", BAZAVY_HUK.j);
             jot.miakkajaHalosnaja = true;
-            jot.halosnaja = true;
+            //jot.halosnaja = true;
             jot.setMiakkasc(true);
             huki.add(jot);
         } else if (papiaredni != null && "еёюя".indexOf(current) >= 0 && ("тдржшч".indexOf(papiaredni.zychodnyjaLitary) >= 0 || papiaredni.padzielPasla != 0)) {
             // звычайна сутык прыстаўкі і кораня
             Huk jot = new Huk("", BAZAVY_HUK.j);
             jot.miakkajaHalosnaja = true;
-            jot.halosnaja = true;
+            //jot.halosnaja = true;
             jot.setMiakkasc(true);
             huki.add(jot);
         }

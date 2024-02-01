@@ -10,6 +10,7 @@ public class PierachodI {
         String r = huk.bazavyHuk.name() + " -> ы";
         huk.bazavyHuk = BAZAVY_HUK.ы;
         huk.miakkajaHalosnaja = false;
+        huk.miakki = 0;
         return r;
     }
 }

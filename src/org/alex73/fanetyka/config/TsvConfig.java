@@ -88,6 +88,11 @@ public class TsvConfig {
         t.logMessage = line[1].trim();
         lineIndex++;
 
+        // тут могуць быць каментары, дзе першы слупок - пусты
+        while (lines.get(lineIndex)[0].isBlank()) {
+            lineIndex++;
+        }
+
         int columnAfter = parseTable(t);
 
         line = lines.get(lineIndex);
@@ -281,6 +286,6 @@ public class TsvConfig {
     }
 
     private void err(int column, int lineOffset, String message) {
-        throw new RuntimeException("Памылка ў канфігурацыі '%s#%d%c': %s".formatted(configName, lineIndex + lineOffset, (char) ('A' + column), message));
+        throw new RuntimeException("Памылка ў канфігурацыі '%s#%d%c': %s".formatted(configName, 1 + lineIndex + lineOffset, (char) ('A' + column), message));
     }
 }

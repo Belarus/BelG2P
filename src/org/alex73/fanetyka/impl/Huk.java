@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
-
 public class Huk {
     public static int PADZIEL_PRYSTAUKA = 1;
     public static int PADZIEL_KARANI = 2;
@@ -111,9 +109,6 @@ public class Huk {
     public static Function<Huk, IPA> ipa_enum = h -> {
         switch (h.bazavyHuk) {
         case а:
-            if (h.miakki != 0) {
-                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
-            }
             return IPA.a;
         case б:
             return h.miakki == 0 ? IPA.b : IPA.bʲ;
@@ -131,9 +126,6 @@ public class Huk {
         case д:
             return h.miakki == 0 ? IPA.d : IPA.dʲ;
         case э:
-            if (h.miakki != 0) {
-                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
-            }
             return IPA.ɛ;
         case дж:
             if (h.miakki != 0) {
@@ -150,9 +142,6 @@ public class Huk {
         case з:
             return h.miakki == 0 ? IPA.z : IPA.zʲ;
         case і:
-            if (h.miakki != 0) {
-                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
-            }
             return IPA.i;
         case к:
             return h.miakki == 0 ? IPA.k : IPA.kʲ;
@@ -168,9 +157,6 @@ public class Huk {
         case н:
             return h.miakki == 0 ? IPA.n : IPA.nʲ;
         case о:
-            if (h.miakki != 0) {
-                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
-            }
             return IPA.ɔ;
         case п:
             return h.miakki == 0 ? IPA.p : IPA.pʲ;
@@ -184,9 +170,6 @@ public class Huk {
         case т:
             return h.miakki == 0 ? IPA.t : IPA.tʲ;
         case у:
-            if (h.miakki != 0) {
-                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
-            }
             return IPA.u;
         case ў:
             if (h.miakki != 0) {
@@ -215,7 +198,7 @@ public class Huk {
             }
             return IPA.ɨ;
         case j:
-            // ён заўсёды аднолькавы
+            // ён заўсёды мяккі
             return IPA.j;
         }
         throw new RuntimeException("Невядомы базавы гук: " + h.bazavyHuk);
@@ -417,6 +400,7 @@ public class Huk {
                 break;
             case 'j':
                 huk = new Huk(s.substring(0, 1), BAZAVY_HUK.j);
+                huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
                 break;
             default:
                 throw new RuntimeException("Невядомы гук: " + s);
