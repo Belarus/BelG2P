@@ -11,11 +11,12 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.alex73.fanetyka.config.Case;
+import org.alex73.fanetyka.config.IConfig;
 import org.alex73.fanetyka.config.ProcessCase;
 import org.alex73.fanetyka.config.TsvConfig;
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 
-public class ProcessRunner {
+public class ProcessRunner implements IProcess {
     public final Class<?> processType;
     protected final TsvConfig config;
     private final Object processor;
@@ -49,6 +50,16 @@ public class ProcessRunner {
         }
     }
 
+    @Override
+    public IConfig getConfig() {
+        return config;
+    }
+
+    @Override
+    public String getProcessType() {
+        return processType.getSimpleName();
+    }
+
     private String setMinus(Set<String> s1, Set<String> s2) {
         Set<String> r = new TreeSet<>(s1);
         r.removeAll(s2);
@@ -65,7 +76,7 @@ public class ProcessRunner {
     public void process(Fanetyka3 instance) throws Exception {
         ProcessContext context = new ProcessContext();
         context.huki = instance.huki;
-        for(String caseName: config.casesOrder) {
+        for (String caseName : config.casesOrder) {
             Method m = methods.get(caseName);
             Case ca = config.cases.get(caseName);
             // ад канца да пачатка
@@ -144,7 +155,7 @@ public class ProcessRunner {
      */
     static boolean checkHuk(String zjava, Case.HukCheck c, Huk huk) {
         if (c.which == null) {
-       //     return true; // табліца пачынаецца з мяжы слова, а не з гука
+            // return true; // табліца пачынаецца з мяжы слова, а не з гука
         }
         for (String h : c.which) {
             switch (h) {

@@ -5,14 +5,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.alex73.fanetyka.config.Case.Example;
 import org.alex73.fanetyka.config.Case.HukCheck;
 import org.alex73.fanetyka.impl.Huk;
 
-public class TsvConfig {
+public class TsvConfig implements IConfig {
     private final String configName;
     private final List<String[]> lines = new ArrayList<>();
     private int lineIndex;
@@ -20,8 +22,8 @@ public class TsvConfig {
     public final List<String> casesOrder = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
-        new TsvConfig("AhlusennieAzvancennie");
-
+        new TsvConfig("Miakkasc");
+        new TsvConfig("Miakkasc-cross");
     }
 
     public TsvConfig(String name) throws Exception {
@@ -54,6 +56,11 @@ public class TsvConfig {
                 err(0, "Невядомы загаловак: " + line[0]);
             }
         }
+    }
+
+    @Override
+    public List<Example> getExamples() {
+        return cases.values().stream().flatMap(c -> c.examples.stream()).toList();
     }
 
     private static final String[] TASK_HEADERS = new String[] { "Умовы:", "якія гукі", "апостраф", "падзел - прыстаўка і корань", "падзел - паміж каранямі",
@@ -209,6 +216,7 @@ public class TsvConfig {
             } catch (ArrayIndexOutOfBoundsException ex) {
             }
             Case.Example ex = new Case.Example();
+            ex.caseName = t.name;
             ex.lineIndex = i;
             ex.column = (char) ('A' + column);
             ex.word = line[column].trim();

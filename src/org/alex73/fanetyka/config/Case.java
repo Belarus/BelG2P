@@ -30,6 +30,7 @@ public class Case {
     }
 
     public static class Example {
+        public String caseName;
         public int lineIndex;
         public char column;
         public String word, expected;

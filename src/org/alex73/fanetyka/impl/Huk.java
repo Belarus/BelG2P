@@ -7,14 +7,14 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class Huk {
-    public static int PADZIEL_PRYSTAUKA = 1;
-    public static int PADZIEL_KARANI = 2;
-    public static int PADZIEL_SUFIX = 4;
-    public static int PADZIEL_SLOVY = 8;
-    public static int PADZIEL_MINUS = 16;
-    public static int MIAKKASC_ASIMILACYJNAJA = 1;
-    public static int MIAKKASC_PAZNACANAJA = 2;
-    public static int MASK_MIAKKASC_USIE = 3;
+    public static final int PADZIEL_PRYSTAUKA = 1;
+    public static final int PADZIEL_KARANI = 2;
+    public static final int PADZIEL_SUFIX = 4;
+    public static final int PADZIEL_SLOVY = 8;
+    public static final int PADZIEL_MINUS = 16;
+    public static final int MIAKKASC_ASIMILACYJNAJA = 1;
+    public static final int MIAKKASC_PAZNACANAJA = 2;
+    public static final int MASK_MIAKKASC_USIE = 3;
 
     public enum BAZAVY_HUK {
         а, б, в, β, г, ґ, д, э, дж, дз, ж, з, і, к, л, м, ɱ, н, о, п, р, с, т, у, ў, ф, х, ц, ч, ш, ы, j
@@ -198,6 +198,9 @@ public class Huk {
             }
             return IPA.ɨ;
         case j:
+            if (h.miakki != Huk.MIAKKASC_PAZNACANAJA) {
+                //TODO throw new RuntimeException("мусіць быць мяккі: " + h.bazavyHuk);
+            }
             // ён заўсёды мяккі
             return IPA.j;
         }

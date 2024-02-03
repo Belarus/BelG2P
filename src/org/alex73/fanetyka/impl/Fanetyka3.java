@@ -25,7 +25,7 @@ import org.alex73.grammardb.structures.Variant;
  * Ф1989 - Фанетыка беларускай літаратурнай мовы / І.Р.Бурлыка,Л.Ц.Выгонная,Г.В.Лосік,А.І.Падлужны. - Мн. : Навука і тэхніка, 1989. - 335с.
  */
 public class Fanetyka3 implements IFanetyka {
-    private final FanetykaConfig config;
+    protected final FanetykaConfig config;
     List<Huk> huki = new ArrayList<>();
     List<String> words = new ArrayList<>();
     public List<String> why = new ArrayList<>(); // як адбываюцца пераходы
@@ -73,6 +73,8 @@ public class Fanetyka3 implements IFanetyka {
         String prev = toString();
         int pass = 0;
         while (true) {
+            startIteration();
+
             if (config.processPierachodZG != null && config.processPierachodZG.isConfigExists()) {
                 config.processPierachodZG.process(this);
             } else {
@@ -142,6 +144,10 @@ public class Fanetyka3 implements IFanetyka {
             }
         }
         setIpaStress();
+    }
+
+    protected void startIteration() {
+
     }
 
     public String toString() {
@@ -1256,6 +1262,7 @@ public class Fanetyka3 implements IFanetyka {
                 break;
             case 'й':
                 novyHuk = new Huk("й", BAZAVY_HUK.j);
+                novyHuk.miakki=Huk.MIAKKASC_PAZNACANAJA;
                 break;
             case 'к':
                 novyHuk = new Huk("к", BAZAVY_HUK.к);
@@ -1385,6 +1392,7 @@ public class Fanetyka3 implements IFanetyka {
             jot.miakkajaHalosnaja = true;
             //jot.halosnaja = true;
             jot.setMiakkasc(true);
+            jot.miakki=Huk.MIAKKASC_PAZNACANAJA;
             huki.add(jot);
         } else if (papiaredni != null && "еёюя".indexOf(current) >= 0 && ("тдржшч".indexOf(papiaredni.zychodnyjaLitary) >= 0 || papiaredni.padzielPasla != 0)) {
             // звычайна сутык прыстаўкі і кораня
@@ -1392,6 +1400,7 @@ public class Fanetyka3 implements IFanetyka {
             jot.miakkajaHalosnaja = true;
             //jot.halosnaja = true;
             jot.setMiakkasc(true);
+            jot.miakki=Huk.MIAKKASC_PAZNACANAJA;
             huki.add(jot);
         }
     }
