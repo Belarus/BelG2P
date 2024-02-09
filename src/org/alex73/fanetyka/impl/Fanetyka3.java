@@ -1169,7 +1169,7 @@ public class Fanetyka3 implements IFanetyka {
                 char nextLetter = wl.charAt(p.length());
                 char nextLetter2 = wl.charAt(p.length() + 1);
                 if (nextLetter == GrammarDB2.pravilny_apostraf && (nextLetter2 == 'е' || nextLetter2 == 'ё' || nextLetter2 == 'ю' || nextLetter2 == 'я')) {
-                    // прыстаўкі перад еёюя - толькі калі ёсць апостраф
+                    // прыстаўкі перад еёюя - толькі калі ёсць апостраф. і выпадае з гэтага раду, бо ёсць заінелы. але заезджаны
                     prystauka = true;
                 } else if (nextLetter == 'е' || nextLetter == 'ё' || nextLetter == 'ю' || nextLetter == 'я') {
                     prystauka = false;

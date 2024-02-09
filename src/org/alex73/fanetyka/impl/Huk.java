@@ -21,7 +21,7 @@ public class Huk {
     }
 
     public enum IPA {
-        a, b, bʲ, v, vʲ, β, ɣ, ɣʲ, g, gʲ, d, dʲ, ɛ, d͡ʐ, d͡z, d͡zʲ, ʐ, z, zʲ, i, k, kʲ, ɫ, lʲ, m, mʲ, ɱ, n, nʲ, ɔ, p,
+        a, b, bʲ, v, vʲ, β, βʲ, ɣ, ɣʲ, g, gʲ, d, dʲ, ɛ, d͡ʐ, d͡z, d͡zʲ, ʐ, z, zʲ, i, k, kʲ, ɫ, lʲ, m, mʲ, ɱ, n, nʲ, ɔ, p,
         pʲ, r, s, sʲ, t, tʲ, u, u̯, f, fʲ, x, xʲ, t͡s, t͡sʲ, t͡ʂ, ʂ, ɨ, j
     }
 
@@ -115,10 +115,7 @@ public class Huk {
         case в:
             return h.miakki == 0 ? IPA.v : IPA.vʲ;
         case β:
-            if (h.miakki != 0) {
-                throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
-            }
-            return IPA.β;
+            return h.miakki == 0 ? IPA.β : IPA.βʲ;
         case г:
             return h.miakki == 0 ? IPA.ɣ : IPA.ɣʲ;
         case ґ:
@@ -437,6 +434,7 @@ public class Huk {
         SKOLNY_MAP.put(IPA.v, "в");
         SKOLNY_MAP.put(IPA.vʲ, "в'");
         SKOLNY_MAP.put(IPA.β, "в");
+        SKOLNY_MAP.put(IPA.βʲ, "в'");
         SKOLNY_MAP.put(IPA.ɣ, "г");
         SKOLNY_MAP.put(IPA.ɣʲ, "г'");
         SKOLNY_MAP.put(IPA.g, "ѓ");

@@ -82,7 +82,7 @@ public class ProcessRunner implements IProcess {
             // ад канца да пачатка
             for (int pos = instance.huki.size() - ca.requiresHuks; pos >= 0; pos--) {
                 context.currentPosition = pos;
-                if (!check(ca, context)) {
+                if (!check(ca, context, instance.why)) {
                     continue;
                 }
                 // збіраем параметры для выкліка метада
@@ -121,7 +121,10 @@ public class ProcessRunner implements IProcess {
     /**
      * Правяраем гукі адпаведнасць умовам - пасля папярэдняй праверкі ў метадзе.
      */
-    private boolean check(Case ca, ProcessContext context) {
+    private boolean check(Case ca, ProcessContext context, List<String> log) {
+        if (ca.debug) {
+            log.add("  Правяраем " + context);
+        }
         int before = Math.min(context.currentPosition + ca.checks.size(), context.huki.size());
         if (ca.borderCheckBefore != null) {
             // мяжа перад першым гукам табліцы
@@ -133,17 +136,29 @@ public class ProcessRunner implements IProcess {
                 h = new Huk(null, null);
                 h.padzielPasla = Huk.PADZIEL_SLOVY;
             }
-            if (!checkRules(ca.name, ca.borderCheckBefore, h)) {
+            String err = checkRules(ca.name, ca.borderCheckBefore, h);
+            if (err != null) {
+                if (ca.debug) {
+                    log.add("    не выканалася ўмова для гука напачатку: " + err);
+                }
                 return false;
             }
         }
         for (int i = context.currentPosition; i < before; i++) {
             if (!checkHuk(ca.name, ca.checks.get(i - context.currentPosition), context.huki.get(i))) {
+                if (ca.debug) {
+                    log.add("    гук не супадае ў пазіцыі +" + (i - context.currentPosition) + ": '" + context.huki.get(i) + "' замест '"
+                            + String.join(" ", ca.checks.get(i - context.currentPosition).which) + "'");
+                }
                 return false;
             }
         }
         for (int i = context.currentPosition; i < before; i++) {
-            if (!checkRules(ca.name, ca.checks.get(i - context.currentPosition), context.huki.get(i))) {
+            String err = checkRules(ca.name, ca.checks.get(i - context.currentPosition), context.huki.get(i));
+            if (err != null) {
+                if (ca.debug) {
+                    log.add("    не выканалася ўмова для гука ў пазіцыі +" + (i - context.currentPosition) + ": " + err);
+                }
                 return false;
             }
         }
@@ -201,12 +216,26 @@ public class ProcessRunner implements IProcess {
     }
 
     /**
-     * Правяраем адзін гук на адпаведнасць умовам.
+     * Правяраем адзін гук на адпаведнасць умовам. Вяртае назву ўмовы, якая не
+     * выканалася, альбо null, калі ўсё добра.
      */
-    static boolean checkRules(String zjava, Case.HukCheck c, Huk huk) {
-        return checkValue(zjava, "апостраф", c.apostraf, huk.apostrafPasla) && checkValue(zjava, "падзел", c.pasziel, huk.padzielPasla)
-                && checkValue(zjava, "мяккасць", c.miakkasc, huk.miakki) && checkValue(zjava, "падвоены", c.padvojeny, huk.padvojeny)
-                && checkValue(zjava, "націск", c.nacisk, huk.stress);
+    static String checkRules(String zjava, Case.HukCheck c, Huk huk) {
+        if (!checkValue(zjava, "апостраф", c.apostraf, huk.apostrafPasla)) {
+            return "апостраф";
+        }
+        if (!checkValue(zjava, "падзел", c.pasziel, huk.padzielPasla)) {
+            return "падзел " + huk.padzielPasla;
+        }
+        if (!checkValue(zjava, "мяккасць", c.miakkasc, huk.miakki)) {
+            return "мяккасць " + huk.miakki;
+        }
+        if (!checkValue(zjava, "падвоены", c.padvojeny, huk.padvojeny)) {
+            return "падвоены";
+        }
+        if (!checkValue(zjava, "націск", c.nacisk, huk.stress)) {
+            return "націск";
+        }
+        return null;
     }
 
     static boolean checkValue(String zjava, String umova, Case.MODE mode, boolean value) {

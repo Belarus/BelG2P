@@ -43,7 +43,7 @@ public class SypiacyjaSvisciacyja {
         return log;
     }
 
-    @ProcessCase("Пераход шыпячых с/з у свісцячыя")
+    @ProcessCase("Пераход шыпячых перад с/з у свісцячыя")
     public String sysz(Huk huk) {
         BAZAVY_HUK replaceTo = sypiacyja2svisciacyja.get(huk.bazavyHuk);
         String log = huk.bazavyHuk.name() + "->" + replaceTo.name();

@@ -6,6 +6,7 @@ import java.util.List;
 public class Case {
     public String name;
     public String logMessage;
+    public boolean debug;
     public HukCheck borderCheckBefore; // праверкі для мяжы перад першым гукам
     public List<HukCheck> checks = new ArrayList<>(); // праверкі для кожнага гуку
     public int requiresHuks;

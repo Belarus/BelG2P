@@ -1,7 +1,7 @@
 package org.alex73.fanetyka.impl;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.alex73.fanetyka.config.Case;
@@ -20,11 +20,11 @@ public class ProcessRunnerTest {
     }
 
     void shouldPass() {
-        assertTrue(ProcessRunner.checkRules("", c, h));
+        assertNull(ProcessRunner.checkRules("", c, h));
     }
 
     void shouldNotPass() {
-        assertFalse(ProcessRunner.checkRules("", c, h));
+        assertNotNull(ProcessRunner.checkRules("", c, h));
     }
 
     void shouldBeError() {

@@ -93,6 +93,7 @@ public class TsvConfig implements IConfig {
             err(1, "мусіць быць тэкст паведамлення");
         }
         t.logMessage = line[1].trim();
+        t.debug = line[1].contains("@");
         lineIndex++;
 
         // тут могуць быць каментары, дзе першы слупок - пусты
