@@ -6,7 +6,7 @@ import org.alex73.fanetyka.impl.ProcessContext;
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 
 public class UstaunyA {
-    @ProcessCase("Устаўны 'а' перад цвёрдым 'р'")
+    @ProcessCase("Устаўны 'а' перад цвёрдым 'р' пасля зычных акрамя р,j,ў")
     public String r(ProcessContext context) {
         ustavicA(context, 1);
         return "а";

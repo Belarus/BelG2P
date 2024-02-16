@@ -8,45 +8,45 @@ import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 public class Sprascennie {
     @ProcessCase("Спрашчэнне: с-ц-к пераходзіць у с-к")
     public String sck(Huk h1, Huk h2, ProcessContext context) {
-        vydalic(context, 1);
+        vydalicNastupny(context, 0);
         return "";
     }
 
     @ProcessCase("Спрашчэнне: с-т-ч пераходзіць у ш-ч")
     public String stc(Huk h1, Huk h2, ProcessContext context) {
-        vydalic(context, 1);
+        vydalicNastupny(context, 0);
         return "";
     }
 
     @ProcessCase("Спрашчэнне: с-т-н -> с-н")
     public String stn(Huk h1, Huk h2, ProcessContext context) {
-        vydalic(context, 1);
+        vydalicPapiaredni(context, 2);
         return "";
     }
 
     @ProcessCase("Спрашчэнне: з-д-н -> з-н")
     public String zdn(Huk h1, Huk h2, Huk h3, ProcessContext context) {
         h1.miakki = h3.miakki;
-        vydalic(context, 1);
+        vydalicNastupny(context, 0);
         return "";
     }
 
     @ProcessCase("Спрашчэнне: р-к-с-к -> р-c-к")
     public String rksk(Huk h1, Huk h2, ProcessContext context) {
-        vydalic(context, 1);
+        vydalicNastupny(context, 0);
         return "";
     }
 
     @ProcessCase("Спрашчэнне: с-с-к -> c-к не на сутыку")
     public String ssk(Huk h1, Huk h2, ProcessContext context) {
-        vydalic(context, 1);
+        vydalicNastupny(context, 0);
         return "";
     }
 
     @ProcessCase("Спрашчэнне: с-с-к -> c:-к на сутыку")
     public String ssks(Huk h1, Huk h2, ProcessContext context) {
         h1.padvojeny = true;
-        vydalic(context, 1);
+        vydalicNastupny(context, 0);
         return "";
     }
 
@@ -76,24 +76,24 @@ public class Sprascennie {
         String r = "с'-ц'-" + h3.bazavyHuk.name() + " -> ";
         if ((h3.isHluchi() || h3.isSanorny()) && !h3.isSypiacy()) {
             // глухі нешыпячы ў наступным слове
-            vydalic(context, 1);
+            vydalicNastupny(context, 0);
             r += "с'ц'";
         } else if (h3.isHluchi() && h3.isSypiacy()) {
             // глухі шыпячы ў наступным слове
             h1.bazavyHuk = Huk.BAZAVY_HUK.ш;
             h1.miakki = 0;
-            vydalic(context, 1);
+            vydalicNastupny(context, 0);
             r += "с'ц'ш";
         } else if (h3.isZvonki() && !h3.isSypiacy()) {
             // звонкі нешыпячы ў наступным слове
             h1.bazavyHuk = Huk.BAZAVY_HUK.з;
-            vydalic(context, 1);
+            vydalicNastupny(context, 0);
             r += "с'ц'з";
         } else if (h3.isZvonki() && h3.isSypiacy()) {
             // звонкі шыпячы ў наступным слове
             h1.bazavyHuk = Huk.BAZAVY_HUK.ж;
             h1.miakki = 0;
-            vydalic(context, 1);
+            vydalicNastupny(context, 0);
             r += "с'ц'ж";
         } else {
             throw new RuntimeException();
@@ -103,19 +103,19 @@ public class Sprascennie {
 
     @ProcessCase("Спрашчэнне: з'-д' +(звонкі ў наступным слове) -> з'")
     public String zdz(ProcessContext context) {
-        vydalic(context, 1);
+        vydalicNastupny(context, 0);
         return "";
     }
 
     @ProcessCase("Спрашчэнне: ш-ч-с -> ш-с")
     public String scs(ProcessContext context) {
-        vydalic(context, 1);
+        vydalicNastupny(context, 0);
         return "";
     }
 
     @ProcessCase("Спрашчэнне: ж-дж -> ж (толькі на канцы слова)")
     public String zdzz(Huk h1, Huk h2, ProcessContext context) {
-        vydalic(context, 1);
+        vydalicNastupny(context, 0);
         return "";
     }
 
@@ -151,6 +151,14 @@ public class Sprascennie {
         return "";
     }
 
+    @ProcessCase("Спрашчэнне падвойнага j у сярэдзіне слова")
+    public String jj(ProcessContext context) {
+        int pos = context.currentPosition;
+        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+        context.huki.remove(pos);
+        return "";
+    }
+
     @ProcessCase("Спрашчэнне аднолькавых зычных (не пасля галоснай)")
     public String eq1(Huk h1, Huk h2, Huk h3, ProcessContext context) {
         if (h2.bazavyHuk != h3.bazavyHuk) {
@@ -175,38 +183,38 @@ public class Sprascennie {
 
     @ProcessCase("Спрашчэнне: н-т-ш-ч -> н-ш-ч")
     public String ntsc(Huk h1, Huk h2, ProcessContext context) {
-        vydalic(context, 1);
+        vydalicPapiaredni(context, 2);
         return "";
     }
 
     @ProcessCase("Спрашчэнне: н-д-ш -> н-ш, н-т-ш -> н-ш")
     public String nds(Huk h1, Huk h2, ProcessContext context) {
-        vydalic(context, 1);
+        vydalicPapiaredni(context, 2);
         return "";
     }
 
     @ProcessCase("Спрашчэнне: н-т-с -> н-с")
     public String nts(Huk h1, Huk h2, ProcessContext context) {
-        vydalic(context, 1);
+        vydalicPapiaredni(context, 2);
         return "";
     }
 
     @ProcessCase("Спрашчэнне: т-с -> ц")
     public String ts(Huk huk, ProcessContext context) {
         huk.bazavyHuk = BAZAVY_HUK.ц;
-        vydalic(context, 1);
+        vydalicNastupny(context, 0);
         return "";
     }
 
     @ProcessCase("Спрашчэнне: б-р-с -> б-с")
     public String brs(Huk h1, Huk h2, ProcessContext context) {
-        vydalic(context, 1);
+        vydalicNastupny(context, 0);
         return "";
     }
 
     @ProcessCase("Спрашчэнне: м-л'-с -> м-с")
     public String mls(Huk h1, Huk h2, ProcessContext context) {
-        vydalic(context, 1);
+        vydalicNastupny(context, 0);
         return "";
     }
 
@@ -230,7 +238,7 @@ public class Sprascennie {
     @ProcessCase("Спрашчэнне: с'-ш -> ш:, с'-ж -> ж:, с'-з -> з:, з’+ш-> ш:, з’+ж-> ж:")
     public String ss(Huk h1, Huk h2, ProcessContext context) {
         String r = h1.bazavyHuk + "'" + h2.bazavyHuk + " -> " + h2.bazavyHuk + ":";
-        vydalic(context, 0);
+        vydalicPapiaredni(context, 1);
         h2.padvojeny = true;
         return r;
     }
@@ -242,9 +250,15 @@ public class Sprascennie {
         return r;
     }
 
-    private void vydalic(ProcessContext context, int offsetFromCurrent) {
+    private void vydalicPapiaredni(ProcessContext context, int offsetFromCurrent) {
         int pos = context.currentPosition + offsetFromCurrent;
-        context.huki.get(pos - 1).zychodnyjaLitary += context.huki.get(pos).zychodnyjaLitary;
-        context.huki.remove(pos);
+        context.huki.get(pos).zychodnyjaLitary += context.huki.get(pos - 1).zychodnyjaLitary + context.huki.get(pos).zychodnyjaLitary;
+        context.huki.remove(pos - 1);
+    }
+
+    private void vydalicNastupny(ProcessContext context, int offsetFromCurrent) {
+        int pos = context.currentPosition + offsetFromCurrent;
+        context.huki.get(pos).zychodnyjaLitary += context.huki.get(pos + 1).zychodnyjaLitary;
+        context.huki.remove(pos + 1);
     }
 }

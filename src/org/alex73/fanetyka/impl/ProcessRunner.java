@@ -204,6 +204,11 @@ public class ProcessRunner implements IProcess {
                     return true;
                 }
                 break;
+            case "санорны":
+                if (huk.isSanorny()) {
+                    return true;
+                }
+                break;
             default:
                 BAZAVY_HUK expected = BAZAVY_HUK.valueOf(h);
                 if (huk.bazavyHuk.equals(expected)) {

@@ -1067,7 +1067,7 @@ public class Fanetyka3 implements IFanetyka {
     // TODO прыстаўкі перад еёюя - толькі калі ёсць апостраф
     static final String[] PRYSTAUKI = new String[] { "ад", "безад", "беспад", "вод", "звод", "наад", "навод", "напад", "над", "неад", "непад", "непрад",
             "павод", "панад", "папад", "падад", "пад", "перапад", "перад", "под", "прад", "прыад", "прыпад", "спад", "спрад", "за", "з",
-            "супад"/*
+            "супад", "най" /*
                     * ,
                     * 
                     * "абяс", "ас", "абес", "адс", "бес", "бяс", "вус", "выс", "дас", "дыс",
@@ -1168,8 +1168,12 @@ public class Fanetyka3 implements IFanetyka {
                 boolean prystauka = false;
                 char nextLetter = wl.charAt(p.length());
                 char nextLetter2 = wl.charAt(p.length() + 1);
-                if (nextLetter == GrammarDB2.pravilny_apostraf && (nextLetter2 == 'е' || nextLetter2 == 'ё' || nextLetter2 == 'ю' || nextLetter2 == 'я')) {
-                    // прыстаўкі перад еёюя - толькі калі ёсць апостраф. і выпадае з гэтага раду, бо ёсць заінелы. але заезджаны
+                if (p.endsWith("й")) {
+                    prystauka = true;
+                } else if (nextLetter == GrammarDB2.pravilny_apostraf
+                        && (nextLetter2 == 'е' || nextLetter2 == 'ё' || nextLetter2 == 'ю' || nextLetter2 == 'я')) {
+                    // прыстаўкі перад еёюя - толькі калі ёсць апостраф, але калі прыстаўка не на -й
+                    // і выпадае з гэтага раду, бо ёсць заінелы. але заезджаны
                     prystauka = true;
                 } else if (nextLetter == 'е' || nextLetter == 'ё' || nextLetter == 'ю' || nextLetter == 'я') {
                     prystauka = false;
