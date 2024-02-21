@@ -32,8 +32,7 @@ public class Case {
 
     public static class Example {
         public String caseName;
-        public int lineIndex;
-        public char column;
+        public Cell cell;
         public String word, expected;
     }
 }

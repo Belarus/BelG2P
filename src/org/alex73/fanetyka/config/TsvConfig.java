@@ -218,8 +218,7 @@ public class TsvConfig implements IConfig {
             }
             Case.Example ex = new Case.Example();
             ex.caseName = t.name;
-            ex.lineIndex = i;
-            ex.column = (char) ('A' + column);
+            ex.cell=new Cell(i, column);
             ex.word = line[column].trim();
             if (line.length > column + 1) {
                 ex.expected = line[column + 1].trim();

@@ -1118,12 +1118,6 @@ public class Fanetyka3 implements IFanetyka {
             return w;
         }
 
-        String dbMorph = config.finder.getMorph(w);
-        if (dbMorph != null) {
-            why.add("Марфемы з базы: " + dbMorph);
-            return dbMorph;
-        }
-
         Set<String> foundForms = new TreeSet<>();
         // у базе няма марфалогіі - спрабуем выцягнуць націскі і ґ
         f1: for (Paradigm p : config.finder.getParadigms(w)) {
@@ -1133,12 +1127,12 @@ public class Fanetyka3 implements IFanetyka {
                         continue;
                     }
                     if (compareWord(w, f.getValue())) {
-                        foundForms.add(f.getValue().toLowerCase());
                         String neww = f.getValue().replace('+', GrammarDB2.pravilny_nacisk);
                         if (!w.equals(neww)) {
                             w = neww;
                             why.add("Націскі з базы: " + w);
                         }
+                        foundForms.add(applyPrystauki(f.getValue().toLowerCase(), v.getPrystauki()));
                         break f1;
                     }
                 }
@@ -1181,13 +1175,27 @@ public class Fanetyka3 implements IFanetyka {
                     prystauka = true;
                 }
                 if (prystauka) {
-                    w = w.substring(0, p.length()) + '|' + w.substring(p.length());
+                    w = w.substring(0, p.length()) + '/' + w.substring(p.length());
                     why.add("Мяркуем, што прыстаўка '" + p + "'");
                 }
             }
         }
 
         return w;
+    }
+
+    /**
+     * Дадаем прыстаўкі ў слова
+     */
+    String applyPrystauki(String word, String prystauki) {
+        if (prystauki == null) {
+            return word;
+        }
+        String pr = prystauki.replace("/", "");
+        if (!word.startsWith(pr)) {
+            throw new RuntimeException("Неадапаведнасць прыставак у базе");
+        }
+        return prystauki + word.substring(pr.length());
     }
 
     /**
@@ -1350,8 +1358,11 @@ public class Fanetyka3 implements IFanetyka {
                     papiaredniHuk.apostrafPasla = true;
                 }
                 break;
-            case '|':
+            case '/':
                 papiaredniHuk.padzielPasla = Huk.PADZIEL_PRYSTAUKA;
+                break;
+            case '|':
+                papiaredniHuk.padzielPasla = Huk.PADZIEL_KARANI;
                 break;
             case '-':
                 papiaredniHuk.padzielPasla = Huk.PADZIEL_MINUS;

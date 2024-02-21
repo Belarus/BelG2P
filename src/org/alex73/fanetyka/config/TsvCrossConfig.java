@@ -127,15 +127,14 @@ public class TsvCrossConfig implements IConfig {
             List<String> cells = new ArrayList<>();
             Case.Example ex = new Case.Example();
             ex.caseName = "";
-            ex.lineIndex = lineIndex;
             int col = 0;
             for (String c : lines.get(lineIndex)) {
                 c = c.trim();
                 if (!c.isEmpty()) {
-                    cells.add(c);
-                    if (ex.column == 0) {
-                        ex.column = (char) ('A' + col);
+                    if (cells.isEmpty()) {
+                        ex.cell = new Cell(lineIndex, col);
                     }
+                    cells.add(c);
                 }
                 col++;
             }
@@ -174,15 +173,6 @@ public class TsvCrossConfig implements IConfig {
 
     // column and rows starts from 1
     private void err(int column, int lineOffset, String message) {
-        String colName;
-        if (column <= 'Z' - 'A' + 1) {
-            colName = Character.toString('A' + column - 1);
-        } else {
-            int dig = 'Z' - 'A' + 1;
-            int c1 = (column - 1 - dig) / dig;
-            int c2 = (column - 1 - dig) % dig;
-            colName = Character.toString('A' + c1) + Character.toString('A' + c2);
-        }
-        throw new RuntimeException("Памылка ў канфігурацыі '%s#%d%s': %s".formatted(configName, 1 + lineIndex + lineOffset, colName, message));
+        throw new RuntimeException("Памылка ў канфігурацыі '%s#%s': %s".formatted(configName, new Cell(lineIndex + lineOffset, column), message));
     }
 }
