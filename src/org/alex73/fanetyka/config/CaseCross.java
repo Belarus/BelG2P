@@ -12,6 +12,7 @@ public class CaseCross {
     public static class TypZmiahcennia {
         public boolean nievyznacana;
         public boolean zmiahcajecca;
-        public boolean pierakrocvajeMiezy;
+        public boolean pierakrocvajeMiezyUsizredzinieSlova;
+        public boolean pierakrocvajeMiezySlou;
     }
 }

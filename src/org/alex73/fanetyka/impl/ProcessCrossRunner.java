@@ -53,7 +53,17 @@ public class ProcessCrossRunner implements IProcess {
 
             CaseCross.TypZmiahcennia zm = ca.values.get(h1.bazavyHuk).get(h2.bazavyHuk);
             if (zm.zmiahcajecca) {
-                if (zm.pierakrocvajeMiezy || !miaza(h1, h2)) {
+                if (miazaSlou(h1, h2)) {
+                    if (zm.pierakrocvajeMiezySlou) {
+                        h1.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
+                        instance.why.add("Мяккасць: адбылося змякчэнне " + h1.bazavyHuk);
+                    }
+                } else if (miazaUsiaredzinieSlova(h1, h2)) {
+                    if (zm.pierakrocvajeMiezyUsizredzinieSlova) {
+                        h1.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
+                        instance.why.add("Мяккасць: адбылося змякчэнне " + h1.bazavyHuk);
+                    }
+                } else {
                     h1.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
                     instance.why.add("Мяккасць: адбылося змякчэнне " + h1.bazavyHuk);
                 }
@@ -76,16 +86,24 @@ public class ProcessCrossRunner implements IProcess {
         return true;
     }
 
-    public static boolean miaza(Huk h1, Huk h2) {
+    public static boolean miazaUsiaredzinieSlova(Huk h1, Huk h2) {
         // ці ёсць мяжа ?
         switch (h1.padzielPasla) {
         case Huk.PADZIEL_KARANI:
-        case Huk.PADZIEL_MINUS:
         case Huk.PADZIEL_PRYSTAUKA:
-        case Huk.PADZIEL_SLOVY:
             return true;
         }
         if (h1.apostrafPasla) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean miazaSlou(Huk h1, Huk h2) {
+        // ці ёсць мяжа ?
+        switch (h1.padzielPasla) {
+        case Huk.PADZIEL_MINUS:
+        case Huk.PADZIEL_SLOVY:
             return true;
         }
         return false;

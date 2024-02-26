@@ -181,6 +181,12 @@ public class Sprascennie {
         return "";
     }
 
+    @ProcessCase("Спрашчэнне свісцячых-шыпячых")
+    public String eq2(Huk h1, Huk h2) {
+        h1.miakki = 0;
+        return "";
+    }
+
     @ProcessCase("Спрашчэнне: н-т-ш-ч -> н-ш-ч")
     public String ntsc(Huk h1, Huk h2, ProcessContext context) {
         vydalicPapiaredni(context, 2);

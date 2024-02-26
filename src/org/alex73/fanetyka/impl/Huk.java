@@ -32,7 +32,7 @@ public class Huk {
     public BAZAVY_HUK bazavyHuk;
     public int miakki;
     public boolean padvojeny;
-    public boolean halosnaja, miakkajaHalosnaja;
+    public boolean halosnaja;
     public boolean apostrafPasla;
     public boolean stressIpa;
     public boolean stress; // TODO: націск у падваеннях і спрашчэннях
@@ -285,7 +285,6 @@ public class Huk {
             case 'ɛ':
                 huk = new Huk(s.substring(0, 1), BAZAVY_HUK.э);
                 huk.halosnaja = true;
-                huk.miakkajaHalosnaja = true;
                 break;
             case 'ʐ':
                 huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ж);
@@ -301,7 +300,6 @@ public class Huk {
             case 'i':
                 huk = new Huk(s.substring(0, 1), BAZAVY_HUK.і);
                 huk.halosnaja = true;
-                huk.miakkajaHalosnaja = true;
                 break;
             case 'k':
                 if (c1 == 'ʲ') {

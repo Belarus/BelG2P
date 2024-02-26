@@ -95,9 +95,21 @@ public class TsvCrossConfig implements IConfig {
                 text = text.trim().replaceAll("\\?$", "");
                 if (text.equals(h1.name() + h2.name())) {
                     zm.zmiahcajecca = true;
-                } else if (text.equals(h1.name() + h2.name() + "*")) {
+                } else if (text.startsWith(h1.name() + h2.name())) {
                     zm.zmiahcajecca = true;
-                    zm.pierakrocvajeMiezy = true;
+                    switch (text.substring(2)) {
+                    case "*":
+                        zm.pierakrocvajeMiezyUsizredzinieSlova = true;
+                        break;
+                    case "+":
+                        zm.pierakrocvajeMiezySlou = true;
+                        break;
+                    case "+*":
+                    case "*+":
+                        zm.pierakrocvajeMiezyUsizredzinieSlova = true;
+                        zm.pierakrocvajeMiezySlou = true;
+                        break;
+                    }
                 } else if (text.isBlank()) {
                     // TODO error
                     zm.nievyznacana = true;
