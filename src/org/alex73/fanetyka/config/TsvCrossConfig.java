@@ -97,7 +97,7 @@ public class TsvCrossConfig implements IConfig {
                     zm.zmiahcajecca = true;
                 } else if (text.startsWith(h1.name() + h2.name())) {
                     zm.zmiahcajecca = true;
-                    switch (text.substring(2)) {
+                    switch (text.substring((h1.name() + h2.name()).length())) {
                     case "*":
                         zm.pierakrocvajeMiezyUsizredzinieSlova = true;
                         break;
@@ -109,6 +109,8 @@ public class TsvCrossConfig implements IConfig {
                         zm.pierakrocvajeMiezyUsizredzinieSlova = true;
                         zm.pierakrocvajeMiezySlou = true;
                         break;
+                    default:
+                        throw new Exception("Незразумелая пазнака: " + text);
                     }
                 } else if (text.isBlank()) {
                     // TODO error

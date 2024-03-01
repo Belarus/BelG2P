@@ -14,14 +14,7 @@ public class ProcessCrossRunner implements IProcess {
     public ProcessCrossRunner(Class<?> process, Map<String, byte[]> configs) throws Exception {
         this.processType = process;
         String processName = process.getSimpleName();
-        if (configs == null) {
-            config = new TsvCrossConfig(processName);
-        } else if (configs.containsKey(processName)) {
-            config = new TsvCrossConfig(processName, new ByteArrayInputStream(configs.get(processName)));
-        } else {
-            config = null; // for debug only
-            return;
-        }
+        config = new TsvCrossConfig(processName, new ByteArrayInputStream(configs.get(processName)));
     }
 
     @Override

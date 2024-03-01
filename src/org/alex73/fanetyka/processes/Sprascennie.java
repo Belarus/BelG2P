@@ -143,13 +143,14 @@ public class Sprascennie {
         return "";
     }
 
-    @ProcessCase("Спрашчэнне: т-ч-> ч, т-ц -> ц(не перад галоснай)")
-    public String tc2(ProcessContext context) {
-        int pos = context.currentPosition;
-        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
-        context.huki.remove(pos);
-        return "";
-    }
+//    @ProcessCase("Спрашчэнне: т-ч-> ч, т-ц -> ц(не перад галоснай)")
+//    public String tc2(ProcessContext context) {
+//        int pos = context.currentPosition;
+//        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+//        context.huki.get(pos + 1).padvojeny = true;
+//        context.huki.remove(pos);
+//        return "";
+//    }
 
     @ProcessCase("Спрашчэнне падвойнага j у сярэдзіне слова")
     public String jj(ProcessContext context) {

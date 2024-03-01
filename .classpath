@@ -17,6 +17,6 @@
 	<classpathentry kind="lib" path="lib/kryo/objenesis-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/kryo/minlog-1.3.0.jar"/>
 	<classpathentry kind="lib" path="lib/kryo/reflectasm-1.10.1-shaded.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/linguistics.grammardb.reader-1.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/linguistics.grammardb.reader-1.1.0.jar" sourcepath="/linguistics.grammardb.reader"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

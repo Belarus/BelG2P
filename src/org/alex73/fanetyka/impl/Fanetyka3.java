@@ -10,6 +10,8 @@ import java.util.function.Function;
 
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 import org.alex73.grammardb.GrammarDB2;
+import org.alex73.grammardb.SetUtils;
+import org.alex73.grammardb.StressUtils;
 import org.alex73.grammardb.structures.Form;
 import org.alex73.grammardb.structures.Paradigm;
 import org.alex73.grammardb.structures.Variant;
@@ -44,32 +46,47 @@ public class Fanetyka3 implements IFanetyka {
             w = narmalizacyjaSlova(w.toLowerCase());
             words.set(i, w);
         }
+
         for (int i = 0; i < words.size(); i++) {
             String w = words.get(i);
+
+            boolean appendToNextWord = false;
             if (i < words.size() - 1) {
-                // "без,не -> бяз,ня" перад словамі з націскам на першы склад
-                String wl = w.toLowerCase();
+                // прыназоўнікі "без", "не" - мусяць прыляпляцца да слова, бо ёсць працэсы, якія
+                // з імі адбываюцца: мяккасць, аглушэнне/азванчэнне
+                // яканне робім адразу тут
+                String wl = StressUtils.unstress(w.toLowerCase());
                 switch (wl) {
                 case "не":
-                case "не" + GrammarDB2.pravilny_nacisk:
-                    if (firstSkladNacisk(words.get(i + 1))) {
+                    appendToNextWord = true;
+                    if (StressUtils.getStressFromStart(words.get(i + 1)) == 0) {
                         w = "ня";
                         why.add("'не' пераходзіць у 'ня' перад словам з націскам на першы склад");
                     }
                     break;
                 case "без":
-                case "без" + GrammarDB2.pravilny_nacisk:
-                    if (firstSkladNacisk(words.get(i + 1))) {
+                    appendToNextWord = true;
+                    if (StressUtils.getStressFromStart(words.get(i + 1)) == 0) {
                         w = "бяз";
                         why.add("'без' пераходзіць у 'бяз' перад словам з націскам на першы склад");
                     }
                     break;
                 }
             }
+
             if (!fanetykaBazy(w)) {
                 stvarajemBazavyjaHuki(w);
             }
+
+            if (appendToNextWord) {
+                Huk aposni = huki.get(huki.size() - 1);
+                if (aposni.padzielPasla != Huk.PADZIEL_SLOVY) {
+                    throw new Exception("Няправільная канвертацыя без/не");
+                }
+                aposni.padzielPasla = Huk.PADZIEL_PRYSTAUKA;
+            }
         }
+
         String prev = toString();
         int pass = 0;
         while (true) {
@@ -232,6 +249,8 @@ public class Fanetyka3 implements IFanetyka {
                     * "па-рас", "прас", "пра-с", "рас", "рас-с", "па-ўс", "пры-с", "рос", "с",
                     * "са-с", "у-рас", "у-рос", "па-с"
                     */ , "між", "звыш", "контр", "гіпер", "супер", "экс", "обер", "супраць", "абез", "без", "беc", "бяз", "бяс", "вуз" };
+    
+    // Гіпа- дэ- дыс- дыз- ін- інтэр- інфра- квазі- кіла- макра- мікра- мега- мата- мульт- мульц- орта-/арта- пан-/пан’- пара- пост-/паст- прота-/прата- суб- транс- ультра- экстра- мілі- дэка- гекта- гіга- тэра- пета- гекса- зэта- іота-/ёта- дэцы- санты- мілі- нана- піка- фемта- ата- зепта- ёкта- 
 
     static {
         Arrays.sort(PRYSTAUKI, new Comparator<String>() {
@@ -274,6 +293,11 @@ public class Fanetyka3 implements IFanetyka {
             return w;
         }
 
+        if (w.toLowerCase().equals("і")) {
+            // асобны выпадак - мусіць не быць націску
+            return "і";
+        }
+
         Set<String> foundForms = new TreeSet<>();
         PrystaukiApplied fromDB = null;
         // у базе няма марфалогіі - спрабуем выцягнуць націскі і ґ
@@ -284,7 +308,13 @@ public class Fanetyka3 implements IFanetyka {
                         continue;
                     }
                     if (compareWord(w, f.getValue())) {
-                        PrystaukiApplied a = applyPrystauki(f.getValue().toLowerCase(), v.getPrystauki());
+                        String r = f.getValue().toLowerCase();
+                        String tag = SetUtils.tag(p, v);
+                        if (StressUtils.syllCount(r) == 1 && (tag.startsWith("E") || tag.startsWith("I") || tag.startsWith("C"))) {
+                            // для аднаскладовых часціц, прыназоўнікаў, злучнікаў - націск не ставіцца
+                            r = StressUtils.unstress(r);
+                        }
+                        PrystaukiApplied a = applyPrystauki(r, v.getPrystauki());
                         if (foundForms.isEmpty()) {
                             fromDB = a;
                             why.add("Націскі, пазначэнне ґ і прыставак з базы: " + fromDB.word);
@@ -315,7 +345,7 @@ public class Fanetyka3 implements IFanetyka {
         w = fromDB.word;
 
         if (!fromDB.prystaukiVyznacanyja) {
-            // пазначаем найбольш распаўсюджаныя прыстаўкі
+            // пазначаем найбольш распаўсюджаныя прыстаўкі, калі ў базе няма інфармацыі
             String wl = w.toLowerCase();
             for (String p : PRYSTAUKI) {
                 if (wl.length() > p.length() + 2 && wl.startsWith(p)) {
@@ -550,47 +580,44 @@ public class Fanetyka3 implements IFanetyka {
     }
 
     void dadacJotKaliPatrebny(Huk papiaredni, char current, char next) {
-        if ((papiaredni == null || papiaredni.halosnaja || papiaredni.apostrafPasla || papiaredni.miakki != 0 || papiaredni.zychodnyjaLitary.equals("ў"))) {
-            if (papiaredni != null && papiaredni.padzielPasla != 0/* && !papiaredni.apostrafPasla */) {
-                // return;
-            }
-            // перад ненаціскным 'і' - непатрэбна
-            if (papiaredni == null) {
-                if (current == 'і' && next != GrammarDB2.pravilny_nacisk) {
-                    return;
+        boolean add = false;
+
+        boolean pacatakSlova = papiaredni == null || papiaredni.padzielPasla == Huk.PADZIEL_SLOVY;
+        switch (current) {
+        case 'і':
+            // ФБЛМ стар. 145-146
+            if (next == GrammarDB2.pravilny_nacisk) {
+                // націскны
+                if (pacatakSlova || papiaredni.halosnaja || papiaredni.apostrafPasla || papiaredni.miakki != 0 || papiaredni.zychodnyjaLitary.equals("ў")) {
+                    // дадаем j
+                    add = true;
                 }
             } else {
-                if (!papiaredni.halosnaja && !papiaredni.apostrafPasla && current == 'і' && next != GrammarDB2.pravilny_nacisk) {
-                    return;
+                // ненаціскны
+                if (!pacatakSlova) {
+                    if (papiaredni.halosnaja || papiaredni.miakki != 0 || papiaredni.zychodnyjaLitary.equals("ў")) {
+                        // дадаем j
+                        add = true;
+                    }
                 }
             }
-            // першая літара ці пасьля пералічаных
-            Huk jot = new Huk("", BAZAVY_HUK.j);
-            //jot.halosnaja = true;
-            jot.setMiakkasc(true);
-            jot.miakki=Huk.MIAKKASC_PAZNACANAJA;
-            huki.add(jot);
-        } else if (papiaredni != null && "еёюя".indexOf(current) >= 0 && ("тдржшч".indexOf(papiaredni.zychodnyjaLitary) >= 0 || papiaredni.padzielPasla != 0)) {
-            // звычайна сутык прыстаўкі і кораня
-            Huk jot = new Huk("", BAZAVY_HUK.j);
-            //jot.halosnaja = true;
-            jot.setMiakkasc(true);
-            jot.miakki=Huk.MIAKKASC_PAZNACANAJA;
-            huki.add(jot);
-        }
-    }
-
-    boolean firstSkladNacisk(String word) {
-        for (int i = 0; i < word.length(); i++) {
-            char c = Character.toLowerCase(word.charAt(i));
-            if ("ёуеыаоэяію".indexOf(c) >= 0) {
-                if (i < word.length() - 1) {
-                    char c1 = word.charAt(i + 1);
-                    return c1 == GrammarDB2.pravilny_nacisk;
-                }
+            break;
+        case 'е':
+        case 'ё':
+        case 'ю':
+        case 'я':
+            if (pacatakSlova || papiaredni.halosnaja || papiaredni.apostrafPasla || papiaredni.miakki != 0 || papiaredni.zychodnyjaLitary.equals("ў")
+                    || papiaredni.padzielPasla != 0 || "тдржшч".indexOf(papiaredni.zychodnyjaLitary) >= 0) {
+                add = true;
             }
+            break;
         }
-        return false;
+        if (add) {
+            Huk jot = new Huk("", BAZAVY_HUK.j);
+            jot.setMiakkasc(true);
+            jot.miakki = Huk.MIAKKASC_PAZNACANAJA;
+            huki.add(jot);
+        }
     }
 
     public static final String usie_naciski = GrammarDB2.pravilny_nacisk + "\u00B4";

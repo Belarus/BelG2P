@@ -26,14 +26,7 @@ public class ProcessRunner implements IProcess {
         this.processType = process;
         processor = process.getDeclaredConstructor().newInstance();
         String processName = process.getSimpleName();
-        if (configs == null) {
-            config = new TsvConfig(processName);
-        } else if (configs.containsKey(processName)) {
-            config = new TsvConfig(processName, new ByteArrayInputStream(configs.get(processName)));
-        } else {
-            config = null; // for debug only
-            return;
-        }
+        config = new TsvConfig(processName, new ByteArrayInputStream(configs.get(processName)));
 
         for (Method m : process.getMethods()) {
             ProcessCase ca = m.getAnnotation(ProcessCase.class);

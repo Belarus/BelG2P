@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class Huk {
-    public static final int PADZIEL_PRYSTAUKA = 1;
+    public static final int PADZIEL_PRYSTAUKA = 1; // прыстаўка ці прыназоўнікі без,не
     public static final int PADZIEL_KARANI = 2;
     public static final int PADZIEL_SUFIX = 4;
     public static final int PADZIEL_SLOVY = 8;

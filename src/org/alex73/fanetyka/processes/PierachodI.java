@@ -22,9 +22,9 @@ public class PierachodI {
         return r;
     }
 
-    @ProcessCase("Прыстаўка за/і(ненаціскны)[рлм] - j не вымаўляецца")
+    @ProcessCase("Прыстаўка на галосную+і(ненаціскны)[рлм] - j не вымаўляецца")
     public String zai(ProcessContext context) {
-        context.huki.remove(2);
+        context.huki.remove(1);
         return "й -> ";
     }
 }
