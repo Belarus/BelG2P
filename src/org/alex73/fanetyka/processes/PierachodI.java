@@ -24,7 +24,9 @@ public class PierachodI {
 
     @ProcessCase("Прыстаўка на галосную+і(ненаціскны)[рлм] - j не вымаўляецца")
     public String zai(ProcessContext context) {
-        context.huki.remove(1);
+        int pos = context.currentPosition + 1;
+        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+        context.huki.remove(pos);
         return "й -> ";
     }
 }

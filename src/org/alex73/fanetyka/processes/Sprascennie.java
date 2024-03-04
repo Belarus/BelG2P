@@ -2,8 +2,8 @@ package org.alex73.fanetyka.processes;
 
 import org.alex73.fanetyka.config.ProcessCase;
 import org.alex73.fanetyka.impl.Huk;
-import org.alex73.fanetyka.impl.ProcessContext;
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
+import org.alex73.fanetyka.impl.ProcessContext;
 
 public class Sprascennie {
     @ProcessCase("Спрашчэнне: с-ц-к пераходзіць у с-к")
@@ -46,6 +46,15 @@ public class Sprascennie {
     @ProcessCase("Спрашчэнне: с-с-к -> c:-к на сутыку")
     public String ssks(Huk h1, Huk h2, ProcessContext context) {
         h1.padvojeny = true;
+        vydalicNastupny(context, 0);
+        return "";
+    }
+
+    @ProcessCase("Спрашчэнне: с-т-с -> c:")
+    public String sts(Huk h1, Huk h2, Huk h3, ProcessContext context) {
+        h1.padvojeny = true;
+        h1.miakki = h3.miakki;
+        vydalicNastupny(context, 0);
         vydalicNastupny(context, 0);
         return "";
     }
@@ -135,13 +144,13 @@ public class Sprascennie {
 //        return "";
 //    }
 
-    @ProcessCase("Спрашчэнне: т-ч-> ч, т-ц -> ц (не пасля галоснай)")
-    public String tc1(ProcessContext context) {
-        int pos = context.currentPosition + 1;
-        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
-        context.huki.remove(pos);
-        return "";
-    }
+//    @ProcessCase("Спрашчэнне: т-ч-> ч, т-ц -> ц (не пасля галоснай)")
+//    public String tc1(ProcessContext context) {
+//        int pos = context.currentPosition + 1;
+//        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+//        context.huki.remove(pos);
+//        return "";
+//    }
 
 //    @ProcessCase("Спрашчэнне: т-ч-> ч, т-ц -> ц(не перад галоснай)")
 //    public String tc2(ProcessContext context) {

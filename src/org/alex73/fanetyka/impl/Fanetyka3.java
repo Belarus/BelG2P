@@ -71,6 +71,10 @@ public class Fanetyka3 implements IFanetyka {
                         why.add("'без' пераходзіць у 'бяз' перад словам з націскам на першы склад");
                     }
                     break;
+                case "праз":
+                case "з":
+                    appendToNextWord = true;
+                    break;
                 }
             }
 
@@ -79,6 +83,7 @@ public class Fanetyka3 implements IFanetyka {
             }
 
             if (appendToNextWord) {
+                // TODO можа варта зрабіць дадатковы тып падзелу каб дадаваўся прагал на вывадзе
                 Huk aposni = huki.get(huki.size() - 1);
                 if (aposni.padzielPasla != Huk.PADZIEL_SLOVY) {
                     throw new Exception("Няправільная канвертацыя без/не");

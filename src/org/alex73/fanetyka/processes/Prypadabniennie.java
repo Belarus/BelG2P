@@ -22,11 +22,11 @@ public class Prypadabniennie {
     }
 
     @ProcessCase("Прыпадабненне т+ц => ц:, т+ч => ч:")
-    public String tc(Huk h1, Huk h2, Huk h3, ProcessContext context) {
-        int pos = context.currentPosition + 1;
+    public String tc(Huk h1, Huk h2, ProcessContext context) {
+        int pos = context.currentPosition;
         context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
         context.huki.remove(pos);
-        h3.padvojeny = true;
+        h2.padvojeny = true;
         return "";
     }
 
