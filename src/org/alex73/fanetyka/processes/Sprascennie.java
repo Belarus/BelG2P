@@ -110,8 +110,9 @@ public class Sprascennie {
         return r;
     }
 
-    @ProcessCase("Спрашчэнне: з'-д' +(звонкі ў наступным слове) -> з'")
+    @ProcessCase("Спрашчэнне: з'-д' +(звонкі ці санорны ў наступным слове) -> з'")
     public String zdz(ProcessContext context) {
+        context.huki.get(context.currentPosition).padzielPasla = context.huki.get(context.currentPosition + 1).padzielPasla;
         vydalicNastupny(context, 0);
         return "";
     }

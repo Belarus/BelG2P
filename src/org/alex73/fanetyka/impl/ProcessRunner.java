@@ -49,7 +49,7 @@ public class ProcessRunner implements IProcess {
     }
 
     @Override
-    public String getProcessType() {
+    public String getProcessTypeName() {
         return processType.getSimpleName();
     }
 

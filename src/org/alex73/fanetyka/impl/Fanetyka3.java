@@ -12,6 +12,7 @@ import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 import org.alex73.grammardb.GrammarDB2;
 import org.alex73.grammardb.SetUtils;
 import org.alex73.grammardb.StressUtils;
+import org.alex73.grammardb.WordMorphology;
 import org.alex73.grammardb.structures.Form;
 import org.alex73.grammardb.structures.Paradigm;
 import org.alex73.grammardb.structures.Variant;
@@ -56,17 +57,19 @@ public class Fanetyka3 implements IFanetyka {
                 // з імі адбываюцца: мяккасць, аглушэнне/азванчэнне
                 // яканне робім адразу тут
                 String wl = StressUtils.unstress(w.toLowerCase());
+                // яканне адбываецца калі ў наступным слове націск прыпадае на першы склад,
+                // альбо нават у трэцім слове: "ня ў лад", "ня з ім"
                 switch (wl) {
                 case "не":
                     appendToNextWord = true;
-                    if (StressUtils.getStressFromStart(words.get(i + 1)) == 0) {
+                    if (naciskNaNastupnySklad(i)) {
                         w = "ня";
                         why.add("'не' пераходзіць у 'ня' перад словам з націскам на першы склад");
                     }
                     break;
                 case "без":
                     appendToNextWord = true;
-                    if (StressUtils.getStressFromStart(words.get(i + 1)) == 0) {
+                    if (naciskNaNastupnySklad(i)) {
                         w = "бяз";
                         why.add("'без' пераходзіць у 'бяз' перад словам з націскам на першы склад");
                     }
@@ -83,12 +86,11 @@ public class Fanetyka3 implements IFanetyka {
             }
 
             if (appendToNextWord) {
-                // TODO можа варта зрабіць дадатковы тып падзелу каб дадаваўся прагал на вывадзе
                 Huk aposni = huki.get(huki.size() - 1);
                 if (aposni.padzielPasla != Huk.PADZIEL_SLOVY) {
                     throw new Exception("Няправільная канвертацыя без/не");
                 }
-                aposni.padzielPasla = Huk.PADZIEL_PRYSTAUKA;
+                aposni.padzielPasla = Huk.PADZIEL_PRYNAZOUNIK;
             }
         }
 
@@ -97,7 +99,6 @@ public class Fanetyka3 implements IFanetyka {
         while (true) {
             startIteration();
 
-            config.processPierachodZG.process(this);
             config.processPierachodI.process(this);
             config.processMiakkasc.process(this);
             config.processAhlusennieAzvancennie.process(this);
@@ -122,6 +123,16 @@ public class Fanetyka3 implements IFanetyka {
         setIpaStress();
     }
 
+    private boolean naciskNaNastupnySklad(int currentWord) {
+        for (int i = currentWord + 1; i < words.size(); i++) {
+            if (StressUtils.syllCount(words.get(i)) > 0) { // не ўлічваем "ў", "з"
+                // аднаскладовыя словы хутчэй за ўсё службовыя - націску няма
+                return StressUtils.getStressFromStart(words.get(i)) == 0;
+            }
+        }
+        return false;
+    }
+
     protected void startIteration() {
 
     }
@@ -134,7 +145,7 @@ public class Fanetyka3 implements IFanetyka {
         StringBuilder out = new StringBuilder();
         for (Huk huk : huki) {
             out.append(hukConverter.apply(huk));
-            if ((huk.padzielPasla & Huk.PADZIEL_SLOVY) != 0) {
+            if ((huk.padzielPasla & (Huk.PADZIEL_SLOVY | Huk.PADZIEL_PRYNAZOUNIK)) != 0) {
                 out.append(' ');
             }
         }
@@ -244,7 +255,7 @@ public class Fanetyka3 implements IFanetyka {
     // TODO дадаць націскі
     // TODO прыстаўкі перад еёюя - толькі калі ёсць апостраф
     static final String[] PRYSTAUKI = new String[] { "ад", "безад", "беспад", "вод", "звод", "наад", "навод", "напад", "над", "неад", "непад", "непрад",
-            "павод", "панад", "папад", "падад", "пад", "перапад", "перад", "под", "прад", "прыад", "прыпад", "спад", "спрад", "за", "з",
+            "павод", "панад", "папад", "падад", "пад", "перапад", "перад", "под", "прад", "прыад", "прыпад", "спад", "спрад", "за\u0301","за", "з",
             "супад", "най" /*
                     * ,
                     * 
@@ -298,13 +309,17 @@ public class Fanetyka3 implements IFanetyka {
             return w;
         }
 
-        if (w.toLowerCase().equals("і")) {
+        if (w.toLowerCase().equals("і") || w.toLowerCase().equals("у") || w.toLowerCase().equals("ў")) {
             // асобны выпадак - мусіць не быць націску
-            return "і";
+            return w;
         }
 
-        Set<String> foundForms = new TreeSet<>();
-        PrystaukiApplied fromDB = null;
+        w = w.replace('+', '\u0301').replace('´', '\u0301').replace('+', '\u0301');
+
+        // 'ў' мусіць захоўвацца
+        boolean piersyUkarotki = w.toLowerCase().startsWith("ў");
+
+        Set<WordMorphology> foundForms = new TreeSet<>();
         // у базе няма марфалогіі - спрабуем выцягнуць націскі і ґ
         for (Paradigm p : config.finder.getParadigms(w)) {
             for (Variant v : p.getVariant()) {
@@ -313,43 +328,46 @@ public class Fanetyka3 implements IFanetyka {
                         continue;
                     }
                     if (compareWord(w, f.getValue())) {
-                        String r = f.getValue().toLowerCase();
-                        String tag = SetUtils.tag(p, v);
-                        if (StressUtils.syllCount(r) == 1 && (tag.startsWith("E") || tag.startsWith("I") || tag.startsWith("C"))) {
-                            // для аднаскладовых часціц, прыназоўнікаў, злучнікаў - націск не ставіцца
-                            r = StressUtils.unstress(r);
-                        }
-                        PrystaukiApplied a = applyPrystauki(r, v.getPrystauki());
-                        if (foundForms.isEmpty()) {
-                            fromDB = a;
-                            why.add("Націскі, пазначэнне ґ і прыставак з базы: " + fromDB.word);
-                        }
-                        foundForms.add(a.word + (a.prystaukiVyznacanyja ? "" : " - прыстаўкі невызнячаныя"));
+                        foundForms.add(new WordMorphology(p, v, f));
                     }
                 }
             }
         }
-        if (foundForms.isEmpty()) {
+        
+        // спрабуем ўзяць форму дзе няма замены на г выбухны
+        WordMorphology fromDB = foundForms.stream().filter(wm -> wm.v.getZmienyFanietyki() == null).findFirst().orElse(null);
+        if (fromDB == null) {
+            // калі такой формы няма, спрабуем ўзяць любую форму
+            fromDB = foundForms.stream().findFirst().orElse(null);
+        }
+        
+        if (fromDB == null) {
             // не знайшлі ў базе - прастаўляем націскі на о, ё
             int p = w.indexOf('о');
             if (p < 0) {
                 p = w.indexOf('ё');
             }
-            String cw;
             if (p >= 0) {
-                cw = w.substring(0, p + 1) + GrammarDB2.pravilny_nacisk + w.substring(p + 1);
+                w = w.substring(0, p + 1) + GrammarDB2.pravilny_nacisk + w.substring(p + 1);
                 why.add("Аўтаматычна пазначаныя націскі: " + w);
-            } else {
-                cw = w;
             }
-            fromDB = new PrystaukiApplied(cw, false);
-        } else if (foundForms.size() > 1) {
-            why.add("Больш за 1 варыянт для '" + w + "' з базы: " + foundForms);// TODO check for all words
+        } else {
+            if (foundForms.stream().map(f -> f.getFanetykaApplied()).distinct().count() > 1) {
+                // ці не ўсе аднолькавыя ?
+                why.add("Больш за 1 варыянт для '" + w + "' з базы: " + foundForms);
+            }
+
+            w = fromDB.getFanetykaApplied(); // нават калі прыстаўкі не вызначаныя, могуць быць змены фанетыкі
+            String tag = SetUtils.tag(fromDB.p, fromDB.v);
+            if (StressUtils.syllCount(w) == 1 && (tag.startsWith("E") || tag.startsWith("I") || tag.startsWith("C"))) {
+                // для аднаскладовых часціц, прыназоўнікаў, злучнікаў - націск не ставіцца
+                w = StressUtils.unstress(w);
+            }
+
+            why.add("Націскі, пазначэнне ґ і прыставак з базы: " + w);
         }
 
-        w = fromDB.word;
-
-        if (!fromDB.prystaukiVyznacanyja) {
+        if (fromDB == null || !fromDB.isMorphologyDefined()) {
             // пазначаем найбольш распаўсюджаныя прыстаўкі, калі ў базе няма інфармацыі
             String wl = w.toLowerCase();
             for (String p : PRYSTAUKI) {
@@ -372,32 +390,19 @@ public class Fanetyka3 implements IFanetyka {
                     if (prystauka) {
                         w = w.substring(0, p.length()) + '/' + w.substring(p.length());
                         why.add("Мяркуем, што прыстаўка '" + p + "'");
+                        break;
                     }
                 }
             }
         }
 
-        return w;
-    }
-
-    record PrystaukiApplied(String word, boolean prystaukiVyznacanyja) {
-    }
-
-    /**
-     * Дадаем прыстаўкі ў слова
-     */
-    PrystaukiApplied applyPrystauki(String word, String prystauki) {
-        if (prystauki == null) {
-            return new PrystaukiApplied(word, false);
-        } else {
-            String pr = prystauki.replace("/", "");
-            if (!word.startsWith(pr)) {
-                why.add("Неадапаведнасць прыставак у базе"); // TODO check ?
-                return new PrystaukiApplied(word, false);
-            } else {
-                return new PrystaukiApplied(prystauki + word.substring(pr.length()), true);
-            }
+        if (piersyUkarotki && w.startsWith("у")) {
+            w = "ў" + w.substring(1);
+        } else if (piersyUkarotki && w.startsWith("У")) {
+            w = "Ў" + w.substring(1);
         }
+
+        return w;
     }
 
     /**
@@ -586,7 +591,7 @@ public class Fanetyka3 implements IFanetyka {
 
     void dadacJotKaliPatrebny(Huk papiaredni, char current, char next) {
         boolean add = false;
-
+//TODO а калі прыназоўнік ?
         boolean pacatakSlova = papiaredni == null || papiaredni.padzielPasla == Huk.PADZIEL_SLOVY;
         switch (current) {
         case 'і':
@@ -613,7 +618,7 @@ public class Fanetyka3 implements IFanetyka {
         case 'я':
             if (pacatakSlova || papiaredni.halosnaja || papiaredni.apostrafPasla || papiaredni.miakki != 0 || papiaredni.zychodnyjaLitary.equals("ў")
                     || papiaredni.padzielPasla != 0 || "тдржшч".indexOf(papiaredni.zychodnyjaLitary) >= 0) {
-                add = true;
+                add = true;//TODO а калі прыназоўнік ?
             }
             break;
         }

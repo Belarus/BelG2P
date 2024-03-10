@@ -20,18 +20,6 @@ public class TsvConfig implements IConfig {
     public final Map<String, Case> cases = new TreeMap<>();
     public final List<String> casesOrder = new ArrayList<>();
 
-    public static void main(String[] args) throws Exception {
-        new TsvConfig("Miakkasc");
-        new TsvConfig("Miakkasc-cross");
-    }
-
-    public TsvConfig(String name) throws Exception {
-        this.configName = name;
-        try (InputStream in = TsvConfig.class.getResourceAsStream("/" + name + ".tsv")) {
-            load(in);
-        }
-    }
-
     public TsvConfig(String name, InputStream in) throws Exception {
         this.configName = name;
         load(in);
@@ -156,7 +144,7 @@ public class TsvConfig implements IConfig {
                     err(c, 0, "слупок мяжы пасля папярэдняга слупку мяжы");
                 }
                 check.apostraf = readMode(2, c);
-                readMultiMode(3, c, check.pasziel, Huk.PADZIEL_PRYSTAUKA);
+                readMultiMode(3, c, check.pasziel, Huk.PADZIEL_PRYSTAUKA | Huk.PADZIEL_PRYNAZOUNIK);
                 readMultiMode(4, c, check.pasziel, Huk.PADZIEL_KARANI);
                 readMultiMode(5, c, check.pasziel, Huk.PADZIEL_SUFIX);
                 readMultiMode(6, c, check.pasziel, Huk.PADZIEL_SLOVY);

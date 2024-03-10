@@ -18,17 +18,6 @@ public class TsvCrossConfig implements IConfig {
     public CaseCross cross;
     public List<Example> examples = new ArrayList<>();
 
-    public static void main(String[] args) throws Exception {
-        new TsvCrossConfig("Miakkasc");
-    }
-
-    public TsvCrossConfig(String name) throws Exception {
-        this.configName = name;
-        try (InputStream in = TsvConfig.class.getResourceAsStream("/" + name + ".tsv")) {
-            load(in);
-        }
-    }
-
     public TsvCrossConfig(String name, InputStream in) throws Exception {
         this.configName = name;
         load(in);

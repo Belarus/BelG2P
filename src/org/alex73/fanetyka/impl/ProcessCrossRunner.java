@@ -23,7 +23,7 @@ public class ProcessCrossRunner implements IProcess {
     }
 
     @Override
-    public String getProcessType() {
+    public String getProcessTypeName() {
         return processType.getSimpleName();
     }
 
@@ -84,6 +84,7 @@ public class ProcessCrossRunner implements IProcess {
         switch (h1.padzielPasla) {
         case Huk.PADZIEL_KARANI:
         case Huk.PADZIEL_PRYSTAUKA:
+        case Huk.PADZIEL_PRYNAZOUNIK:
             return true;
         }
         if (h1.apostrafPasla) {

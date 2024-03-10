@@ -14,7 +14,6 @@ import org.alex73.fanetyka.processes.HubnaZubnyM;
 import org.alex73.fanetyka.processes.Miakkasc;
 import org.alex73.fanetyka.processes.PierachodFH;
 import org.alex73.fanetyka.processes.PierachodI;
-import org.alex73.fanetyka.processes.PierachodZG;
 import org.alex73.fanetyka.processes.Prypadabniennie;
 import org.alex73.fanetyka.processes.Sprascennie;
 import org.alex73.fanetyka.processes.SypiacyjaSvisciacyja;
@@ -24,8 +23,9 @@ import org.alex73.grammardb.GrammarFinder;
 public class FanetykaConfig {
     protected final GrammarFinder finder;
 
-    protected final ProcessRunner processPierachodI;
+    protected final ProcessPrykladyRunner processPryklady;
     protected final ProcessCrossRunner processMiakkasc;
+    protected final ProcessRunner processPierachodI;
     protected final ProcessRunner processAhlusennieAzvancennie;
     protected final ProcessRunner processSprascennie;
     protected final ProcessRunner processPrypadabniennie;
@@ -34,13 +34,12 @@ public class FanetykaConfig {
     protected final ProcessRunner processHubnaZubnyM;
     protected final ProcessRunner processUstaunyA;
     protected final ProcessRunner processPierachodFH;
-    protected final ProcessRunner processPierachodZG;
 
     public FanetykaConfig(GrammarFinder finder) throws Exception {
         this(finder, () -> {
             Map<String, byte[]> configs = new TreeMap<>();
             for (String t : List.of("Miakkasc", "AhlusennieAzvancennie", "BilabijalnyV", "HubnaZubnyM", "Prypadabniennie", "PierachodFH", "PierachodI",
-                    "PierachodZG", "Sprascennie", "SypiacyjaSvisciacyja", "UstaunyA")) {
+                    "Pryklady", "Sprascennie", "SypiacyjaSvisciacyja", "UstaunyA")) {
                 try (InputStream in = TsvConfig.class.getResourceAsStream("/" + t + ".tsv")) {
                     in.readAllBytes();
                     configs.put(t, in.readAllBytes());
@@ -61,6 +60,7 @@ public class FanetykaConfig {
         Map<String, byte[]> configs = getConfigs.get();
         this.processPierachodI = new ProcessRunner(PierachodI.class, configs);
         this.processMiakkasc = new ProcessCrossRunner(Miakkasc.class, configs);
+        this.processPryklady = new ProcessPrykladyRunner(configs);
         this.processAhlusennieAzvancennie = new ProcessRunner(AhlusennieAzvancennie.class, configs);
         this.processSprascennie = new ProcessRunner(Sprascennie.class, configs);
         this.processPrypadabniennie = new ProcessRunner(Prypadabniennie.class, configs);
@@ -69,6 +69,5 @@ public class FanetykaConfig {
         this.processHubnaZubnyM = new ProcessRunner(HubnaZubnyM.class, configs);
         this.processUstaunyA = new ProcessRunner(UstaunyA.class, configs);
         this.processPierachodFH = new ProcessRunner(PierachodFH.class, configs);
-        this.processPierachodZG = new ProcessRunner(PierachodZG.class, configs);
     }
 }
