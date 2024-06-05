@@ -566,6 +566,10 @@ public class Fanetyka3 implements IFanetyka {
             case '|':
                 papiaredniHuk.padzielPasla = Huk.PADZIEL_KARANI;
                 break;
+            case '{':
+            case '}':
+                // інтэрфікс - ніякіх падзелаў
+                break;
             case '-':
                 papiaredniHuk.padzielPasla = Huk.PADZIEL_MINUS;
                 break;
