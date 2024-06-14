@@ -1,12 +1,19 @@
 package org.alex73.fanetyka.impl;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 import org.alex73.grammardb.GrammarDB2;
@@ -252,31 +259,6 @@ public class Fanetyka3 implements IFanetyka {
         }
     }
 
-    // TODO дадаць націскі
-    // TODO прыстаўкі перад еёюя - толькі калі ёсць апостраф
-    static final String[] PRYSTAUKI = new String[] { "ад", "безад", "беспад", "вод", "звод", "наад", "навод", "напад", "над", "неад", "непад", "непрад",
-            "павод", "панад", "папад", "падад", "пад", "перапад", "перад", "под", "прад", "прыад", "прыпад", "спад", "спрад", "за\u0301","за", "з",
-            "супад", "най" /*
-                    * ,
-                    * 
-                    * "абяс", "ас", "абес", "адс", "бес", "бяс", "вус", "выс", "дас", "дыс",
-                    * "зрас", "зас", "нарас", "нас", "небес", "небяс", "церас", "ус", "наўс",
-                    * "не-рас", "не-с", "не-ўс", "пера-рас", "пера-с", "ня-с", "ня-ўс", "па-па-с",
-                    * "па-рас", "прас", "пра-с", "рас", "рас-с", "па-ўс", "пры-с", "рос", "с",
-                    * "са-с", "у-рас", "у-рос", "па-с"
-                    */ , "між", "звыш", "контр", "гіпер", "супер", "экс", "обер", "супраць", "абез", "без", "беc", "бяз", "бяс", "вуз" };
-    
-    // Гіпа- дэ- дыс- дыз- ін- інтэр- інфра- квазі- кіла- макра- мікра- мега- мата- мульт- мульц- орта-/арта- пан-/пан’- пара- пост-/паст- прота-/прата- суб- транс- ультра- экстра- мілі- дэка- гекта- гіга- тэра- пета- гекса- зэта- іота-/ёта- дэцы- санты- мілі- нана- піка- фемта- ата- зепта- ёкта- 
-
-    static {
-        Arrays.sort(PRYSTAUKI, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return o2.length() - o1.length();
-            }
-        });
-    }
-
     boolean fanetykaBazy(String word) {
         String fan = config.finder.getFan(word);
         if (fan == null) {
@@ -340,7 +322,7 @@ public class Fanetyka3 implements IFanetyka {
             // калі такой формы няма, спрабуем ўзяць любую форму
             fromDB = foundForms.stream().findFirst().orElse(null);
         }
-        
+
         if (fromDB == null) {
             // не знайшлі ў базе - прастаўляем націскі на о, ё
             int p = w.indexOf('о');
@@ -369,29 +351,33 @@ public class Fanetyka3 implements IFanetyka {
 
         if (fromDB == null || !fromDB.isMorphologyDefined()) {
             // пазначаем найбольш распаўсюджаныя прыстаўкі, калі ў базе няма інфармацыі
-            String wl = w.toLowerCase();
-            for (String p : PRYSTAUKI) {
-                if (wl.length() > p.length() + 2 && wl.startsWith(p)) {
-                    boolean prystauka = false;
-                    char nextLetter = wl.charAt(p.length());
-                    char nextLetter2 = wl.charAt(p.length() + 1);
-                    if (p.endsWith("й")) {
-                        prystauka = true;
-                    } else if (nextLetter == GrammarDB2.pravilny_apostraf
-                            && (nextLetter2 == 'е' || nextLetter2 == 'ё' || nextLetter2 == 'ю' || nextLetter2 == 'я')) {
-                        // прыстаўкі перад еёюя - толькі калі ёсць апостраф, але калі прыстаўка не на -й
-                        // і выпадае з гэтага раду, бо ёсць заінелы. але заезджаны
-                        prystauka = true;
-                    } else if (nextLetter == 'е' || nextLetter == 'ё' || nextLetter == 'ю' || nextLetter == 'я') {
-                        prystauka = false;
-                    } else {
-                        prystauka = true;
+            String wl = StressUtils.unstress(w.toLowerCase());
+            for (Prystauka p : PRYSTAUKI) {
+                if (wl.startsWith(p.beg)) {
+                    int skipLength = p.result.replaceAll("[/\\|{}]", "").length();
+
+                    if (p.result.endsWith("/")) {
+                        // гэта прыстаўка - правяраем, ці магчымая яна ў гэтым слове
+                        char nextLetter = wl.charAt(skipLength );
+                        char nextLetter2 = wl.charAt(skipLength+1);
+                        if (p.beg.endsWith("й")) {
+                            // прыстаўка
+                        } else if (nextLetter == GrammarDB2.pravilny_apostraf
+                                && (nextLetter2 == 'е' || nextLetter2 == 'ё' || nextLetter2 == 'ю' || nextLetter2 == 'я')) {
+                            // прыстаўкі перад еёюя - толькі калі ёсць апостраф, але калі прыстаўка не на -й
+                            // і выпадае з гэтага раду, бо ёсць заінелы. але заезджаны
+                            // прыстаўка
+                        } else if (nextLetter == 'е' || nextLetter == 'ё' || nextLetter == 'ю' || nextLetter == 'я') {
+                            continue;
+                        }
                     }
-                    if (prystauka) {
-                        w = w.substring(0, p.length()) + '/' + w.substring(p.length());
-                        why.add("Мяркуем, што прыстаўка '" + p + "'");
-                        break;
-                    }
+
+                    why.add("Мяркуем, што прыстаўка '" + p.result + "'");
+                    w = StressUtils.setUsuallyStress(w);
+                    int stress = StressUtils.getStressFromStart(w);
+                    wl = p.result + wl.substring(skipLength);
+                    w = StressUtils.setStressFromStart(wl, stress);
+                    break;
                 }
             }
         }
@@ -695,5 +681,40 @@ public class Fanetyka3 implements IFanetyka {
             ii++;
             ig++;
         }
+    }
+
+    static class Prystauka implements Comparable<Prystauka> {
+        String beg;
+        String result;
+
+        @Override
+        public int compareTo(Prystauka o) {
+            return o.beg.length() - beg.length();
+        }
+    }
+
+    static final List<Prystauka> PRYSTAUKI = new ArrayList<>();
+
+    static {
+        Pattern RE = Pattern.compile("(.+)=(.*) #.+");
+
+        try (BufferedReader rd = new BufferedReader(new InputStreamReader(Fanetyka3.class.getResourceAsStream("prystauki.txt"), StandardCharsets.UTF_8))) {
+            String s;
+            while ((s = rd.readLine()) != null) {
+                Matcher m = RE.matcher(s);
+                if (!m.matches()) {
+                    throw new Exception(s);
+                }
+                Prystauka p = new Prystauka();
+                p.beg = m.group(1).trim();
+                p.result = m.group(2).trim();
+                if (!p.result.equals("?")) {
+                    PRYSTAUKI.add(p);
+                }
+            }
+        } catch (Exception ex) {
+            throw new ExceptionInInitializerError(ex);
+        }
+        Collections.sort(PRYSTAUKI);
     }
 }
