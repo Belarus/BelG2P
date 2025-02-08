@@ -41,7 +41,6 @@ public class FanetykaConfig {
             for (String t : List.of("Miakkasc", "AhlusennieAzvancennie", "BilabijalnyV", "HubnaZubnyM", "Prypadabniennie", "PierachodFH", "PierachodI",
                     "Pryklady", "Sprascennie", "SypiacyjaSvisciacyja", "UstaunyA")) {
                 try (InputStream in = TsvConfig.class.getResourceAsStream("/" + t + ".tsv")) {
-                    in.readAllBytes();
                     configs.put(t, in.readAllBytes());
                 } catch (IOException ex) {
                     throw new RuntimeException("Can't read /" + t + ".tsv from jar");
