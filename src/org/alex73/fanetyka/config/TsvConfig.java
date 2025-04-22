@@ -50,9 +50,8 @@ public class TsvConfig implements IConfig {
         return cases.values().stream().flatMap(c -> c.examples.stream()).toList();
     }
 
-    private static final String[] TASK_HEADERS = new String[] { "Умовы:", "якія гукі", "апостраф", "падзел - прыстаўка і корань", "падзел - паміж каранямі",
-            "падзел - кораня і суфікса", "падзел - мяжа слова", "падзел - праз злучок", "мяккасць - асіміляцыйная", "мяккасць - пазначаная", "падвоены",
-            "націск" };
+    private static final String[] TASK_HEADERS = new String[] { "Умовы:", "якія гукі", "апостраф", "прыстаўка+(прыстаўка ці корань)", "корань+корань",
+            "мяжа слова", "злучок", "мяккасць - асіміляцыйная", "мяккасць - пазначаная", "доўгі гук", "націск" };
 
     private void readTask() throws Exception {
         Case t = new Case();
@@ -155,9 +154,8 @@ public class TsvConfig implements IConfig {
                 check.apostraf = readMode(2, c);
                 readMultiMode(3, c, check.pasziel, Huk.PADZIEL_PRYSTAUKA | Huk.PADZIEL_PRYNAZOUNIK);
                 readMultiMode(4, c, check.pasziel, Huk.PADZIEL_KARANI);
-                readMultiMode(5, c, check.pasziel, Huk.PADZIEL_SUFIX);
-                readMultiMode(6, c, check.pasziel, Huk.PADZIEL_SLOVY);
-                readMultiMode(7, c, check.pasziel, Huk.PADZIEL_MINUS);
+                readMultiMode(5, c, check.pasziel, Huk.PADZIEL_SLOVY);
+                readMultiMode(6, c, check.pasziel, Huk.PADZIEL_MINUS);
                 if (check.pasziel.maskYes != 0 && check.pasziel.maskNo != 0) {
                     err(c, 3, "Няправільная камбінацыя пазнак падзелаў");
                 }
@@ -169,13 +167,13 @@ public class TsvConfig implements IConfig {
                 }
                 t.checks.add(check = new HukCheck());
                 check.which = readHuki(1, c);
-                readMultiMode(8, c, check.miakkasc, Huk.MIAKKASC_ASIMILACYJNAJA);
-                readMultiMode(9, c, check.miakkasc, Huk.MIAKKASC_PAZNACANAJA);
+                readMultiMode(7, c, check.miakkasc, Huk.MIAKKASC_ASIMILACYJNAJA);
+                readMultiMode(8, c, check.miakkasc, Huk.MIAKKASC_PAZNACANAJA);
                 if (check.miakkasc.maskYes != 0 && check.miakkasc.maskNo != 0) {
                     err(c, 3, "Няправільная камбінацыя пазнак мяккасці");
                 }
-                check.padvojeny = readMode(10, c);
-                check.nacisk = readMode(11, c);
+                check.padvojeny = readMode(9, c);
+                check.nacisk = readMode(10, c);
                 if (header.contains("неабавязковы")) {
                     check.optionalHuk = true;
                 } else {
