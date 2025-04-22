@@ -35,7 +35,7 @@ public class FanetykaText {
                     f.calcFanetyka();
                     ipa += f.toString(Huk.ipa);
                     skola += f.toString(Huk.skolny);
-                    why.addAll(f.why);
+                    why.addAll(f.logPhenomenon);
                     f = new Fanetyka3(config);
                     ipa += c;
                     skola += c;
@@ -48,7 +48,7 @@ public class FanetykaText {
         f.calcFanetyka();
         ipa += f.toString(Huk.ipa);
         skola += f.toString(Huk.skolny);
-        why.addAll(f.why);
+        why.addAll(f.logPhenomenon);
     }
 
     boolean isLetter(char c) {

@@ -25,6 +25,7 @@ public class Prypadabniennie {
     public String tc(Huk h1, Huk h2, ProcessContext context) {
         int pos = context.currentPosition;
         context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+        context.huki.get(pos + 1).debug = context.huki.get(pos).debug || context.huki.get(pos + 1).debug;
         context.huki.remove(pos);
         h2.padvojeny = true;
         return "";
@@ -34,6 +35,7 @@ public class Prypadabniennie {
     public String ddz(Huk h1, Huk h2, ProcessContext context) {
         int pos = context.currentPosition;
         context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+        context.huki.get(pos + 1).debug = context.huki.get(pos).debug || context.huki.get(pos + 1).debug;
         context.huki.remove(pos);
         h2.padvojeny = true;
         return "";

@@ -26,6 +26,7 @@ public class PierachodI {
     public String zai(ProcessContext context) {
         int pos = context.currentPosition + 1;
         context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+        context.huki.get(pos + 1).debug = context.huki.get(pos).debug || context.huki.get(pos + 1).debug;
         context.huki.remove(pos);
         return "й -> ";
     }

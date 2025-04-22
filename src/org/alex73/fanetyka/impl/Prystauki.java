@@ -121,7 +121,7 @@ public class Prystauki {
     }
 
     static Comparator<String> P = new Comparator<String>() {
-        Collator BE = Collator.getInstance(new Locale("be"));
+        Collator BE = Collator.getInstance(Locale.of("be"));
 
         @Override
         public int compare(String o1, String o2) {

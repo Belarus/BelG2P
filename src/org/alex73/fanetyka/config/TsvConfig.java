@@ -71,16 +71,25 @@ public class TsvConfig implements IConfig {
         }
         casesOrder.add(t.name);
         lineIndex++;
-        // правяраем другі радок - паведамленне ў log
+        // правяраем другі радок - падрабязнасці
         line = lines.get(lineIndex);
-        if (!"Log:".equals(line[0].trim())) {
-            err(0, "мусіць быць \"Log:\"");
+        if (!"Падрабязнасці:".equals(line[0].trim())) {
+            err(0, "мусіць быць \"Падрабязнасці:\"");
         }
         if (line[1].isBlank()) {
-            err(1, "мусіць быць тэкст паведамлення");
+            err(1, "мусіць быць тэкст падрабязнасцяў");
         }
         t.logMessage = line[1].trim();
-        t.debug = line[1].contains("@");
+        lineIndex++;
+        // правяраем трэці радок - што адбываецца
+        line = lines.get(lineIndex);
+        if (!"Што адбываецца:".equals(line[0].trim())) {
+            err(0, "мусіць быць \"Што адбываецца:\"");
+        }
+        if (line[1].isBlank()) {
+            err(1, "мусіць быць тэкст што адбываецца");
+        }
+        t.details = line[1].trim();
         lineIndex++;
 
         // тут могуць быць каментары, дзе першы слупок - пусты

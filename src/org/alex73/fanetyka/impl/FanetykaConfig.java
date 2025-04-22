@@ -2,7 +2,11 @@ package org.alex73.fanetyka.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Supplier;
@@ -34,6 +38,8 @@ public class FanetykaConfig {
     protected final ProcessRunner processHubnaZubnyM;
     protected final ProcessRunner processUstaunyA;
     protected final ProcessRunner processPierachodFH;
+
+    private final List<String> debugCases = new ArrayList<String>();
 
     public FanetykaConfig(GrammarFinder finder) throws Exception {
         this(finder, () -> {
@@ -68,5 +74,23 @@ public class FanetykaConfig {
         this.processHubnaZubnyM = new ProcessRunner(HubnaZubnyM.class, configs);
         this.processUstaunyA = new ProcessRunner(UstaunyA.class, configs);
         this.processPierachodFH = new ProcessRunner(PierachodFH.class, configs);
+
+        debugCases.addAll(this.processPierachodI.getDebugCases());
+        debugCases.addAll(this.processMiakkasc.getDebugCases());
+        debugCases.addAll(this.processPryklady.getDebugCases());
+        debugCases.addAll(this.processAhlusennieAzvancennie.getDebugCases());
+        debugCases.addAll(this.processSprascennie.getDebugCases());
+        debugCases.addAll(this.processPrypadabniennie.getDebugCases());
+        debugCases.addAll(this.processSypiacyjaSvisciacyja.getDebugCases());
+        debugCases.addAll(this.processBilabijalnyV.getDebugCases());
+        debugCases.addAll(this.processHubnaZubnyM.getDebugCases());
+        debugCases.addAll(this.processUstaunyA.getDebugCases());
+        debugCases.addAll(this.processPierachodFH.getDebugCases());
+
+        Collections.sort(debugCases, Collator.getInstance(Locale.of("be")));
+    }
+
+    public List<String> getDebugCases() {
+        return debugCases;
     }
 }

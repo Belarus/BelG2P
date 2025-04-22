@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -53,6 +54,11 @@ public class ProcessRunner implements IProcess {
         return processType.getSimpleName();
     }
 
+    @Override
+    public Collection<String> getDebugCases() {
+        return config.cases.keySet();
+    }
+
     private String setMinus(Set<String> s1, Set<String> s2) {
         Set<String> r = new TreeSet<>(s1);
         r.removeAll(s2);
@@ -69,13 +75,31 @@ public class ProcessRunner implements IProcess {
     public void process(Fanetyka3 instance) throws Exception {
         ProcessContext context = new ProcessContext();
         context.huki = instance.huki;
+        context.debug = instance.logPhenomenon;
         for (String caseName : config.casesOrder) {
             Method m = methods.get(caseName);
             Case ca = config.cases.get(caseName);
-            // ад канца да пачатка
+            // from end to beginning
             for (int pos = instance.huki.size() - ca.requiresHuks; pos >= 0; pos--) {
                 context.currentPosition = pos;
-                if (!check(ca, context, instance.why)) {
+
+                // detect if debug required
+                context.debugPrefix = null;
+                if (caseName.equals(instance.debugPhenomenon)) {
+                    context.debugPrefix = "[";
+                    for (int i = context.currentPosition; i < context.currentPosition + ca.checks.size() && i < context.huki.size(); i++) {
+                        context.debugPrefix += context.huki.get(i).toString();
+                        if (!context.huki.get(i).debug) {
+                            // do not debug if some huk is outside of debug mark
+                            context.debugPrefix = null;
+                            break;
+                        }
+                    }
+                    if (context.debugPrefix != null) {
+                        context.debugPrefix += ']';
+                    }
+                }
+                if (!check(ca, context)) {
                     continue;
                 }
                 // збіраем параметры для выкліка метада
@@ -105,20 +129,18 @@ public class ProcessRunner implements IProcess {
                 String before = instance.toString(Huk.ipa);
                 String change = (String) m.invoke(processor, parameters.toArray());
                 if (change != null) {
-                    instance.why.add(ca.name + ": " + ca.logMessage.replace("()", "(" + change + ")") + ": " + before + " -> " + instance.toString(Huk.ipa));
+                    instance.logPhenomenon.add(ca.name + ": " + ca.logMessage.replace("()", "(" + change + ")") + ": " + before + " -> " + instance.toString(Huk.ipa));
                 }
             }
         }
     }
 
     /**
-     * Правяраем гукі адпаведнасць умовам - пасля папярэдняй праверкі ў метадзе.
+     * Check sounds for table before method execution.
      */
-    private boolean check(Case ca, ProcessContext context, List<String> log) {
-        if (ca.debug) {
-            log.add("  Правяраем " + context);
-        }
+    private boolean check(Case ca, ProcessContext context) {
         int before = Math.min(context.currentPosition + ca.checks.size(), context.huki.size());
+
         if (ca.borderCheckBefore != null) {
             // мяжа перад першым гукам табліцы
             Huk h;
@@ -131,16 +153,16 @@ public class ProcessRunner implements IProcess {
             }
             String err = checkRules(ca.name, ca.borderCheckBefore, h);
             if (err != null) {
-                if (ca.debug) {
-                    log.add("    не выканалася ўмова для гука напачатку: " + err);
+                if (context.debugPrefix != null) {
+                    context.debug.add(context.debugPrefix + " не выканалася ўмова для гука напачатку: " + err);
                 }
                 return false;
             }
         }
         for (int i = context.currentPosition; i < before; i++) {
             if (!checkHuk(ca.name, ca.checks.get(i - context.currentPosition), context.huki.get(i))) {
-                if (ca.debug) {
-                    log.add("    гук не супадае ў пазіцыі +" + (i - context.currentPosition) + ": '" + context.huki.get(i) + "' замест '"
+                if (context.debugPrefix != null) {
+                    context.debug.add(context.debugPrefix + " гук не супадае ў пазіцыі +" + (i - context.currentPosition) + ": '" + context.huki.get(i) + "' замест '"
                             + String.join(" ", ca.checks.get(i - context.currentPosition).which) + "'");
                 }
                 return false;
@@ -149,8 +171,8 @@ public class ProcessRunner implements IProcess {
         for (int i = context.currentPosition; i < before; i++) {
             String err = checkRules(ca.name, ca.checks.get(i - context.currentPosition), context.huki.get(i));
             if (err != null) {
-                if (ca.debug) {
-                    log.add("    не выканалася ўмова для гука ў пазіцыі +" + (i - context.currentPosition) + ": " + err);
+                if (context.debugPrefix != null) {
+                    context.debug.add(context.debugPrefix + " не выканалася ўмова для гука ў пазіцыі +" + (i - context.currentPosition) + ": " + err);
                 }
                 return false;
             }

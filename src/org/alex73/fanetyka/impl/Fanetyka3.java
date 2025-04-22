@@ -1,13 +1,10 @@
 package org.alex73.fanetyka.impl;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -36,19 +33,79 @@ import org.alex73.grammardb.structures.Variant;
  */
 public class Fanetyka3 implements IFanetyka {
     protected final FanetykaConfig config;
-    List<Huk> huki = new ArrayList<>();
-    List<String> words = new ArrayList<>();
-    public List<String> why = new ArrayList<>(); // як адбываюцца пераходы
+
+    private final List<String> words = new ArrayList<>();
+
+    final List<Huk> huki = new ArrayList<>();
+
+    protected final String debugPhenomenon;
+    public List<String> logPhenomenon = new ArrayList<>(); // log of phonetic phenomenon
 
     public Fanetyka3(FanetykaConfig config) throws Exception {
-        this.config = config;
+        this(config, null);
     }
 
+    /**
+     * Create phonetic converted instance using config.
+     * 
+     * @param config          - config with conversion tables
+     * @param debugPhenomenon - which phonetic phenomenon to debug. Some letters
+     *                        should be marked by () for debugging
+     */
+    public Fanetyka3(FanetykaConfig config, String debugPhenomenon) throws Exception {
+        this.config = config;
+        this.debugPhenomenon = debugPhenomenon;
+    }
+
+    /**
+     * Add word to processing.
+     * 
+     * @param w - word text
+     */
     public void addWord(String w) {
         words.add(normalize(w));
     }
 
+    /**
+     * Conversion of words into a phonetic representation.
+     */
     public void calcFanetyka() throws Exception {
+        prepareWordsForProcessing();
+
+        String prev = toString();
+        int pass = 1;
+        while (true) {
+            startIteration();
+
+            config.processPierachodI.process(this);
+            config.processMiakkasc.process(this);
+            config.processAhlusennieAzvancennie.process(this);
+            config.processSprascennie.process(this);
+            config.processPrypadabniennie.process(this);
+            config.processSypiacyjaSvisciacyja.process(this);
+            config.processBilabijalnyV.process(this);
+            config.processHubnaZubnyM.process(this);
+            config.processUstaunyA.process(this);
+            config.processPierachodFH.process(this);
+            String hnew = toString();
+            if (hnew.equals(prev)) {
+                // nothing was changed during last iteration - conversion finished
+                break;
+            }
+            prev = hnew;
+            pass++;
+            if (pass >= 100) {
+                // too many iterations - probably issue with config
+                throw new RuntimeException("Зашмат крокаў канверсіі");
+            }
+        }
+        setIpaStress();
+    }
+
+    /**
+     * Prepare words and initial conversion chars to phonemes.
+     */
+    private void prepareWordsForProcessing() throws Exception {
         for (int i = 0; i < words.size(); i++) {
             String w = words.get(i);
             w = narmalizacyjaSlova(w.toLowerCase());
@@ -64,6 +121,9 @@ public class Fanetyka3 implements IFanetyka {
                 // з імі адбываюцца: мяккасць, аглушэнне/азванчэнне
                 // яканне робім адразу тут
                 String wl = StressUtils.unstress(w.toLowerCase());
+                if (debugPhenomenon != null) {
+                    wl = wl.replace("(", "").replace(")", "");
+                }
                 // яканне адбываецца калі ў наступным слове націск прыпадае на першы склад,
                 // альбо нават у трэцім слове: "ня ў лад", "ня з ім"
                 switch (wl) {
@@ -71,14 +131,14 @@ public class Fanetyka3 implements IFanetyka {
                     appendToNextWord = true;
                     if (naciskNaNastupnySklad(i)) {
                         w = "ня";
-                        why.add("'не' пераходзіць у 'ня' перад словам з націскам на першы склад");
+                        logPhenomenon.add("'не' пераходзіць у 'ня' перад словам з націскам на першы склад");
                     }
                     break;
                 case "без":
                     appendToNextWord = true;
                     if (naciskNaNastupnySklad(i)) {
                         w = "бяз";
-                        why.add("'без' пераходзіць у 'бяз' перад словам з націскам на першы склад");
+                        logPhenomenon.add("'без' пераходзіць у 'бяз' перад словам з націскам на першы склад");
                     }
                     break;
                 case "праз":
@@ -100,36 +160,11 @@ public class Fanetyka3 implements IFanetyka {
                 aposni.padzielPasla = Huk.PADZIEL_PRYNAZOUNIK;
             }
         }
-
-        String prev = toString();
-        int pass = 0;
-        while (true) {
-            startIteration();
-
-            config.processPierachodI.process(this);
-            config.processMiakkasc.process(this);
-            config.processAhlusennieAzvancennie.process(this);
-            config.processSprascennie.process(this);
-            config.processPrypadabniennie.process(this);
-            config.processSypiacyjaSvisciacyja.process(this);
-            config.processBilabijalnyV.process(this);
-            config.processHubnaZubnyM.process(this);
-            config.processUstaunyA.process(this);
-            config.processPierachodFH.process(this);
-            String hnew = toString();
-            if (hnew.equals(prev)) {
-                // нічога не змянілася
-                break;
-            }
-            prev = hnew;
-            pass++;
-            if (pass >= 100) {
-                throw new RuntimeException("Зашмат крокаў канверсіі");
-            }
-        }
-        setIpaStress();
     }
 
+    /**
+     * Check if stress on the next syllable.
+     */
     private boolean naciskNaNastupnySklad(int currentWord) {
         for (int i = currentWord + 1; i < words.size(); i++) {
             if (StressUtils.syllCount(words.get(i)) > 0) { // не ўлічваем "ў", "з"
@@ -140,14 +175,19 @@ public class Fanetyka3 implements IFanetyka {
         return false;
     }
 
+    /**
+     * Start next iteration. Required for some overrides.
+     */
     protected void startIteration() {
-
     }
 
     public String toString() {
         return toString(Huk.ipa) + " / " + toString(Huk.skolny);
     }
 
+    /**
+     * Convert sounds to specific text representation.
+     */
     public String toString(Function<Huk, String> hukConverter) {
         StringBuilder out = new StringBuilder();
         for (Huk huk : huki) {
@@ -159,6 +199,9 @@ public class Fanetyka3 implements IFanetyka {
         return out.toString().trim();
     }
 
+    /**
+     * Set stress using IPA standard - before syllable. It required to define syllables borders.
+     */
     public void setIpaStress() {
         int hal = 0;
         for (int i = 0; i < huki.size(); i++) {
@@ -264,7 +307,7 @@ public class Fanetyka3 implements IFanetyka {
         if (fan == null) {
             return false;
         }
-        why.add("Фанетыка з базы: " + fan);
+        logPhenomenon.add("Фанетыка з базы: " + fan);
         Huk.ParseIpaContext p = new Huk.ParseIpaContext(fan);
         while (p.fan.length() > 0) {
             Huk h = Huk.parseIpa(p);
@@ -282,7 +325,7 @@ public class Fanetyka3 implements IFanetyka {
     }
 
     /**
-     * Бярэм падзел слова на часткі з базы, ці толькі націскі і ґ, ці пазначаем
+     * Бяром падзел слова на часткі з базы, ці толькі націскі і ґ, ці пазначаем
      * найбольш распаўсюджаныя прыстаўкі.
      */
     String narmalizacyjaSlova(String w) {
@@ -331,12 +374,12 @@ public class Fanetyka3 implements IFanetyka {
             }
             if (p >= 0) {
                 w = w.substring(0, p + 1) + GrammarDB2.pravilny_nacisk + w.substring(p + 1);
-                why.add("Аўтаматычна пазначаныя націскі: " + w);
+                logPhenomenon.add("Аўтаматычна пазначаныя націскі: " + w);
             }
         } else {
             if (foundForms.stream().map(f -> f.getFanetykaApplied()).distinct().count() > 1) {
                 // ці не ўсе аднолькавыя ?
-                why.add("Больш за 1 варыянт для '" + w + "' з базы: " + foundForms);
+                logPhenomenon.add("Больш за 1 варыянт для '" + w + "' з базы: " + foundForms);
             }
 
             w = fromDB.getFanetykaApplied(); // нават калі прыстаўкі не вызначаныя, могуць быць змены фанетыкі
@@ -346,7 +389,7 @@ public class Fanetyka3 implements IFanetyka {
                 w = StressUtils.unstress(w);
             }
 
-            why.add("Націскі, пазначэнне ґ і прыставак з базы: " + w);
+            logPhenomenon.add("Націскі, пазначэнне ґ і прыставак з базы: " + w);
         }
 
         if (fromDB == null || !fromDB.isMorphologyDefined()) {
@@ -372,7 +415,7 @@ public class Fanetyka3 implements IFanetyka {
                         }
                     }
 
-                    why.add("Мяркуем, што прыстаўка '" + p.result + "'");
+                    logPhenomenon.add("Мяркуем, што прыстаўка '" + p.result + "'");
                     w = StressUtils.setUsuallyStress(w);
                     int stress = StressUtils.getStressFromStart(w);
                     wl = p.result + wl.substring(skipLength);
@@ -396,6 +439,7 @@ public class Fanetyka3 implements IFanetyka {
      * мяккі знак як мяккасьць папярэдняга гуку.
      */
     void stvarajemBazavyjaHuki(String w) {
+        boolean insideDebug = false;
         Huk papiaredniHuk = null;
         for (int i = 0; i < w.length(); i++) {
             char c = w.charAt(i);
@@ -556,6 +600,16 @@ public class Fanetyka3 implements IFanetyka {
             case '}':
                 // інтэрфікс - ніякіх падзелаў
                 break;
+            case '(':
+                if (debugPhenomenon != null) {
+                    insideDebug = true;
+                }
+                break;
+            case ')':
+                if (debugPhenomenon != null) {
+                    insideDebug = false;
+                }
+                break;
             case '-':
                 papiaredniHuk.padzielPasla = Huk.PADZIEL_MINUS;
                 break;
@@ -570,6 +624,7 @@ public class Fanetyka3 implements IFanetyka {
                 throw new RuntimeException("Невядомая літара: " + c);
             }
             if (novyHuk != null) {
+                novyHuk.debug = insideDebug;
                 huki.add(novyHuk);
                 papiaredniHuk = novyHuk;
             }
@@ -623,6 +678,9 @@ public class Fanetyka3 implements IFanetyka {
     public static final String usie_naciski = GrammarDB2.pravilny_nacisk + "\u00B4";
     public static final String usie_apostrafy = GrammarDB2.pravilny_apostraf + "\'\u2019";
 
+    /**
+     * This method fixes stress chars and apostrophes to correct char code.
+     */
     static String normalize(String inputWord) {
         StringBuilder s = new StringBuilder();
         for (char c : inputWord.toCharArray()) {

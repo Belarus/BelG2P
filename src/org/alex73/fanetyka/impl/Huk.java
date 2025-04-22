@@ -40,6 +40,8 @@ public class Huk {
     /** Гэты гук павінен быць аддзелены ад наступнага, бо гэта апошні гук прыстаўкі. */
     public int padzielPasla;
 
+    public boolean debug; // debug not applied processes
+
     static final Map<IPA, String> ARFAEP_MAP = new HashMap<>();
     static final Map<IPA, String> SKOLNY_MAP = new HashMap<>();
 

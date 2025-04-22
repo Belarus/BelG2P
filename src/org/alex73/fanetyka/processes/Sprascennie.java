@@ -37,13 +37,7 @@ public class Sprascennie {
         return "";
     }
 
-    @ProcessCase("Спрашчэнне: с-с-к -> c-к не на сутыку")
-    public String ssk(Huk h1, Huk h2, ProcessContext context) {
-        vydalicNastupny(context, 0);
-        return "";
-    }
-
-    @ProcessCase("Спрашчэнне: с-с-к -> c:-к на сутыку")
+    @ProcessCase("Спрашчэнне: с-с-к -> c:-к на стыку")
     public String ssks(Huk h1, Huk h2, ProcessContext context) {
         h1.padvojeny = true;
         vydalicNastupny(context, 0);
@@ -62,16 +56,17 @@ public class Sprascennie {
     @ProcessCase("Спрашчэнне: з-д-ч -> ш-ч")
     public String zdc(Huk h1, Huk h2, ProcessContext context) {
         h2.zychodnyjaLitary = h1.zychodnyjaLitary + h2.zychodnyjaLitary;
+        h2.debug = h1.debug || h2.debug;
         h2.bazavyHuk = BAZAVY_HUK.ш;
         context.huki.remove(context.currentPosition);
         return "";
     }
 
-//    @ProcessCase("Спрашчэнне: ш-с-> с-с")
-//    public String ss(Huk h1, Huk h2) {
-//        h1.bazavyHuk = BAZAVY_HUK.с;
-//        return "";
-//    }
+    @ProcessCase("Спрашчэнне: ш-с-> с-с")
+    public String ss(Huk h1, Huk h2) {
+        h1.bazavyHuk = BAZAVY_HUK.с;
+        return "";
+    }
 
     @ProcessCase("Спрашчэнне: ц'-т -> т'-т, ц'-ц -> т'-ц")
     public String ct(Huk h1, Huk h2) {
@@ -166,27 +161,39 @@ public class Sprascennie {
     public String jj(ProcessContext context) {
         int pos = context.currentPosition;
         context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+        context.huki.get(pos + 1).debug = context.huki.get(pos).debug || context.huki.get(pos + 1).debug;
         context.huki.remove(pos);
         return "";
     }
+
+//    @ProcessCase("Спрашчэнне: с-с-к -> c-к не на стыку")
+//    public String ssk(Huk h1, Huk h2, ProcessContext context) {
+//        vydalicNastupny(context, 0);
+//        return "";
+//    }
 
     @ProcessCase("Спрашчэнне аднолькавых зычных (не пасля галоснай)")
     public String eq1(Huk h1, Huk h2, Huk h3, ProcessContext context) {
         if (h2.bazavyHuk != h3.bazavyHuk) {
+            if (context.debugPrefix!=null) {
+                context.debug.add(context.debugPrefix + " другі і трэці гукі не супадаюць");
+            }
             return null;
         }
         int pos = context.currentPosition + 1;
         context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+        context.huki.get(pos + 1).debug = context.huki.get(pos).debug || context.huki.get(pos + 1).debug;
         context.huki.remove(pos);
         return "";
     }
 
-    @ProcessCase("Спрашчэнне аднолькавых зычных")
+    @ProcessCase("Падваенне аднолькавых зычных")
     public String eq2(Huk h1, Huk h2, ProcessContext context) {
         if (h1.bazavyHuk != h2.bazavyHuk) {
             return null;
         }
         h2.zychodnyjaLitary = h1.zychodnyjaLitary + h2.zychodnyjaLitary;
+        h2.debug = h1.debug || h2.debug;
         h2.padvojeny = true;
         context.huki.remove(context.currentPosition);
         return "";
@@ -270,12 +277,14 @@ public class Sprascennie {
     private void vydalicPapiaredni(ProcessContext context, int offsetFromCurrent) {
         int pos = context.currentPosition + offsetFromCurrent;
         context.huki.get(pos).zychodnyjaLitary += context.huki.get(pos - 1).zychodnyjaLitary + context.huki.get(pos).zychodnyjaLitary;
+        context.huki.get(pos).debug = context.huki.get(pos - 1).debug || context.huki.get(pos).debug;
         context.huki.remove(pos - 1);
     }
 
     private void vydalicNastupny(ProcessContext context, int offsetFromCurrent) {
         int pos = context.currentPosition + offsetFromCurrent;
         context.huki.get(pos).zychodnyjaLitary += context.huki.get(pos + 1).zychodnyjaLitary;
+        context.huki.get(pos).debug = context.huki.get(pos + 1).debug || context.huki.get(pos).debug;
         context.huki.remove(pos + 1);
     }
 }

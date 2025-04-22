@@ -4,6 +4,7 @@ import org.alex73.fanetyka.config.ProcessCase;
 import org.alex73.fanetyka.impl.Huk;
 
 public class Miakkasc {
+    //TODO насамрэч гэтыя метады непатэрбныя ?
     @ProcessCase("Змякчэнне перад мяккімі галоснымі")
     public String zha(Huk h1) {
         String before = h1.toString();

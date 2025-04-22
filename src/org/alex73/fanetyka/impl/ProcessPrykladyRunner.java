@@ -1,6 +1,8 @@
 package org.alex73.fanetyka.impl;
 
 import java.io.ByteArrayInputStream;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.alex73.fanetyka.config.IConfig;
@@ -23,5 +25,10 @@ public class ProcessPrykladyRunner implements IProcess {
     @Override
     public IConfig getConfig() {
         return config;
+    }
+
+    @Override
+    public Collection<String> getDebugCases() {
+        return List.of();
     }
 }
