@@ -37,10 +37,19 @@ public class Sprascennie {
         return "";
     }
 
-    @ProcessCase("Спрашчэнне: с-с-к -> c:-к на стыку")
+    @ProcessCase("Прыпадабненне аднолькавых зычных")
+    public String eq2(Huk h1, Huk h2, ProcessContext context) {
+        if (h1.bazavyHuk != h2.bazavyHuk) {
+            return null;
+        }
+        vydalicPapiaredni(context, 1);
+        h2.padvojeny = true;
+        return "";
+    }
+
+    @ProcessCase("Спрашчэнне: с-с-к -> c-к не на стыку")
     public String ssks(Huk h1, Huk h2, ProcessContext context) {
-        h1.padvojeny = true;
-        vydalicNastupny(context, 0);
+        vydalicPapiaredni(context, 1);
         return "";
     }
 
@@ -184,18 +193,6 @@ public class Sprascennie {
         context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
         context.huki.get(pos + 1).debug = context.huki.get(pos).debug || context.huki.get(pos + 1).debug;
         context.huki.remove(pos);
-        return "";
-    }
-
-    @ProcessCase("Прыпадабненне аднолькавых зычных")
-    public String eq2(Huk h1, Huk h2, ProcessContext context) {
-        if (h1.bazavyHuk != h2.bazavyHuk) {
-            return null;
-        }
-        h2.zychodnyjaLitary = h1.zychodnyjaLitary + h2.zychodnyjaLitary;
-        h2.debug = h1.debug || h2.debug;
-        h2.padvojeny = true;
-        context.huki.remove(context.currentPosition);
         return "";
     }
 
