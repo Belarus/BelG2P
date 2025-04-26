@@ -77,16 +77,14 @@ public class Fanetyka3 implements IFanetyka {
         while (true) {
             startIteration();
 
-            config.processPierachodI.process(this);
+            config.processPierachody.process(this);
             config.processMiakkasc.process(this);
             config.processAhlusennieAzvancennie.process(this);
             config.processSprascennie.process(this);
-            config.processPrypadabniennie.process(this);
             config.processSypiacyjaSvisciacyja.process(this);
             config.processBilabijalnyV.process(this);
             config.processHubnaZubnyM.process(this);
             config.processUstaunyA.process(this);
-            config.processPierachodFH.process(this);
             String hnew = toString();
             if (hnew.equals(prev)) {
                 // nothing was changed during last iteration - conversion finished

@@ -62,13 +62,13 @@ public class Sprascennie {
         return "";
     }
 
-    @ProcessCase("Спрашчэнне: ш-с-> с-с")
+    @ProcessCase("Прыпадабненне: ш-с-> с-с")
     public String ss(Huk h1, Huk h2) {
         h1.bazavyHuk = BAZAVY_HUK.с;
         return "";
     }
 
-    @ProcessCase("Спрашчэнне: ц'-т -> т'-т, ц'-ц -> т'-ц")
+    @ProcessCase("Спрашчэнне зычных: ц'-т -> т'-т, ц'-ц -> т'-ц")
     public String ct(Huk h1, Huk h2) {
         String r = h1.bazavyHuk.name() + "'-" + h2.bazavyHuk.name() + " -> т'-ц";
         h1.bazavyHuk = BAZAVY_HUK.т;
@@ -157,7 +157,7 @@ public class Sprascennie {
 //        return "";
 //    }
 
-    @ProcessCase("Спрашчэнне падвойнага j у сярэдзіне слова")
+    @ProcessCase("Спрашчэнне падвойнага j")
     public String jj(ProcessContext context) {
         int pos = context.currentPosition;
         context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
@@ -187,7 +187,7 @@ public class Sprascennie {
         return "";
     }
 
-    @ProcessCase("Падваенне аднолькавых зычных")
+    @ProcessCase("Прыпадабненне аднолькавых зычных")
     public String eq2(Huk h1, Huk h2, ProcessContext context) {
         if (h1.bazavyHuk != h2.bazavyHuk) {
             return null;
@@ -259,7 +259,7 @@ public class Sprascennie {
         throw new RuntimeException("Спрашчэнне: з'-з -> з");
     }
 
-    @ProcessCase("Спрашчэнне: с'-ш -> ш:, с'-ж -> ж:, с'-з -> з:, з’+ш-> ш:, з’+ж-> ж:")
+    @ProcessCase("Прыпадабненне: с'-ш -> ш:, с'-ж -> ж:, с'-з -> з:, з’+ш-> ш:, з’+ж-> ж:")
     public String ss(Huk h1, Huk h2, ProcessContext context) {
         String r = h1.bazavyHuk + "'" + h2.bazavyHuk + " -> " + h2.bazavyHuk + ":";
         vydalicPapiaredni(context, 1);
@@ -267,12 +267,59 @@ public class Sprascennie {
         return r;
     }
 
-    @ProcessCase("Спрашчэнне: с'+ц-> сц, с'ч -> сч")
+    @ProcessCase("Прыпадабненне: с'+ц-> сц, с'ч -> сч")
     public String sc(Huk h1, Huk h2) {
         String r = h1.bazavyHuk + "'" + h2.bazavyHuk + " -> " + h1.bazavyHuk + h2.bazavyHuk;
         h1.miakki = 0;
         return r;
     }
+
+    @ProcessCase("Прыпадабненне дч -> тч, дц -> тц")
+    public String pry(Huk huk) {
+        huk.bazavyHuk = BAZAVY_HUK.т;
+        return "";
+    }
+
+//    @ProcessCase("Падваенне ґ+г => г:")
+//    public String gh(Huk h1, Huk h2, ProcessContext context) {
+//        int pos = context.currentPosition;
+//        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+//        context.huki.remove(pos);//TODO выдаляць другі гук, а не першы ?
+//        h2.padvojeny = true;
+//        return "";
+//    }
+
+    @ProcessCase("Прыпадабненне т+ц => ц:, т+ч => ч:")
+    public String tc(Huk h1, Huk h2, ProcessContext context) {
+        int pos = context.currentPosition;
+        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+        context.huki.get(pos + 1).debug = context.huki.get(pos).debug || context.huki.get(pos + 1).debug;
+        context.huki.remove(pos);
+        h2.padvojeny = true;
+        return "";
+    }
+
+    @ProcessCase("Прыпадабненне д+дж => дж:, д+дз => дз:")
+    public String ddz(Huk h1, Huk h2, ProcessContext context) {
+        int pos = context.currentPosition;
+        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+        context.huki.get(pos + 1).debug = context.huki.get(pos).debug || context.huki.get(pos + 1).debug;
+        context.huki.remove(pos);
+        h2.padvojeny = true;
+        return "";
+    }
+/*
+    @ProcessCase("Падваенне аднолькавых зычных")
+    public String eq(Huk h1, Huk h2, Huk h3, ProcessContext context) {
+        if (h2.bazavyHuk != h3.bazavyHuk) {
+            return null;
+        }
+        int pos = context.currentPosition + 1;
+        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+        context.huki.remove(pos);
+        h3.padvojeny = true;
+        return "";
+    }*/
 
     private void vydalicPapiaredni(ProcessContext context, int offsetFromCurrent) {
         int pos = context.currentPosition + offsetFromCurrent;
