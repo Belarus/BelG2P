@@ -38,6 +38,7 @@ public class Fanetyka3 implements IFanetyka {
 
     final List<Huk> huki = new ArrayList<>();
 
+    private boolean insideDebug = false;
     protected final String debugPhenomenon;
     public List<String> logPhenomenon = new ArrayList<>(); // log of phonetic phenomenon
 
@@ -210,7 +211,7 @@ public class Fanetyka3 implements IFanetyka {
             if (h.halosnaja && h.bazavyHuk != BAZAVY_HUK.j) {
                 hal = i;
             }
-            if ((h.padzielPasla & Huk.PADZIEL_SLOVY) != 0) {
+            if ((h.padzielPasla & Huk.PADZIEL_SLOVY) != 0 || (h.padzielPasla & Huk.PADZIEL_KARANI) != 0) {
                 hal = i + 1;
             }
         }
@@ -437,7 +438,6 @@ public class Fanetyka3 implements IFanetyka {
      * мяккі знак як мяккасьць папярэдняга гуку.
      */
     void stvarajemBazavyjaHuki(String w) {
-        boolean insideDebug = false;
         Huk papiaredniHuk = null;
         for (int i = 0; i < w.length(); i++) {
             char c = w.charAt(i);
@@ -601,11 +601,15 @@ public class Fanetyka3 implements IFanetyka {
             case '(':
                 if (debugPhenomenon != null) {
                     insideDebug = true;
+                } else {
+                    throw new RuntimeException("Дужкі ў слове, але не абранае правіла для доследаў");
                 }
                 break;
             case ')':
                 if (debugPhenomenon != null) {
                     insideDebug = false;
+                } else {
+                    throw new RuntimeException("Дужкі ў слове, але не абранае правіла для доследаў");
                 }
                 break;
             case '-':
