@@ -87,29 +87,37 @@ public class Sprascennie {
     @ProcessCase("Спрашчэнне: с'-ц' + зычны")
     public String cch(Huk h1, Huk h2, Huk h3, ProcessContext context) {
         String r = "с'-ц'-" + h3.bazavyHuk.name() + " -> ";
-        if ((h3.isHluchi() || h3.isSanorny()) && !h3.isSypiacy()) {
-            // глухі нешыпячы ў наступным слове
-            vydalicNastupny(context, 0);
-            r += "с'ц'";
-        } else if (h3.isHluchi() && h3.isSypiacy()) {
-            // глухі шыпячы ў наступным слове
-            h1.bazavyHuk = Huk.BAZAVY_HUK.ш;
-            h1.miakki = 0;
-            vydalicNastupny(context, 0);
-            r += "с'ц'ш";
-        } else if (h3.isZvonki() && !h3.isSypiacy()) {
-            // звонкі нешыпячы ў наступным слове
-            h1.bazavyHuk = Huk.BAZAVY_HUK.з;
-            vydalicNastupny(context, 0);
-            r += "с'ц'з";
-        } else if (h3.isZvonki() && h3.isSypiacy()) {
-            // звонкі шыпячы ў наступным слове
-            h1.bazavyHuk = Huk.BAZAVY_HUK.ж;
-            h1.miakki = 0;
-            vydalicNastupny(context, 0);
-            r += "с'ц'ж";
+        if (h3.isSanorny()) {
+            // калі санорны - не спрашчаецца
+            return null;
+        }
+        if (h3.isSypiacy()) {
+            // шыпячы ў наступным слове
+            if (h3.isHluchi()) {
+                h1.bazavyHuk = Huk.BAZAVY_HUK.ш;
+                h1.miakki = 0;
+                vydalicNastupny(context, 0);
+                r += "с'ц'ш";
+            } else if (h3.isZvonki()) {
+                h1.bazavyHuk = Huk.BAZAVY_HUK.ж;
+                h1.miakki = 0;
+                vydalicNastupny(context, 0);
+                r += "с'ц'ж";
+            } else {
+                throw new RuntimeException();
+            }
         } else {
-            throw new RuntimeException();
+            // нешыпячы ў наступным слове
+            if (h3.isHluchi()) {
+                vydalicNastupny(context, 0);
+                r += "с'ц'";
+            } else if (h3.isZvonki()) {
+                h1.bazavyHuk = Huk.BAZAVY_HUK.з;
+                vydalicNastupny(context, 0);
+                r += "с'ц'з";
+            } else {
+                throw new RuntimeException();
+            }
         }
         return r;
     }
@@ -196,8 +204,11 @@ public class Sprascennie {
         return "";
     }
 
-    @ProcessCase("Спрашчэнне свісцячых-шыпячых")
+    @ProcessCase("Прыпадабненне свісцячых-шыпячых")
     public String eq2(Huk h1, Huk h2) {
+        if (h2.isSanorny()) {
+            return null;
+        }
         h1.miakki = 0;
         return "";
     }

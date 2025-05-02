@@ -25,8 +25,7 @@ public class Huk {
         pʲ, r, s, sʲ, t, tʲ, u, u̯, f, fʲ, x, xʲ, t͡s, t͡sʲ, t͡ʂ, ʂ, ɨ, j
     }
 
-    public List<IPA> sanornyja = Arrays.asList(IPA.r, IPA.ɫ, IPA.lʲ, IPA.m, IPA.mʲ, IPA.n, IPA.nʲ, IPA.v, IPA.vʲ, IPA.ɱ,
-            IPA.u̯, IPA.j);
+    public List<IPA> sanornyja = Arrays.asList(IPA.r, IPA.ɫ, IPA.lʲ, IPA.m, IPA.mʲ, IPA.n, IPA.nʲ, IPA.v, IPA.vʲ, IPA.β, IPA.βʲ, IPA.ɱ, IPA.u̯, IPA.j);
 
     public String zychodnyjaLitary;
     public BAZAVY_HUK bazavyHuk;
