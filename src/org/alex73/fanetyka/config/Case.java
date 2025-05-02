@@ -11,6 +11,7 @@ public class Case {
     public List<HukCheck> checks = new ArrayList<>(); // праверкі для кожнага гуку
     public int requiresHuks;
     public List<Example> examples = new ArrayList<>();
+    public String[][] table;
 
     public enum MODE {
         DONT_CARE, YES, NO, ERROR

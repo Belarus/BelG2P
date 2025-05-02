@@ -160,7 +160,7 @@ public class TsvConfig implements IConfig {
                     err(c, 3, "Няправільная камбінацыя пазнак падзелаў");
                 }
                 byuHuk = false;
-            } else if (("гук " + hukIndex).equals(header) || ("гук " + hukIndex + "(неабавязковы)").equals(header)) {
+            } else if (("гук " + hukIndex).equals(header) || ("гук " + hukIndex + " (неабавязковы)").equals(header)) {
                 if (byuHuk != null && byuHuk.booleanValue()) {
                     // быў гук
                     err(c, 0, "слупок гуку пасля папярэдняга слупку гуку");
@@ -183,6 +183,14 @@ public class TsvConfig implements IConfig {
                 hukIndex++;
             } else {
                 err(c, "Няправільны загаловак - " + header);
+            }
+        }
+        // захоўваем тэкст табліцы для вываду ў артыкул
+        t.table = new String[TASK_HEADERS.length][];
+        for (int i = 0; i < TASK_HEADERS.length; i++) {
+            t.table[i] = new String[c - 1];
+            for (int col = 0; col < c - 1; col++) {
+                t.table[i][col] = lines.get(lineIndex + i)[col];
             }
         }
 

@@ -9,6 +9,8 @@ public class CaseCross {
 
     public Map<Huk.BAZAVY_HUK, Map<Huk.BAZAVY_HUK, TypZmiahcennia>> values = new HashMap<>();
 
+    public String[][] table;
+
     public static class TypZmiahcennia {
         public boolean nievyznacana;
         public boolean zmiahcajecca;

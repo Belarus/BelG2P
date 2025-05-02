@@ -122,6 +122,14 @@ public class TsvCrossConfig implements IConfig {
             }
         }
 
+        cross.table = new String[rows.size()][];
+        for (int row = 0; row < rows.size(); row++) {
+            cross.table[row] = new String[cols.size()];
+            for (int col = 0; col < cols.size(); col++) {
+                cross.table[row][col] = lines.get(lineIndex + row)[col];
+            }
+        }
+
         lineIndex += rows.size();
     }
 

@@ -35,13 +35,15 @@ public class FanetykaConfig {
     protected final ProcessRunner processHubnaZubnyM;
     protected final ProcessRunner processUstaunyA;
 
+    static final List<String> CONFIG_NAMES = List.of("Miakkasc", "AhlusennieAzvancennie", "BilabijalnyV", "HubnaZubnyM", "Pierachody", "Pryklady",
+            "Sprascennie", "SypiacyjaSvisciacyja", "UstaunyA");
+
     private final List<String> debugCases = new ArrayList<String>();
 
     public FanetykaConfig(GrammarFinder finder) throws Exception {
         this(finder, () -> {
             Map<String, byte[]> configs = new TreeMap<>();
-            for (String t : List.of("Miakkasc", "AhlusennieAzvancennie", "BilabijalnyV", "HubnaZubnyM", "Pierachody", "Pryklady", "Sprascennie",
-                    "SypiacyjaSvisciacyja", "UstaunyA")) {
+            for (String t : CONFIG_NAMES) {
                 try (InputStream in = TsvConfig.class.getResourceAsStream("/" + t + ".tsv")) {
                     configs.put(t, in.readAllBytes());
                 } catch (IOException ex) {
