@@ -77,7 +77,7 @@ public class Sprascennie {
         return "";
     }
 
-    @ProcessCase("Спрашчэнне зычных: ц'-т -> т'-т, ц'-ц -> т'-ц")
+    @ProcessCase("Прыпадабненне зычных: ц'-т -> т'-т")
     public String ct(Huk h1, Huk h2) {
         String r = h1.bazavyHuk.name() + "'-" + h2.bazavyHuk.name() + " -> т'-ц";
         h1.bazavyHuk = BAZAVY_HUK.т;

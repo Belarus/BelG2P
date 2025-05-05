@@ -85,7 +85,7 @@ public class ProcessRunner implements IProcess {
 
                 // detect if debug required
                 context.debugPrefix = null;
-                if (caseName.equals(instance.debugPhenomenon)) {
+                if (caseName.equals(instance.debugRuleName)) {
                     context.debugPrefix = "[";
                     for (int i = context.currentPosition; i < context.currentPosition + ca.checks.size() && i < context.huki.size(); i++) {
                         context.debugPrefix += context.huki.get(i).toString();

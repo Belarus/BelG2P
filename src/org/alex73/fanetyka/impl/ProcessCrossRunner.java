@@ -51,7 +51,7 @@ public class ProcessCrossRunner implements IProcess {
             Huk h2 = instance.huki.get(pos + 1);
 
             String debugHuki = null;
-            if (h1.debug && h2.debug && DEBUG_NAME.equals(instance.debugPhenomenon)) {
+            if (h1.debug && h2.debug && DEBUG_NAME.equals(instance.debugRuleName)) {
                 debugHuki = '[' + h1.toString() + h2.toString() + ']';
             }
 

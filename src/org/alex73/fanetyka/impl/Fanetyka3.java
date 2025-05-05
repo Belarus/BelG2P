@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -14,7 +15,6 @@ import java.util.regex.Pattern;
 
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 import org.alex73.grammardb.GrammarDB2;
-import org.alex73.grammardb.SetUtils;
 import org.alex73.grammardb.StressUtils;
 import org.alex73.grammardb.WordMorphology;
 import org.alex73.grammardb.structures.Form;
@@ -39,23 +39,33 @@ public class Fanetyka3 implements IFanetyka {
     final List<Huk> huki = new ArrayList<>();
 
     private boolean insideDebug = false;
-    protected final String debugPhenomenon;
+    protected String debugRuleName;
+    protected IVerbalizer verbalizer;
     public List<String> logPhenomenon = new ArrayList<>(); // log of phonetic phenomenon
-
-    public Fanetyka3(FanetykaConfig config) throws Exception {
-        this(config, null);
-    }
 
     /**
      * Create phonetic converted instance using config.
      * 
-     * @param config          - config with conversion tables
-     * @param debugPhenomenon - which phonetic phenomenon to debug. Some letters
-     *                        should be marked by () for debugging
+     * @param config        - config with conversion tables
+     * @param debugRuleName - which phonetic rule to debug. Some letters should be
+     *                      marked by () for debugging
      */
-    public Fanetyka3(FanetykaConfig config, String debugPhenomenon) throws Exception {
+    public Fanetyka3(FanetykaConfig config) throws Exception {
         this.config = config;
-        this.debugPhenomenon = debugPhenomenon;
+    }
+
+    /**
+     * Debug some cases.
+     */
+    public void setDebugRuleName(String debugRuleName) {
+        this.debugRuleName = debugRuleName;
+    }
+
+    /**
+     * Set convertor for processing unknown letters and digits.
+     */
+    public void setVerbalizer(IVerbalizer verbalizer) {
+        this.verbalizer = verbalizer;
     }
 
     /**
@@ -71,6 +81,9 @@ public class Fanetyka3 implements IFanetyka {
      * Conversion of words into a phonetic representation.
      */
     public void calcFanetyka() throws Exception {
+        if (verbalizer != null) {
+            verbalizer.process(words);
+        }
         prepareWordsForProcessing();
 
         String prev = toString();
@@ -120,7 +133,7 @@ public class Fanetyka3 implements IFanetyka {
                 // з імі адбываюцца: мяккасць, аглушэнне/азванчэнне
                 // яканне робім адразу тут
                 String wl = StressUtils.unstress(w.toLowerCase());
-                if (debugPhenomenon != null) {
+                if (debugRuleName != null) {
                     wl = wl.replace("(", "").replace(")", "");
                 }
                 // яканне адбываецца калі ў наступным слове націск прыпадае на першы склад,
@@ -196,6 +209,23 @@ public class Fanetyka3 implements IFanetyka {
             }
         }
         return out.toString().trim();
+    }
+
+    /**
+     * Convert to list of sounds.
+     */
+    public List<String> toSoundList(Function<Huk, String> hukConverter) {
+        List<String> result = new ArrayList<String>();
+        for (Huk huk : huki) {
+            result.add(hukConverter.apply(huk));
+            if ((huk.padzielPasla & (Huk.PADZIEL_SLOVY | Huk.PADZIEL_PRYNAZOUNIK)) != 0) {
+                result.add(" ");
+            }
+        }
+        if (!result.isEmpty() && result.get(result.size() - 1).isBlank()) {
+            result.remove(result.size() - 1);
+        }
+        return result;
     }
 
     /**
@@ -333,8 +363,9 @@ public class Fanetyka3 implements IFanetyka {
             return w;
         }
 
-        if (w.toLowerCase().equals("і") || w.toLowerCase().equals("у") || w.toLowerCase().equals("ў")) {
-            // асобны выпадак - мусіць не быць націску
+        String wlower = w.toLowerCase();
+        if (wlower.equals("ў") || NIENACISKNYJA.contains(wlower)) {
+            // мусіць не быць націску, прыставак і іншых складанасцяў няма
             return w;
         }
 
@@ -345,6 +376,7 @@ public class Fanetyka3 implements IFanetyka {
 
         Set<WordMorphology> foundForms = new TreeSet<>();
         // у базе няма марфалогіі - спрабуем выцягнуць націскі і ґ
+        // TODO - аманімія
         for (Paradigm p : config.finder.getParadigms(w)) {
             for (Variant v : p.getVariant()) {
                 for (Form f : v.getForm()) {
@@ -382,11 +414,6 @@ public class Fanetyka3 implements IFanetyka {
             }
 
             w = fromDB.getFanetykaApplied(); // нават калі прыстаўкі не вызначаныя, могуць быць змены фанетыкі
-            String tag = SetUtils.tag(fromDB.p, fromDB.v);
-            if (StressUtils.syllCount(w) == 1 && (tag.startsWith("E") || tag.startsWith("I") || tag.startsWith("C"))) {
-                // для аднаскладовых часціц, прыназоўнікаў, злучнікаў - націск не ставіцца
-                w = StressUtils.unstress(w);
-            }
 
             logPhenomenon.add("Націскі, пазначэнне ґ і прыставак з базы: " + w);
         }
@@ -400,8 +427,8 @@ public class Fanetyka3 implements IFanetyka {
 
                     if (p.result.endsWith("/")) {
                         // гэта прыстаўка - правяраем, ці магчымая яна ў гэтым слове
-                        char nextLetter = wl.charAt(skipLength );
-                        char nextLetter2 = wl.charAt(skipLength+1);
+                        char nextLetter = skipLength < wl.length() ? wl.charAt(skipLength) : '\0';
+                        char nextLetter2 = skipLength + 1 < wl.length() ? wl.charAt(skipLength + 1) : '\0';
                         if (p.beg.endsWith("й")) {
                             // прыстаўка
                         } else if (nextLetter == GrammarDB2.pravilny_apostraf
@@ -589,31 +616,37 @@ public class Fanetyka3 implements IFanetyka {
                 }
                 break;
             case '/':
-                papiaredniHuk.padzielPasla = Huk.PADZIEL_PRYSTAUKA;
+                if (papiaredniHuk != null) {
+                    papiaredniHuk.padzielPasla = Huk.PADZIEL_PRYSTAUKA;
+                }
                 break;
             case '|':
-                papiaredniHuk.padzielPasla = Huk.PADZIEL_KARANI;
+                if (papiaredniHuk != null) {
+                    papiaredniHuk.padzielPasla = Huk.PADZIEL_KARANI;
+                }
                 break;
             case '{':
             case '}':
                 // інтэрфікс - ніякіх падзелаў
                 break;
             case '(':
-                if (debugPhenomenon != null) {
+                if (debugRuleName != null) {
                     insideDebug = true;
                 } else {
                     throw new RuntimeException("Дужкі ў слове, але не абранае правіла для доследаў");
                 }
                 break;
             case ')':
-                if (debugPhenomenon != null) {
+                if (debugRuleName != null) {
                     insideDebug = false;
                 } else {
                     throw new RuntimeException("Дужкі ў слове, але не абранае правіла для доследаў");
                 }
                 break;
             case '-':
-                papiaredniHuk.padzielPasla = Huk.PADZIEL_MINUS;
+                if (papiaredniHuk != null) {
+                    papiaredniHuk.padzielPasla = Huk.PADZIEL_MINUS;
+                }
                 break;
             case GrammarDB2.pravilny_nacisk:
                 if (papiaredniHuk == null || !papiaredniHuk.halosnaja || papiaredniHuk.padzielPasla == Huk.PADZIEL_MINUS
@@ -751,17 +784,24 @@ public class Fanetyka3 implements IFanetyka {
         public int compareTo(Prystauka o) {
             return o.beg.length() - beg.length();
         }
+
+        @Override
+        public String toString() {
+            return beg + "=" + result;
+        }
     }
 
     static final List<Prystauka> PRYSTAUKI = new ArrayList<>();
+    static final Set<String> NIENACISKNYJA;
 
     static {
-        Pattern RE = Pattern.compile("(.+)=(.*) #.+");
+        Pattern RE_P = Pattern.compile("(.+)=(.*) #.+");
+        Pattern RE_N = Pattern.compile("[A-Z]/(.+)");
 
         try (BufferedReader rd = new BufferedReader(new InputStreamReader(Fanetyka3.class.getResourceAsStream("prystauki.txt"), StandardCharsets.UTF_8))) {
             String s;
             while ((s = rd.readLine()) != null) {
-                Matcher m = RE.matcher(s);
+                Matcher m = RE_P.matcher(s);
                 if (!m.matches()) {
                     throw new Exception(s);
                 }
@@ -776,5 +816,20 @@ public class Fanetyka3 implements IFanetyka {
             throw new ExceptionInInitializerError(ex);
         }
         Collections.sort(PRYSTAUKI);
+
+        Set<String> nienacisknyja = new HashSet<>();
+        try (BufferedReader rd = new BufferedReader(new InputStreamReader(Fanetyka3.class.getResourceAsStream("nienacisknyja.txt"), StandardCharsets.UTF_8))) {
+            String s;
+            while ((s = rd.readLine()) != null) {
+                Matcher m = RE_N.matcher(s);
+                if (!m.matches()) {
+                    throw new Exception(s);
+                }
+                nienacisknyja.add(m.group(1));
+            }
+        } catch (Exception ex) {
+            throw new ExceptionInInitializerError(ex);
+        }
+        NIENACISKNYJA = Collections.unmodifiableSet(nienacisknyja);
     }
 }

@@ -38,7 +38,7 @@ public class Cell {
 
     @Override
     public String toString() {
-        return COL_NAMES.get(col) + row;
+        return COL_NAMES.get(col) + (row + 1);
     }
 
     public static void main(String[] args) {
