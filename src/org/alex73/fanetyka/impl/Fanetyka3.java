@@ -39,12 +39,9 @@ public class Fanetyka3 implements IFanetyka {
     final List<Huk> huki = new ArrayList<>();
 
     private boolean insideDebug = false;
-    protected final String debugPhenomenon;
+    protected String debugPhenomenon;
+    protected IVerbalizer verbalizer;
     public List<String> logPhenomenon = new ArrayList<>(); // log of phonetic phenomenon
-
-    public Fanetyka3(FanetykaConfig config) throws Exception {
-        this(config, null);
-    }
 
     /**
      * Create phonetic converted instance using config.
@@ -53,9 +50,19 @@ public class Fanetyka3 implements IFanetyka {
      * @param debugPhenomenon - which phonetic phenomenon to debug. Some letters
      *                        should be marked by () for debugging
      */
-    public Fanetyka3(FanetykaConfig config, String debugPhenomenon) throws Exception {
+    public Fanetyka3(FanetykaConfig config) throws Exception {
         this.config = config;
+    }
+
+    /**
+     * Debug some cases.
+     */
+    public void setDebugPhenomenon(String debugPhenomenon) {
         this.debugPhenomenon = debugPhenomenon;
+    }
+
+    public void setVerbalizer(IVerbalizer verbalizer) {
+        this.verbalizer = verbalizer;
     }
 
     /**
@@ -71,6 +78,9 @@ public class Fanetyka3 implements IFanetyka {
      * Conversion of words into a phonetic representation.
      */
     public void calcFanetyka() throws Exception {
+        if (verbalizer != null) {
+            verbalizer.process(words);
+        }
         prepareWordsForProcessing();
 
         String prev = toString();
@@ -196,6 +206,23 @@ public class Fanetyka3 implements IFanetyka {
             }
         }
         return out.toString().trim();
+    }
+
+    /**
+     * Convert to list of sounds.
+     */
+    public List<String> toSoundList(Function<Huk, String> hukConverter) {
+        List<String> result = new ArrayList<String>();
+        for (Huk huk : huki) {
+            result.add(hukConverter.apply(huk));
+            if ((huk.padzielPasla & (Huk.PADZIEL_SLOVY | Huk.PADZIEL_PRYNAZOUNIK)) != 0) {
+                result.add(" ");
+            }
+        }
+        if (!result.isEmpty() && result.get(result.size() - 1).isBlank()) {
+            result.remove(result.size() - 1);
+        }
+        return result;
     }
 
     /**
@@ -400,8 +427,10 @@ public class Fanetyka3 implements IFanetyka {
 
                     if (p.result.endsWith("/")) {
                         // гэта прыстаўка - правяраем, ці магчымая яна ў гэтым слове
-                        char nextLetter = wl.charAt(skipLength );
-                        char nextLetter2 = wl.charAt(skipLength+1);
+                        char nextLetter =  wl.charAt(skipLength) ;
+                        char nextLetter2 =  wl.charAt(skipLength + 1) ;
+                        //char nextLetter = skipLength < wl.length() ? wl.charAt(skipLength) : '\0';
+                        //char nextLetter2 = skipLength + 1 < wl.length() ? wl.charAt(skipLength + 1) : '\0';
                         if (p.beg.endsWith("й")) {
                             // прыстаўка
                         } else if (nextLetter == GrammarDB2.pravilny_apostraf
@@ -589,10 +618,14 @@ public class Fanetyka3 implements IFanetyka {
                 }
                 break;
             case '/':
-                papiaredniHuk.padzielPasla = Huk.PADZIEL_PRYSTAUKA;
+                //if (papiaredniHuk != null) {
+                    papiaredniHuk.padzielPasla = Huk.PADZIEL_PRYSTAUKA;
+                //}
                 break;
             case '|':
-                papiaredniHuk.padzielPasla = Huk.PADZIEL_KARANI;
+                //if (papiaredniHuk != null) {
+                    papiaredniHuk.padzielPasla = Huk.PADZIEL_KARANI;
+                //}
                 break;
             case '{':
             case '}':
@@ -613,7 +646,9 @@ public class Fanetyka3 implements IFanetyka {
                 }
                 break;
             case '-':
-                papiaredniHuk.padzielPasla = Huk.PADZIEL_MINUS;
+               // if (papiaredniHuk != null) {
+                    papiaredniHuk.padzielPasla = Huk.PADZIEL_MINUS;
+                //}
                 break;
             case GrammarDB2.pravilny_nacisk:
                 if (papiaredniHuk == null || !papiaredniHuk.halosnaja || papiaredniHuk.padzielPasla == Huk.PADZIEL_MINUS
