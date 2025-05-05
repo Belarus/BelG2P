@@ -109,7 +109,7 @@ public class TsvCrossConfig implements IConfig {
                         w = w.trim();
                         if (w.isEmpty()) {
                         } else if (w.matches("\\-[0-9]+")) {
-                        } else if (w.equals("0")) {
+                        } else if (w.equals("×")) {
                             // TODO не мусіць быць такіх спалучэнняў
                         } else if (w.equals("-")) {
                             // змягчэння не адбываецца
