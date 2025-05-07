@@ -138,6 +138,8 @@ public class Fanetyka3 implements IFanetyka {
                 }
                 // яканне адбываецца калі ў наступным слове націск прыпадае на першы склад,
                 // альбо нават у трэцім слове: "ня ў лад", "ня з ім"
+                // Яканне адбываецца толькі ў некаторых часціцах і прыназоўніках, і не адбываецца ў астатніх: "дзе вёска"(але "ня вёска"),
+                // таму яканне не ўзнікае ад прыляпляння прыназоўнікаў да назоўнікаў.
                 switch (wl) {
                 case "не":
                     appendToNextWord = true;
@@ -441,7 +443,11 @@ public class Fanetyka3 implements IFanetyka {
                         }
                     }
 
-                    logPhenomenon.add("Мяркуем, што прыстаўка '" + p.result + "'");
+                    if (p.result.isEmpty()) {
+                        logPhenomenon.add("Мяркуем, што няма прыстаўкі");
+                    } else {
+                        logPhenomenon.add("Мяркуем, што прыстаўка '" + p.result + "'");
+                    }
                     w = StressUtils.setUsuallyStress(w);
                     int stress = StressUtils.getStressFromStart(w);
                     wl = p.result + wl.substring(skipLength);

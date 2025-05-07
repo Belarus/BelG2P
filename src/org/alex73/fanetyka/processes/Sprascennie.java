@@ -47,7 +47,7 @@ public class Sprascennie {
         return "";
     }
 
-    @ProcessCase("Спрашчэнне: с-с-к -> c-к не на стыку")
+    @ProcessCase("Спрашчэнне: с/ш/х-с-к -> c-к не на стыку")
     public String ssks(Huk h1, Huk h2, ProcessContext context) {
         vydalicPapiaredni(context, 1);
         return "";
@@ -235,6 +235,12 @@ public class Sprascennie {
     public String ts(Huk huk, ProcessContext context) {
         huk.bazavyHuk = BAZAVY_HUK.ц;
         vydalicNastupny(context, 0);
+        return "";
+    }
+
+    @ProcessCase("Пераход: т-с на мяжы -> ц-с")
+    public String ts_miaza(Huk huk, ProcessContext context) {
+        huk.bazavyHuk = BAZAVY_HUK.ц;
         return "";
     }
 
