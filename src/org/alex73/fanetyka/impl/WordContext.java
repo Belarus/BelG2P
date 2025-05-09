@@ -36,7 +36,7 @@ public class WordContext {
     private final WordContext nextWord;
     private boolean appendToNextWord;
     protected List<Huk> huki = new ArrayList<>();
-    protected int debugBegin = -1, debugEnd = -1;
+    protected float debugPartBegin = 0, debugPartEnd = 0; // if debug, value will be from 0 to 1 - position in word
 
     public WordContext(GrammarFinder finder, String wordToProcess, WordContext nextWord, Consumer<String> logger) {
         this.finder = finder;
@@ -44,21 +44,72 @@ public class WordContext {
         this.word = wordToProcess;
         this.nextWord = nextWord;
 
-        standartnyjaApostrafyNaciski();
+        zamienaSimvalau();
         fanetykaBazy();
-        if (!huki.isEmpty()) {
-            return; // ужо стварылі фанетыку
+        if (huki.isEmpty()) { // фанетыка не ўзялася з базы
+            String wlower = word.toLowerCase();
+            if (wlower.equals("ў") || NIENACISKNYJA.contains(wlower)) {
+                // Простыя ненаціскныя словы - не бяром націск і прыстаўкі з базы.
+            } else {
+                // Звычайныя словы - глядзім базу.
+                word = zBazy(word);
+            }
+            checkNextWord();
+            stvarajemBazavyjaHuki();
         }
+    }
 
-        String wlower = word.toLowerCase();
-        if (wlower.equals("ў") || NIENACISKNYJA.contains(wlower)) {
-            // Простыя ненаціскныя словы - не бяром націск і прыстаўкі з базы.
-        } else {
-            // Звычайныя словы - глядзім базу.
-            word = zBazy(word);
+    /**
+     * This method fixes stress chars and apostrophes to correct char code. Also, it
+     * retrieves debug positions.
+     */
+    private void zamienaSimvalau() {
+        int debugBegin = -1, debugEnd = -1;
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < word.length(); i++) {
+            char c = word.charAt(i);
+            if (c == '(') {
+                debugBegin = s.length();
+            } else if (c == ')') {
+                debugEnd = s.length();
+            } else {
+                if (usie_apostrafy.indexOf(c) >= 0) {
+                    c = GrammarDB2.pravilny_apostraf;
+                }
+                if (usie_naciski.indexOf(c) >= 0) {
+                    c = GrammarDB2.pravilny_nacisk;
+                }
+                s.append(c);
+            }
         }
-        checkNextWord();
-        stvarajemBazavyjaHuki();
+        word = s.toString();
+        if (word.length() >= 0) {
+            if (debugBegin < 0 && debugEnd >= 0) {
+                debugBegin = 0;
+            }
+            if (debugBegin >= 0 && debugEnd < 0) {
+                debugEnd = word.length();
+            }
+            if (debugBegin >= 0) {
+                debugPartBegin = debugBegin * 1.0f / word.length();
+            } else {
+                debugPartBegin = 0;
+            }
+            if (debugEnd >= 0) {
+                debugPartEnd = debugEnd * 1.0f / word.length();
+            } else {
+                debugPartEnd = 0;
+            }
+        }
+    }
+
+    public boolean applyDebug(float from, float to) {
+        int debugBegin = Math.round(from * huki.size());
+        int debugEnd = Math.round(to * huki.size());
+        for (int i = debugBegin; i < debugEnd; i++) {
+            huki.get(i).debug = true;
+        }
+        return debugEnd == huki.size();
     }
 
     private void checkNextWord() {
@@ -288,12 +339,10 @@ public class WordContext {
                 papiaredniHuk = novyHuk;
             }
         }
+        huki.getLast().padzielPasla |= Huk.PADZIEL_SLOVY;
         if (nextWord != null) {
-            Huk aposni = huki.get(huki.size() - 1);
             if (appendToNextWord) {
-                aposni.padzielPasla = Huk.PADZIEL_PRYNAZOUNIK;
-            } else {
-                aposni.padzielPasla |= Huk.PADZIEL_SLOVY; // TODO калі дадаем да наступнага слова - то іншы падзел
+                huki.getLast().padzielPasla |= Huk.PADZIEL_PRYNAZOUNIK;
             }
         }
     }
@@ -364,38 +413,22 @@ public class WordContext {
     /**
      * Ці прыпадае ў гэтым слове націск на першы склад ?
      */
-    boolean naciskNaPiersySklad() { // TODO не з ім - ці пераходзіць у ня ?
-        // TODO націск трэба вызначаць па фанетыцы, бо можа перароблена
-        if (StressUtils.syllCount(word) == 0) {
-            // Не ўлічваем "ў", "з" - бяром з наступнага слова, бо "не з ім" - мусіць
-            // пераходзіць не->ня.
-            if (nextWord != null) {
-                return nextWord.naciskNaPiersySklad();
-            } else {
-                // наступнага слова няма
-                return false;
+    boolean naciskNaPiersySklad() {
+        // на які склад націск ?
+        for (Huk h : huki) {
+            if (h.halosnaja) {
+                return h.stress;
             }
+        }
+        // Слова без галосных - магчыма прыназоўнік.
+        // Не ўлічваем "ў", "з" - бяром з наступнага слова, бо "не з ім" - мусіць
+        // пераходзіць у "ня з ім".
+        if (nextWord != null) {
+            return nextWord.naciskNaPiersySklad();
         } else {
-            // ці прыпадае на першы склад у гэтым слове ?
-            return StressUtils.getStressFromStart(word) == 0;
+            // наступнага слова няма
+            return false;
         }
-    }
-
-    /**
-     * This method fixes stress chars and apostrophes to correct char code.
-     */
-    protected void standartnyjaApostrafyNaciski() {
-        StringBuilder s = new StringBuilder();
-        for (char c : word.toCharArray()) {
-            if (usie_apostrafy.indexOf(c) >= 0) {
-                c = GrammarDB2.pravilny_apostraf;
-            }
-            if (usie_naciski.indexOf(c) >= 0) {
-                c = GrammarDB2.pravilny_nacisk;
-            }
-            s.append(c);
-        }
-        word = s.toString();
     }
 
     /**

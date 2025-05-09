@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 import org.alex73.grammardb.GrammarDB2;
@@ -156,5 +157,54 @@ public class WordContextTest {
 
         WordContext wcy = new WordContext(finder, "ўяўны", null, logger);
         assertEquals("ўя+ўны".replace('+', '\u0301'), wcy.word);
+    }
+
+    private void checkDebug(List<WordContext> words, String... debugs) {
+        assertEquals(words.size(), debugs.length);
+        for (int i = 0; i < words.size(); i++) {
+            List<Huk> huki = words.get(i).huki;
+            assertEquals(huki.size(), debugs[i].length());
+            StringBuilder real = new StringBuilder();
+            for (int j = 0; j < huki.size(); j++) {
+                real.append(huki.get(j).debug ? '+' : '-');
+            }
+            assertEquals(debugs[i], real.toString());
+        }
+    }
+
+    @Test
+    public void debugInsideOne() throws Exception {
+        List<WordContext> words = List.of(new WordContext(emptyFinder, "н(ов)ы", null, logger));
+        Fanetyka3.applyDebug(words);
+        checkDebug(words, "-++-");
+    }
+
+    @Test
+    public void debugStartOne() throws Exception {
+        List<WordContext> words = List.of(new WordContext(emptyFinder, "(нов)ы", null, logger));
+        Fanetyka3.applyDebug(words);
+        checkDebug(words, "+++-");
+    }
+
+    @Test
+    public void debugEndOne() throws Exception {
+        List<WordContext> words = List.of(new WordContext(emptyFinder, "н(овы)", null, logger));
+        Fanetyka3.applyDebug(words);
+        checkDebug(words, "-+++");
+    }
+
+    @Test
+    public void debugTwo() throws Exception {
+        List<WordContext> words = List.of(new WordContext(emptyFinder, "н(овы", null, logger), new WordContext(emptyFinder, "нов)ы", null, logger));
+        Fanetyka3.applyDebug(words);
+        checkDebug(words, "-+++", "+++-");
+    }
+
+    @Test
+    public void debugThree() throws Exception {
+        List<WordContext> words = List.of(new WordContext(emptyFinder, "н(овы", null, logger), new WordContext(emptyFinder, "новы", null, logger),
+                new WordContext(emptyFinder, "нов)ы", null, logger));
+        Fanetyka3.applyDebug(words);
+        checkDebug(words, "-+++", "++++", "+++-");
     }
 }

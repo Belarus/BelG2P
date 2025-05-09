@@ -4,16 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-/*
- * Праверыць - [й] перад галоснымі - гэта галосны ці змяніць на зычны
- * 
- * TODO зрабіць: н перад санорнымі не змякчаецца
- * 
- * TODO брск - бск (Акцябрскі)     стм - см (пластмаса)     мюзікл mʲuzʲikl
- * 
- * Спасылкі на кнігі:
- * Ф1989 - Фанетыка беларускай літаратурнай мовы / І.Р.Бурлыка,Л.Ц.Выгонная,Г.В.Лосік,А.І.Падлужны. - Мн. : Навука і тэхніка, 1989. - 335с.
- */
 public class Fanetyka3 implements IFanetyka {
     protected final FanetykaConfig config;
 
@@ -21,7 +11,6 @@ public class Fanetyka3 implements IFanetyka {
 
     protected final List<Huk> huki = new ArrayList<>();
 
-    private boolean insideDebug = false;
     protected String debugRuleName;
     public List<String> logPhenomenon = new ArrayList<>(); // log of phonetic phenomenon
 
@@ -87,14 +76,15 @@ public class Fanetyka3 implements IFanetyka {
     }
 
     /**
-     * Рыхтуем словы для працэсінга. Для кожнага слова знаходзім адпаведнае слова ў базе, і робім змены:
+     * Рыхтуем словы для працэсінга. Для кожнага слова знаходзім адпаведнае слова ў
+     * базе, і робім змены:
      *
-     * - З базы бяром: націскі, змены фанетыкі, дакладную фанетыку, пазначэнне межаў.
-     * - Пазначаем найбольш распаўсюджаныя прыстаўкі, калі слова няма ў базе.
-     * - Захоўваем пазначаныя карыстальнікам межы і націскі.
-     * - Дадаем яканне ў прыназоўнікі "без" і "не".
-     * - Пазначаем межы для некаторых прыназоўнікаў адмыслова, каб яны разглядаліся як частка слова.
-     * - Пазначаем месца дужак для debug.
+     * - З базы бяром: націскі, змены фанетыкі, дакладную фанетыку, пазначэнне
+     * межаў. - Пазначаем найбольш распаўсюджаныя прыстаўкі, калі слова няма ў базе.
+     * - Захоўваем пазначаныя карыстальнікам межы і націскі. - Дадаем яканне ў
+     * прыназоўнікі "без" і "не". - Пазначаем межы для некаторых прыназоўнікаў
+     * адмыслова, каб яны разглядаліся як частка слова. - Пазначаем месца дужак для
+     * debug.
      */
     protected void prepareWordsForProcessing() throws Exception {
         List<WordContext> words = new ArrayList<>();
@@ -108,12 +98,28 @@ public class Fanetyka3 implements IFanetyka {
         }
         words = words.reversed();
 
+        applyDebug(words);
+
         // збіраем гукі з усіх слоў
         for (WordContext w : words) {
             huki.addAll(w.huki);
         }
+    }
 
-        // TODO паставіць debug
+    static void applyDebug(List<WordContext> words) {
+        // пазначаем debug для гукаў
+        boolean inDebug = false;
+        for (WordContext w : words) {
+            boolean wordHasOwnDebug = w.debugPartEnd > 0;
+            if (wordHasOwnDebug) {
+                if (w.applyDebug(w.debugPartBegin, w.debugPartEnd)) {
+                    inDebug = true;
+                }
+            }
+            if (inDebug && !wordHasOwnDebug) {
+                w.applyDebug(0, 1);
+            }
+        }
     }
 
     /**
