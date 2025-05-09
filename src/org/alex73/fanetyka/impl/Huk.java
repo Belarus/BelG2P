@@ -8,10 +8,10 @@ import java.util.function.Function;
 
 public class Huk {
     public static final int PADZIEL_PRYSTAUKA = 1; // прыстаўка
-    public static final int PADZIEL_PRYNAZOUNIK = 16; // прыназоўнікі без, не, з, праз
+    public static final int PADZIEL_PRYNAZOUNIK = 16; // Прыназоўнікі без, не, з, праз. TODO Дадаецца разам з падзелам на словы ?
     public static final int PADZIEL_KARANI = 2;
     public static final int PADZIEL_SLOVY = 4;
-    public static final int PADZIEL_MINUS = 8;
+    public static final int PADZIEL_ZLUCOK = 8;
     public static final int MIAKKASC_ASIMILACYJNAJA = 1;
     public static final int MIAKKASC_PAZNACANAJA = 2;
     public static final int MASK_MIAKKASC_USIE = 3;

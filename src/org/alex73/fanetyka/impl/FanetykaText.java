@@ -53,7 +53,7 @@ public class FanetykaText {
 
     boolean isLetter(char c) {
         c = Character.toLowerCase(c);
-        return ("ёйцукенгшўзх'фывапролджэячсмітьбюґ|-\u0301" + Fanetyka3.usie_apostrafy + Fanetyka3.usie_naciski).indexOf(c) >= 0;
+        return ("ёйцукенгшўзх'фывапролджэячсмітьбюґ|-\u0301" + WordContext.usie_apostrafy + WordContext.usie_naciski).indexOf(c) >= 0;
     }
 
     public static void main(String[] a) throws Exception {

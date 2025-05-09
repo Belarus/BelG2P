@@ -120,7 +120,7 @@ public class ProcessCrossRunner implements IProcess {
     public static boolean miazaSlou(Huk h1, Huk h2, List<String> log, String debugHuki) {
         // ці ёсць мяжа ?
         switch (h1.padzielPasla) {
-        case Huk.PADZIEL_MINUS:
+        case Huk.PADZIEL_ZLUCOK:
         case Huk.PADZIEL_SLOVY:
             return true;
         }

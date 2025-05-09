@@ -155,7 +155,7 @@ public class TsvConfig implements IConfig {
                 readMultiMode(3, c, check.pasziel, Huk.PADZIEL_PRYSTAUKA | Huk.PADZIEL_PRYNAZOUNIK);
                 readMultiMode(4, c, check.pasziel, Huk.PADZIEL_KARANI);
                 readMultiMode(5, c, check.pasziel, Huk.PADZIEL_SLOVY);
-                readMultiMode(6, c, check.pasziel, Huk.PADZIEL_MINUS);
+                readMultiMode(6, c, check.pasziel, Huk.PADZIEL_ZLUCOK);
                 if (check.pasziel.maskYes != 0 && check.pasziel.maskNo != 0) {
                     err(c, 3, "Няправільная камбінацыя пазнак падзелаў");
                 }
