@@ -14,6 +14,7 @@ public class FanetykaText {
     public FanetykaText(GrammarFinder finder, String text) throws Exception {
         FanetykaConfig config = new FanetykaConfig(finder, null);
         String word = "";
+        List<String> words = new ArrayList<>();
         Fanetyka3 f = new Fanetyka3(config);
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
@@ -25,14 +26,15 @@ public class FanetykaText {
                 word += c;
             } else {
                 if (!word.isEmpty()) {
-                    f.addWord(word);
+                    words.add(word);
                     word = "";
                 } else if (c == ' ') {
                     ipa += c;
                     skola += c;
                 }
                 if (c != ' ') {
-                    f.calcFanetyka();
+                    f.calcFanetyka(words);
+                    words.clear();
                     ipa += f.toString(Huk.ipa);
                     skola += f.toString(Huk.skolny);
                     why.addAll(f.logPhenomenon);
@@ -43,9 +45,9 @@ public class FanetykaText {
             }
         }
         if (!word.isEmpty()) {
-            f.addWord(word);
+            words.add(word);
         }
-        f.calcFanetyka();
+        f.calcFanetyka(words);
         ipa += f.toString(Huk.ipa);
         skola += f.toString(Huk.skolny);
         why.addAll(f.logPhenomenon);

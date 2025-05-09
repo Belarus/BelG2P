@@ -327,22 +327,28 @@ public class WordContext {
             case GrammarDB2.pravilny_nacisk:
                 if (papiaredniHuk == null || !papiaredniHuk.halosnaja || papiaredniHuk.padzielPasla == Huk.PADZIEL_ZLUCOK
                         || papiaredniHuk.padzielPasla == Huk.PADZIEL_SLOVY) {
-                    throw new RuntimeException("Няправільная пазнака націску - пасля " + papiaredniHuk);
+                    if (!Huk.SKIP_ERRORS) {
+                        throw new RuntimeException("Няправільная пазнака націску - пасля " + papiaredniHuk);
+                    }
                 }
                 papiaredniHuk.stress = true;
                 break;
             default:
-                throw new RuntimeException("Невядомая літара: " + c);
+                if (!Huk.SKIP_ERRORS) {
+                    throw new RuntimeException("Невядомая літара: " + c);
+                }
             }
             if (novyHuk != null) {
                 huki.add(novyHuk);
                 papiaredniHuk = novyHuk;
             }
         }
-        huki.getLast().padzielPasla |= Huk.PADZIEL_SLOVY;
-        if (nextWord != null) {
-            if (appendToNextWord) {
-                huki.getLast().padzielPasla |= Huk.PADZIEL_PRYNAZOUNIK;
+        if (!huki.isEmpty()) {
+            huki.getLast().padzielPasla |= Huk.PADZIEL_SLOVY;
+            if (nextWord != null) {
+                if (appendToNextWord) {
+                    huki.getLast().padzielPasla |= Huk.PADZIEL_PRYNAZOUNIK;
+                }
             }
         }
     }
@@ -601,7 +607,7 @@ public class WordContext {
             while ((s = rd.readLine()) != null) {
                 Matcher m = RE_P.matcher(s);
                 if (!m.matches()) {
-                    throw new Exception(s);
+                    throw new ExceptionInInitializerError(s);
                 }
                 Prystauka p = new Prystauka();
                 p.beg = m.group(1).trim();
@@ -621,7 +627,7 @@ public class WordContext {
             while ((s = rd.readLine()) != null) {
                 Matcher m = RE_N.matcher(s);
                 if (!m.matches()) {
-                    throw new Exception(s);
+                    throw new ExceptionInInitializerError(s);
                 }
                 nienacisknyja.add(m.group(1));
             }

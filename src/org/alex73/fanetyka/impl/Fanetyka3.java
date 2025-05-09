@@ -4,10 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * Converter.
+ * 
+ * Class is not thread-safe.
+ */
 public class Fanetyka3 implements IFanetyka {
     protected final FanetykaConfig config;
 
-    protected final List<String> inputWords = new ArrayList<>();
+    protected List<String> inputWords;
 
     protected final List<Huk> huki = new ArrayList<>();
 
@@ -33,18 +38,13 @@ public class Fanetyka3 implements IFanetyka {
     }
 
     /**
-     * Add word to processing.
-     * 
-     * @param w - word text
-     */
-    public void addWord(String w) {
-        inputWords.add(w);
-    }
-
-    /**
      * Conversion of words into a phonetic representation.
      */
-    public void calcFanetyka() throws Exception {
+    public void calcFanetyka(List<String> inputWords) throws Exception {
+        if (this.inputWords != null) {
+            throw new Exception("You need to create new converter instance to process new words");
+        }
+        this.inputWords = inputWords;
         prepareWordsForProcessing();
 
         String prev = toString();

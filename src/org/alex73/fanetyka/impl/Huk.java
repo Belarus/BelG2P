@@ -38,6 +38,7 @@ public class Huk {
     /** Гэты гук павінен быць аддзелены ад наступнага, бо гэта апошні гук прыстаўкі. */
     public int padzielPasla;
 
+    public static boolean SKIP_ERRORS = false; // не спыняць працу пры памылках канвертавання
     public boolean debug; // debug not applied processes
 
     static final Map<IPA, String> ARFAEP_MAP = new HashMap<>();
@@ -58,7 +59,9 @@ public class Huk {
     public void setMiakkasc(boolean m) {
         if (miakki == MIAKKASC_PAZNACANAJA && bazavyHuk == BAZAVY_HUK.ы) {
             if (!m) {
-                throw new RuntimeException("Спроба асіміляцыйнай цвёрдасці ў пазначаным мяккім");
+                if (!SKIP_ERRORS) {
+                    throw new RuntimeException("Спроба асіміляцыйнай цвёрдасці ў пазначаным мяккім");
+                }
             }
         } else {
             miakki = m ? MIAKKASC_ASIMILACYJNAJA : 0;
@@ -126,14 +129,14 @@ public class Huk {
         case э:
             return IPA.ɛ;
         case дж:
-            if (h.miakki != 0) {
+            if (h.miakki != 0 && !SKIP_ERRORS) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.d͡ʐ;
         case дз:
             return h.miakki == 0 ? IPA.d͡z : IPA.d͡zʲ;
         case ж:
-            if (h.miakki != 0) {
+            if (h.miakki != 0 && !SKIP_ERRORS) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.ʐ;
@@ -148,7 +151,7 @@ public class Huk {
         case м:
             return h.miakki == 0 ? IPA.m : IPA.mʲ;
         case ɱ:
-            if (h.miakki != 0) {
+            if (h.miakki != 0 && !SKIP_ERRORS) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.ɱ;
@@ -159,7 +162,7 @@ public class Huk {
         case п:
             return h.miakki == 0 ? IPA.p : IPA.pʲ;
         case р:
-            if (h.miakki != 0) {
+            if (h.miakki != 0 && !SKIP_ERRORS) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.r;
@@ -170,7 +173,7 @@ public class Huk {
         case у:
             return IPA.u;
         case ў:
-            if (h.miakki != 0) {
+            if (h.miakki != 0 && !SKIP_ERRORS) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.u̯;
@@ -181,17 +184,17 @@ public class Huk {
         case ц:
             return h.miakki == 0 ? IPA.t͡s : IPA.t͡sʲ;
         case ч:
-            if (h.miakki != 0) {
+            if (h.miakki != 0 && !SKIP_ERRORS) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.t͡ʂ;
         case ш:
-            if (h.miakki != 0) {
+            if (h.miakki != 0 && !SKIP_ERRORS) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.ʂ;
         case ы:
-            if (h.miakki != 0) {
+            if (h.miakki != 0 && !SKIP_ERRORS) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
             return IPA.ɨ;
@@ -314,7 +317,7 @@ public class Huk {
                 huk = new Huk(s.substring(0, 1), BAZAVY_HUK.л);
                 break;
             case 'l':
-                if (c1 != 'ʲ') {
+                if (c1 != 'ʲ' && !SKIP_ERRORS) {
                     throw new RuntimeException("Няправільнае аднаўленне гуку: " + s);
                 }
                 huk = new Huk(s.substring(0, 2), BAZAVY_HUK.л);

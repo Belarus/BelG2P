@@ -263,7 +263,7 @@ public class ProcessRunner implements IProcess {
         case DONT_CARE:
             return true;
         case ERROR:
-            if (value) {
+            if (value && !Huk.SKIP_ERRORS) {
                 throw new RuntimeException("У з'яве '%s' не можа выконвацца ўмова '%s'".formatted(zjava, umova));
             }
             return true;
@@ -277,7 +277,7 @@ public class ProcessRunner implements IProcess {
     }
 
     static boolean checkValue(String zjava, String umova, Case.MultiMode mode, int value) {
-        if ((mode.maskError & value) != 0) {
+        if ((mode.maskError & value) != 0  && !Huk.SKIP_ERRORS) {
             throw new RuntimeException("У з'яве '%s' не можа выконвацца ўмова '%s' у значэнні %d".formatted(zjava, umova, value));
         }
 

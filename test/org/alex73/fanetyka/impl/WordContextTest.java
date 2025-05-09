@@ -207,4 +207,9 @@ public class WordContextTest {
         Fanetyka3.applyDebug(words);
         checkDebug(words, "-+++", "++++", "+++-");
     }
+
+    @Test
+    public void empty() throws Exception {
+        new WordContext(emptyFinder, "", null, logger);
+    }
 }
