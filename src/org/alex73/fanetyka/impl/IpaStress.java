@@ -5,7 +5,7 @@ import java.util.List;
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 
 /**
- * Выстаўляе націск па IPA-стандарце - перад складам.
+ * Handles stress placement using the IPA standard, placing stress before the syllable.
  */
 public class IpaStress {
     /**

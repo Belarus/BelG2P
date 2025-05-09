@@ -22,8 +22,12 @@ import org.alex73.fanetyka.processes.SypiacyjaSvisciacyja;
 import org.alex73.fanetyka.processes.UstaunyA;
 import org.alex73.grammardb.GrammarFinder;
 
+/**
+ * Configuration class for Fanetyka processes. This class initializes and
+ * manages various phonetic processes and their configurations.
+ */
 public class FanetykaConfig {
-    protected final GrammarFinder finder;
+    protected final GrammarFinder finder; // GrammarFinder instance for managing grammar-related operations.
 
     protected final ProcessPrykladyRunner processPryklady;
     protected final ProcessCrossRunner processMiakkasc;

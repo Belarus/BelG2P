@@ -9,7 +9,7 @@ import java.util.function.Function;
  * 
  * Class is not thread-safe.
  */
-public class Fanetyka3 implements IFanetyka {
+public class Fanetyka3 {
     protected final FanetykaConfig config;
 
     protected List<String> inputWords;

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 public class Huk {
@@ -25,7 +26,7 @@ public class Huk {
         pʲ, r, s, sʲ, t, tʲ, u, u̯, f, fʲ, x, xʲ, t͡s, t͡sʲ, t͡ʂ, ʂ, ɨ, j
     }
 
-    public List<IPA> sanornyja = Arrays.asList(IPA.r, IPA.ɫ, IPA.lʲ, IPA.m, IPA.mʲ, IPA.n, IPA.nʲ, IPA.v, IPA.vʲ, IPA.β, IPA.βʲ, IPA.ɱ, IPA.u̯, IPA.j);
+    public Set<IPA> sanornyja = Set.of(IPA.r, IPA.ɫ, IPA.lʲ, IPA.m, IPA.mʲ, IPA.n, IPA.nʲ, IPA.v, IPA.vʲ, IPA.β, IPA.βʲ, IPA.ɱ, IPA.u̯, IPA.j);
 
     public String zychodnyjaLitary;
     public BAZAVY_HUK bazavyHuk;
@@ -43,10 +44,6 @@ public class Huk {
 
     static final Map<IPA, String> ARFAEP_MAP = new HashMap<>();
     static final Map<IPA, String> SKOLNY_MAP = new HashMap<>();
-
-    static {
-        initMaps();
-    }
 
     public Huk(String z, BAZAVY_HUK b) {
         zychodnyjaLitary = z;
@@ -75,21 +72,17 @@ public class Huk {
 
     public boolean isZvonki() {
         if (miakki != 0) {
-            return bazavyHuk == BAZAVY_HUK.б || bazavyHuk == BAZAVY_HUK.д || bazavyHuk == BAZAVY_HUK.дз || bazavyHuk == BAZAVY_HUK.з
-                    || bazavyHuk == BAZAVY_HUK.ґ || bazavyHuk == BAZAVY_HUK.г;
+            return Set.of(BAZAVY_HUK.б, BAZAVY_HUK.д, BAZAVY_HUK.дз, BAZAVY_HUK.з, BAZAVY_HUK.ґ, BAZAVY_HUK.г).contains(bazavyHuk);
         } else {
-            return bazavyHuk == BAZAVY_HUK.б || bazavyHuk == BAZAVY_HUK.д || bazavyHuk == BAZAVY_HUK.дз || bazavyHuk == BAZAVY_HUK.з
-                    || bazavyHuk == BAZAVY_HUK.ж || bazavyHuk == BAZAVY_HUK.дж || bazavyHuk == BAZAVY_HUK.г || bazavyHuk == BAZAVY_HUK.ґ;
+            return Set.of(BAZAVY_HUK.б, BAZAVY_HUK.д, BAZAVY_HUK.дз, BAZAVY_HUK.з, BAZAVY_HUK.ж, BAZAVY_HUK.дж, BAZAVY_HUK.г, BAZAVY_HUK.ґ).contains(bazavyHuk);
         }
     }
 
     public boolean isHluchi() {
         if (miakki != 0) {
-            return bazavyHuk == BAZAVY_HUK.п || bazavyHuk == BAZAVY_HUK.ц || bazavyHuk == BAZAVY_HUK.с || bazavyHuk == BAZAVY_HUK.к || bazavyHuk == BAZAVY_HUK.х
-                    || bazavyHuk == BAZAVY_HUK.ф;
+            return Set.of(BAZAVY_HUK.п, BAZAVY_HUK.ц, BAZAVY_HUK.с, BAZAVY_HUK.к, BAZAVY_HUK.х, BAZAVY_HUK.ф).contains(bazavyHuk);
         } else {
-            return bazavyHuk == BAZAVY_HUK.п || bazavyHuk == BAZAVY_HUK.т || bazavyHuk == BAZAVY_HUK.ц || bazavyHuk == BAZAVY_HUK.с || bazavyHuk == BAZAVY_HUK.ш
-                    || bazavyHuk == BAZAVY_HUK.ч || bazavyHuk == BAZAVY_HUK.х || bazavyHuk == BAZAVY_HUK.к || bazavyHuk == BAZAVY_HUK.ф;
+            return Set.of(BAZAVY_HUK.п, BAZAVY_HUK.т, BAZAVY_HUK.ц, BAZAVY_HUK.с, BAZAVY_HUK.ш, BAZAVY_HUK.ч, BAZAVY_HUK.х, BAZAVY_HUK.к, BAZAVY_HUK.ф).contains(bazavyHuk);
         }
     }
 
@@ -98,11 +91,11 @@ public class Huk {
 //            // небываюць мяккімі
 //            return false;
 //        }
-        return bazavyHuk == BAZAVY_HUK.ш || bazavyHuk == BAZAVY_HUK.ж || bazavyHuk == BAZAVY_HUK.дж || bazavyHuk == BAZAVY_HUK.ч;
+        return Set.of(BAZAVY_HUK.ш, BAZAVY_HUK.ж, BAZAVY_HUK.дж, BAZAVY_HUK.ч).contains(bazavyHuk);
     }
 
     public boolean isSvisciacy() {
-        return bazavyHuk == BAZAVY_HUK.с || bazavyHuk == BAZAVY_HUK.з || bazavyHuk == BAZAVY_HUK.дз || bazavyHuk == BAZAVY_HUK.ц;
+        return Set.of(BAZAVY_HUK.с, BAZAVY_HUK.з, BAZAVY_HUK.дз, BAZAVY_HUK.ц).contains(bazavyHuk);
     }
 
     @Override
@@ -228,12 +221,7 @@ public class Huk {
         } else if (s.startsWith("t͡s")) {
             huk = new Huk(s.substring(0, 3), BAZAVY_HUK.ц);
         } else {
-            char c1;
-            try {
-                c1 = s.charAt(1);
-            } catch (StringIndexOutOfBoundsException ex) {
-                c1 = 0;
-            }
+            char c1 = s.length() > 1 ? s.charAt(1) : 0;
             switch (s.charAt(0)) {
             case 'ˈ':
                 context.stress = true;
@@ -429,7 +417,7 @@ public class Huk {
         }
     }
 
-    static void initMaps() {
+    static {
         SKOLNY_MAP.put(IPA.a, "а");
         SKOLNY_MAP.put(IPA.b, "б");
         SKOLNY_MAP.put(IPA.bʲ, "б'");
