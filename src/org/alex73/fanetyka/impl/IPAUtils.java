@@ -338,10 +338,27 @@ public class IPAUtils {
             context.stress = false;
         }
         String sipa = Huk.ipa.apply(huk);
+        context.fan = context.fan.substring(sipa.length());
+
+        char cafter = context.fan.length() > 0 ? context.fan.charAt(0) : 0;
+        if (cafter == 'ː') {
+            huk.padvojeny = true;
+            huk.zychodnyjaLitary = huk.zychodnyjaLitary + "ː";
+            context.fan = context.fan.substring(1);
+            sipa += cafter;
+        }
+
         if (!s.startsWith(sipa) || !sipa.equals(huk.zychodnyjaLitary)) {
             throw new RuntimeException("Няправільнае аднаўленне гуку: " + Huk.ipa.apply(huk) + " => " + s);
         }
-        context.fan = context.fan.substring(sipa.length());
+
+        char cspace = context.fan.length() > 0 ? context.fan.charAt(0) : 0;
+        if (cspace == ' ') {
+            huk.padzielPasla |= Huk.PADZIEL_SLOVY;
+            context.fan = context.fan.substring(1);
+            sipa += cspace;
+        }
+
         return huk;
     }
 
