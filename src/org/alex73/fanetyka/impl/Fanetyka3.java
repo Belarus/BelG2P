@@ -72,7 +72,7 @@ public class Fanetyka3 {
                 throw new RuntimeException("Зашмат крокаў канверсіі");
             }
         }
-        IpaStress.setIpaStress(huki, this);
+        IPAUtils.setIpaStress(huki, this);
     }
 
     /**

@@ -35,7 +35,7 @@ public class WordContext {
     public String word;
     private final WordContext nextWord;
     private boolean appendToNextWord;
-    protected List<Huk> huki = new ArrayList<>();
+    protected List<Huk> huki;
     protected float debugPartBegin = 0, debugPartEnd = 0; // if debug, value will be from 0 to 1 - position in word
 
     public WordContext(GrammarFinder finder, String wordToProcess, WordContext nextWord, Consumer<String> logger) {
@@ -46,7 +46,7 @@ public class WordContext {
 
         zamienaSimvalau();
         fanetykaBazy();
-        if (huki.isEmpty()) { // фанетыка не ўзялася з базы
+        if (huki == null) { // фанетыка не ўзялася з базы
             String wlower = word.toLowerCase();
             if (wlower.equals("ў") || NIENACISKNYJA.contains(wlower)) {
                 // Простыя ненаціскныя словы - не бяром націск і прыстаўкі з базы.
@@ -151,6 +151,7 @@ public class WordContext {
      * мяккі знак як мяккасьць папярэдняга гуку.
      */
     void stvarajemBazavyjaHuki() {
+        huki = new ArrayList<>();
         String wl = word.toLowerCase();
         Huk papiaredniHuk = null;
         for (int i = 0; i < wl.length(); i++) {
@@ -355,7 +356,7 @@ public class WordContext {
 
     void dadacJotKaliPatrebny(Huk papiaredni, char current, char next) {
         boolean add = false;
-//TODO а калі прыназоўнік ?
+
         boolean pacatakSlova = papiaredni == null || papiaredni.padzielPasla == Huk.PADZIEL_SLOVY;
         switch (current) {
         case 'і':
@@ -382,7 +383,7 @@ public class WordContext {
         case 'я':
             if (pacatakSlova || papiaredni.halosnaja || papiaredni.apostrafPasla || papiaredni.miakki != 0 || papiaredni.zychodnyjaLitary.equals("ў")
                     || papiaredni.padzielPasla != 0 || "тдржшч".indexOf(papiaredni.zychodnyjaLitary) >= 0) {
-                add = true;// TODO а калі прыназоўнік ?
+                add = true;
             }
             break;
         }
@@ -403,17 +404,8 @@ public class WordContext {
             return;
         }
         logger.accept("Адмысловая фанетыка з базы: " + fan);
-        Huk.ParseIpaContext p = new Huk.ParseIpaContext(fan);
-        while (p.fan.length() > 0) {
-            Huk h = Huk.parseIpa(p);
-            if (h != null) {
-                huki.add(h);
-            }
-        }
-        if (p.stress) {
-            throw new RuntimeException("Няправільнае аднаўленне націску: " + word);
-        }
-        huki.get(huki.size() - 1).padzielPasla = Huk.PADZIEL_SLOVY;
+        huki = IPAUtils.parseIpa(fan);
+        huki.getLast().padzielPasla = Huk.PADZIEL_SLOVY;
     }
 
     /**
