@@ -5,9 +5,9 @@ import org.alex73.fanetyka.impl.Huk;
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 
 public class BilabijalnyV {
-    @ProcessCase("Білабіяльны 'в'")
-    public String b(Huk huk) {
+    @ProcessCase(name = "Білабіяльны 'в'", logCountBefore = 1, logCountAfter = 1)
+    public boolean b(Huk huk) {
         huk.bazavyHuk = BAZAVY_HUK.β;
-        return "в -> β";
+        return true;
     }
 }

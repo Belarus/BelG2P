@@ -5,9 +5,9 @@ import org.alex73.fanetyka.impl.Huk;
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 
 public class HubnaZubnyM {
-    @ProcessCase("Губна-зубны 'м'")
-    public String m(Huk huk) {
+    @ProcessCase(name = "Губна-зубны 'м'", logCountBefore = 1, logCountAfter = 1)
+    public boolean m(Huk huk) {
         huk.bazavyHuk = BAZAVY_HUK.ɱ;
-        return "м -> ɱ";
+        return true;
     }
 }

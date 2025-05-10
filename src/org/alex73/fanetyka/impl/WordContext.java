@@ -458,6 +458,7 @@ public class WordContext {
         }
 
         if (fromDB == null) {
+            logger.accept("Слова не знойдзена ў базе: " + w);
             // не знайшлі ў базе - прастаўляем націскі на о, ё
             int p = w.indexOf('о');
             if (p < 0) {

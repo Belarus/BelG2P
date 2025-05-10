@@ -35,28 +35,25 @@ public class SypiacyjaSvisciacyja {
         }
     }
 
-    @ProcessCase("Пераход шыпячых ц/дз у свісцячыя")
-    public String sycdz(Huk huk) {
+    @ProcessCase(name = "Пераход шыпячых ц/дз у свісцячыя", logCountBefore = 2, logCountAfter = 2)
+    public boolean sycdz(Huk huk) {
         BAZAVY_HUK replaceTo = sypiacyja2svisciacyja.get(huk.bazavyHuk);
-        String log = huk.bazavyHuk.name() + "->" + replaceTo.name();
         huk.bazavyHuk = replaceTo;
-        return log;
+        return true;
     }
 
-    @ProcessCase("Пераход шыпячых перад с/з у свісцячыя")
-    public String sysz(Huk huk) {
+    @ProcessCase(name = "Пераход шыпячых перад с/з у свісцячыя", logCountBefore = 2, logCountAfter = 2)
+    public boolean sysz(Huk huk) {
         BAZAVY_HUK replaceTo = sypiacyja2svisciacyja.get(huk.bazavyHuk);
-        String log = huk.bazavyHuk.name() + "->" + replaceTo.name();
         huk.bazavyHuk = replaceTo;
-        return log;
+        return true;
     }
 
-    @ProcessCase("Пераход свісцячых у шыпячыя")
-    public String sv(Huk huk) {
+    @ProcessCase(name = "Пераход свісцячых у шыпячыя", logCountBefore = 2, logCountAfter = 2)
+    public boolean sv(Huk huk) {
         BAZAVY_HUK replaceTo = svisciacyja2sypiacyja.get(huk.bazavyHuk);
-        String log = huk.bazavyHuk.name() + "->" + replaceTo.name();
         huk.bazavyHuk = replaceTo;
         huk.miakki = 0;
-        return log;
+        return true;
     }
 }

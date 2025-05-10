@@ -32,7 +32,7 @@ public class ProcessRunner implements IProcess {
         for (Method m : process.getMethods()) {
             ProcessCase ca = m.getAnnotation(ProcessCase.class);
             if (ca != null) {
-                if (methods.put(ca.value(), m) != null) {
+                if (methods.put(ca.name(), m) != null) {
                     throw new Exception("Duplicate cases in methods in class " + process.getSimpleName());
                 }
             }
@@ -126,10 +126,12 @@ public class ProcessRunner implements IProcess {
                 }
                 // спачатку выклікаем метад, і ён ужо можа выклікаць праверку па табліцы, пасля
                 // таго як сам зробіць іншыя праверкі
-                String before = instance.toString(Huk.ipa);
-                String change = (String) m.invoke(processor, parameters.toArray());
-                if (change != null) {
-                    instance.logPhenomenon.add(ca.name + ": " + ca.logMessage.replace("()", "(" + change + ")") + ": " + before + " -> " + instance.toString(Huk.ipa));
+                ProcessCase ann = m.getAnnotation(ProcessCase.class);
+                String before =context.dump(ann.logCountBefore());
+                boolean changed = (Boolean) m.invoke(processor, parameters.toArray());
+                if (changed) {
+                    String after = context.dump(ann.logCountAfter());
+                    instance.logPhenomenon.add(ca.name + ": [" + before + " -> " + after + "]. " + ca.logMessage);
                 }
             }
         }

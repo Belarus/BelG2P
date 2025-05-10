@@ -6,16 +6,16 @@ import org.alex73.fanetyka.impl.ProcessContext;
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 
 public class UstaunyA {
-    @ProcessCase("Устаўны 'а' перад цвёрдым 'р' пасля зычных акрамя р,j,ў")
-    public String r(ProcessContext context) {
+    @ProcessCase(name = "Устаўны 'а' перад цвёрдым 'р' пасля зычных акрамя р,j,ў", logCountBefore = 3, logCountAfter = 4)
+    public boolean r(ProcessContext context) {
         ustavicA(context, 1);
-        return "а";
+        return true;
     }
 
-    @ProcessCase("Устаўны 'а' перад мяккім 'л'")
-    public String l(ProcessContext context) {
+    @ProcessCase(name = "Устаўны 'а' перад мяккім 'л'", logCountBefore = 3, logCountAfter = 4)
+    public boolean l(ProcessContext context) {
         ustavicA(context, 1);
-        return "а";
+        return true;
     }
 
     private void ustavicA(ProcessContext context, int offsetFromCurrent) {

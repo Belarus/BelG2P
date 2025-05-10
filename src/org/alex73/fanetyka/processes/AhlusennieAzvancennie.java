@@ -26,25 +26,23 @@ public class AhlusennieAzvancennie {
         }
     }
 
-    @ProcessCase("Аглушэнне")
-    public String ahlusennie(Huk huk, Huk nastupny) {
+    @ProcessCase(name = "Аглушэнне", logCountBefore = 1, logCountAfter = 1)
+    public boolean ahlusennie(Huk huk, Huk nastupny) {
         BAZAVY_HUK replaceTo = ahlusennie.get(huk.bazavyHuk);
-        String log = huk.bazavyHuk.name() + "->" + replaceTo.name();
         huk.bazavyHuk = replaceTo;
-        return log;
+        return true;
     }
 
-    @ProcessCase("Азванчэнне ц->д")
-    public String azvancennieC(Huk huk, Huk nastupny) {
+    @ProcessCase(name = "Азванчэнне ц->д", logCountBefore = 1, logCountAfter = 1)
+    public boolean azvancennieC(Huk huk, Huk nastupny) {
         huk.bazavyHuk = BAZAVY_HUK.д;
-        return "ц->д";
+        return true;
     }
 
-    @ProcessCase("Азванчэнне")
-    public String azvancennie(Huk huk, Huk nastupny) {
+    @ProcessCase(name = "Азванчэнне", logCountBefore = 1, logCountAfter = 1)
+    public boolean azvancennie(Huk huk, Huk nastupny) {
         BAZAVY_HUK replaceTo = azvancennie.get(huk.bazavyHuk);
-        String log = huk.bazavyHuk.name() + "->" + replaceTo.name();
         huk.bazavyHuk = replaceTo;
-        return log;
+        return true;
     }
 }
