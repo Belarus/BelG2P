@@ -64,16 +64,16 @@ public class ProcessCrossRunner implements IProcess {
                 if (miazaSlou(h1, h2, instance.logPhenomenon, debugHuki)) {
                     if (zm.pierakrocvajeMiezySlou) {
                         h1.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                        instance.logPhenomenon.add("Мяккасць: адбылося змякчэнне " + h1.bazavyHuk);
+                        instance.logPhenomenon.add("Мяккасць: адбылося змякчэнне " + h1.bazavyHuk + ": " + instance);
                     }
                 } else if (miazaUsiaredzinieSlova(h1, h2, instance.logPhenomenon, debugHuki)) {
                     if (zm.pierakrocvajeMiezyUsizredzinieSlova) {
                         h1.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                        instance.logPhenomenon.add("Мяккасць: адбылося змякчэнне " + h1.bazavyHuk);
+                        instance.logPhenomenon.add("Мяккасць: адбылося змякчэнне " + h1.bazavyHuk + ": " + instance);
                     }
                 } else {
                     h1.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                    instance.logPhenomenon.add("Мяккасць: адбылося змякчэнне " + h1.bazavyHuk);
+                    instance.logPhenomenon.add("Мяккасць: адбылося змякчэнне " + h1.bazavyHuk + ": " + instance);
                 }
             }
         }
