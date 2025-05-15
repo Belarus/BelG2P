@@ -399,6 +399,10 @@ public class WordContext {
      * Калі ў базе прапісана адмысловая фанетыка для слова - выкарыстоўваем яе.
      */
     void fanetykaBazy() {
+        if (word.indexOf('ґ') > 0 || word.indexOf('Ґ') > 0) {
+            // калі ў слове ёсць 'ґ' - шукаем фанетыку ўсё ж для 'г'
+            word = word.toLowerCase().replace('ґ', 'г');
+        }
         String fan = finder.getFan(word);
         if (fan == null) {
             return;
