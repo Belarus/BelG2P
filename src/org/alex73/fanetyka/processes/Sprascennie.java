@@ -199,11 +199,8 @@ public class Sprascennie {
         return true;
     }
 
-    @ProcessCase(name = "Прыпадабненне свісцячых-шыпячых",logCountBefore = 2, logCountAfter = 2)
+    @ProcessCase(name = "Прыпадабненне свісцячых па мяккасці",logCountBefore = 2, logCountAfter = 2)
     public boolean eq2(Huk h1, Huk h2) {
-        if (h2.isSanorny()) {
-            return false;
-        }
         h1.miakki = 0;
         return true;
     }
