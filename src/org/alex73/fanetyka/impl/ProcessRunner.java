@@ -132,6 +132,9 @@ public class ProcessRunner implements IProcess {
                 if (changed) {
                     String after = context.dump(ann.logCountAfter());
                     instance.logPhenomenon.add(ca.name + ": [" + before + " -> " + after + "]. " + ca.logMessage);
+                    if (caseName.equals(instance.debugRuleName)) {
+                        instance.debugRuleProcessed = true; // ці выканалася гэтае правіла
+                    }
                 }
             }
         }

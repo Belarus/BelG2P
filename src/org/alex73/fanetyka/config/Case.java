@@ -35,5 +35,6 @@ public class Case {
         public String caseName;
         public Cell cell;
         public String word, expected;
+        public Boolean ruleExecution; // should be true if the example should be changed by this rule
     }
 }

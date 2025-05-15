@@ -63,10 +63,13 @@ public class TsvPrykladyConfig implements IConfig {
                 }
                 col++;
             }
-            if (cells.size() >= 2) {
-                ex.word = cells.get(0);
+            switch (cells.size()) {
+            case 2:
                 ex.expected = cells.get(1);
+            case 1:
+                ex.word = cells.get(0);
                 examples.add(ex);
+                break;
             }
         }
     }

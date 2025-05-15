@@ -17,6 +17,7 @@ public class Fanetyka3 {
     protected final List<Huk> huki = new ArrayList<>();
 
     protected String debugRuleName;
+    public boolean debugRuleProcessed;
     public List<String> logPhenomenon = new ArrayList<>(); // log of phonetic phenomenon
 
     /**

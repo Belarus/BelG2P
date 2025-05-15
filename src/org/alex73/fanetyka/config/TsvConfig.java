@@ -225,6 +225,11 @@ public class TsvConfig implements IConfig {
             if (line.length > column + 1) {
                 ex.expected = line[column + 1].trim();
             }
+            if (line.length > column + 2 && !line[column + 2].isBlank()) {
+                ex.ruleExecution = false;
+            } else {
+                ex.ruleExecution = true;
+            }
             t.examples.add(ex);
         }
     }
