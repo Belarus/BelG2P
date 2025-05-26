@@ -137,6 +137,10 @@ public class Fanetyka3 {
      * Convert sounds to specific text representation.
      */
     public String toString(Function<Huk, String> hukConverter) {
+        return toString(huki, hukConverter);
+    }
+
+    public static String toString(List<Huk> huki, Function<Huk, String> hukConverter) {
         StringBuilder out = new StringBuilder();
         for (Huk huk : huki) {
             out.append(hukConverter.apply(huk));

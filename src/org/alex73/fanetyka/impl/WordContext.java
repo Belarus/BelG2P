@@ -352,6 +352,7 @@ public class WordContext {
                 }
             }
         }
+        logger.accept("Базавыя гукі з '"+wl+"': " + Fanetyka3.toString(huki, Huk.ipa));
     }
 
     void dadacJotKaliPatrebny(Huk papiaredni, char current, char next) {
