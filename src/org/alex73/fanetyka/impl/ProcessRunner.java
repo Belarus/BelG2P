@@ -127,11 +127,13 @@ public class ProcessRunner implements IProcess {
                 // спачатку выклікаем метад, і ён ужо можа выклікаць праверку па табліцы, пасля
                 // таго як сам зробіць іншыя праверкі
                 ProcessCase ann = m.getAnnotation(ProcessCase.class);
-                String before =context.dump(ann.logCountBefore());
+                String before = context.dump(ann.logCountBefore());
+                String wordBefore = instance.toString(Huk.ipa);
                 boolean changed = (Boolean) m.invoke(processor, parameters.toArray());
                 if (changed) {
                     String after = context.dump(ann.logCountAfter());
-                    instance.logPhenomenon.add(ca.name + ": [" + before + " -> " + after + "]. " + ca.logMessage);
+                    String wordAfter = instance.toString(Huk.ipa);
+                    instance.logPhenomenon.add(ca.name + ": [" + before + " -> " + after + "]. " + ca.logMessage + "; " + wordBefore + "=>" + wordAfter);
                     if (caseName.equals(instance.debugRuleName)) {
                         instance.debugRuleProcessed = true; // ці выканалася гэтае правіла
                     }

@@ -383,7 +383,12 @@ public class WordContext {
         case 'ю':
         case 'я':
             if (pacatakSlova || papiaredni.halosnaja || papiaredni.apostrafPasla || papiaredni.miakki != 0 || papiaredni.zychodnyjaLitary.equals("ў")
-                    || papiaredni.padzielPasla != 0 || "тдржшч".indexOf(papiaredni.zychodnyjaLitary) >= 0) {
+                    || (papiaredni.padzielPasla != 0 && papiaredni.padzielPasla != Huk.PADZIEL_PRYSTAUKA)
+                    || "тдржшч".indexOf(papiaredni.zychodnyjaLitary) >= 0) {
+                /*
+                 * j дадаецца, калі апостраф (аб'яднаць), паміж каранямі (ваенюрыст), злучок (штык-юнкер), ці пачатак слова, у тым ліку пасля прыназоўніка.
+                 * j не дадаецца, калі падзел прыстаўкі і корня (узяць)
+                 */
                 add = true;
             }
             break;

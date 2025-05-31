@@ -37,7 +37,7 @@ public class Sprascennie {
         return true;
     }
 
-    @ProcessCase(name = "Прыпадабненне аднолькавых зычных", logCountBefore = 2, logCountAfter = 2)
+    @ProcessCase(name = "Прыпадабненне аднолькавых зычных", logCountBefore = 2, logCountAfter = 1)
     public boolean eq2(Huk h1, Huk h2, ProcessContext context) {
         if (h1.bazavyHuk != h2.bazavyHuk) {
             // неаднолькавыя
