@@ -61,6 +61,7 @@ public class Fanetyka3 {
             config.processBilabijalnyV.process(this);
             config.processHubnaZubnyM.process(this);
             config.processUstaunyA.process(this);
+            config.processUstaunyJ.process(this);
             String hnew = toString();
             if (hnew.equals(prev)) {
                 // nothing was changed during last iteration - conversion finished

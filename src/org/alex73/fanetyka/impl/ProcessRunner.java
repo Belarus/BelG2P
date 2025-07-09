@@ -196,6 +196,8 @@ public class ProcessRunner implements IProcess {
         }
         for (String h : c.which) {
             switch (h) {
+            case "любы":
+                return true;
             case "звонкі":
                 if (huk.isZvonki()) {
                     return true;

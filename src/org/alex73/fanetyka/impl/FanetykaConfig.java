@@ -20,6 +20,7 @@ import org.alex73.fanetyka.processes.Pierachody;
 import org.alex73.fanetyka.processes.Sprascennie;
 import org.alex73.fanetyka.processes.SypiacyjaSvisciacyja;
 import org.alex73.fanetyka.processes.UstaunyA;
+import org.alex73.fanetyka.processes.UstaunyJ;
 import org.alex73.grammardb.GrammarFinder;
 
 /**
@@ -38,9 +39,10 @@ public class FanetykaConfig {
     protected final ProcessRunner processBilabijalnyV;
     protected final ProcessRunner processHubnaZubnyM;
     protected final ProcessRunner processUstaunyA;
+    protected final ProcessRunner processUstaunyJ;
 
     static final List<String> CONFIG_NAMES = List.of("Miakkasc", "AhlusennieAzvancennie", "BilabijalnyV", "HubnaZubnyM", "Pierachody", "Pryklady",
-            "Sprascennie", "SypiacyjaSvisciacyja", "UstaunyA");
+            "Sprascennie", "SypiacyjaSvisciacyja", "UstaunyA", "UstaunyJ");
 
     private final List<String> debugCases = new ArrayList<String>();
 
@@ -74,6 +76,7 @@ public class FanetykaConfig {
         this.processBilabijalnyV = new ProcessRunner(BilabijalnyV.class, configs);
         this.processHubnaZubnyM = new ProcessRunner(HubnaZubnyM.class, configs);
         this.processUstaunyA = new ProcessRunner(UstaunyA.class, configs);
+        this.processUstaunyJ = new ProcessRunner(UstaunyJ.class, configs);
 
         debugCases.addAll(this.processPierachody.getDebugCases());
         debugCases.addAll(this.processMiakkasc.getDebugCases());
@@ -84,6 +87,7 @@ public class FanetykaConfig {
         debugCases.addAll(this.processBilabijalnyV.getDebugCases());
         debugCases.addAll(this.processHubnaZubnyM.getDebugCases());
         debugCases.addAll(this.processUstaunyA.getDebugCases());
+        debugCases.addAll(this.processUstaunyJ.getDebugCases());
 
         Collections.sort(debugCases, Collator.getInstance(Locale.of("be")));
     }

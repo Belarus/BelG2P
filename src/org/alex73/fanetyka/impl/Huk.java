@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 import org.alex73.fanetyka.impl.IPAUtils.IPA;
+import org.alex73.grammardb.WordMorphology;
 
 public class Huk {
     public static final int PADZIEL_PRYSTAUKA = 1; // прыстаўка
@@ -33,6 +34,7 @@ public class Huk {
     public boolean stress; // TODO: націск у падваеннях і спрашчэннях
     /** Гэты гук павінен быць аддзелены ад наступнага, бо гэта апошні гук прыстаўкі. */
     public int padzielPasla;
+    public WordMorphology fromDB; // спасылка на граматычную базу
 
     public static boolean SKIP_ERRORS = false; // не спыняць працу пры памылках канвертавання
     public boolean debug; // debug not applied processes

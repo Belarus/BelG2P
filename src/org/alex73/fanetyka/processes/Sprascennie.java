@@ -48,9 +48,19 @@ public class Sprascennie {
         return true;
     }
 
-    @ProcessCase(name = "Спрашчэнне: с/ш/х-с-к -> c-к не на стыку", logCountBefore = 3, logCountAfter = 2)
-    public boolean ssks(ProcessContext context) {
+    @ProcessCase(name = "Спрашчэнне: с/ш-с-к -> c-к не на стыку", logCountBefore = 3, logCountAfter = 2)
+    public boolean sss(ProcessContext context) {
         vydalicPapiaredni(context, 1);
+        return true;
+    }
+
+    @ProcessCase(name = "Спрашчэнне: х-с-к -> c-к не на стыку", logCountBefore = 4, logCountAfter = 3)
+    public boolean sks(ProcessContext context, Huk h1) {
+        if (h1.bazavyHuk == Huk.BAZAVY_HUK.j) {
+            // калі перад х стаіць j - не спрашчаецца
+            return false;
+        }
+        vydalicPapiaredni(context, 2);
         return true;
     }
 

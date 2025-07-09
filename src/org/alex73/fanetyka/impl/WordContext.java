@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,6 +36,7 @@ public class WordContext {
     private boolean appendToNextWord;
     protected List<Huk> huki;
     protected float debugPartBegin = 0, debugPartEnd = 0; // if debug, value will be from 0 to 1 - position in word
+    private WordMorphology fromDB;
 
     public WordContext(GrammarFinder finder, String wordToProcess, WordContext nextWord, Consumer<String> logger) {
         this.finder = finder;
@@ -184,13 +184,11 @@ public class WordContext {
                 novyHuk = new Huk("д", BAZAVY_HUK.д);
                 break;
             case 'е':
-                dadacJotKaliPatrebny(papiaredniHuk, c, next);
                 novyHuk = new Huk("е", BAZAVY_HUK.э);
                 novyHuk.halosnaja = true;
                 novyHuk.miakki = Huk.MIAKKASC_PAZNACANAJA;
                 break;
             case 'ё':
-                dadacJotKaliPatrebny(papiaredniHuk, c, next);
                 novyHuk = new Huk("ё", BAZAVY_HUK.о);
                 novyHuk.halosnaja = true;
                 novyHuk.miakki = Huk.MIAKKASC_PAZNACANAJA;
@@ -214,7 +212,6 @@ public class WordContext {
                 }
                 break;
             case 'і':
-                dadacJotKaliPatrebny(papiaredniHuk, c, next);
                 novyHuk = new Huk("і", BAZAVY_HUK.і);
                 novyHuk.halosnaja = true;
                 novyHuk.miakki = Huk.MIAKKASC_PAZNACANAJA;
@@ -287,13 +284,11 @@ public class WordContext {
                 novyHuk.halosnaja = true;
                 break;
             case 'ю':
-                dadacJotKaliPatrebny(papiaredniHuk, c, next);
                 novyHuk = new Huk("ю", BAZAVY_HUK.у);
                 novyHuk.halosnaja = true;
                 novyHuk.miakki = Huk.MIAKKASC_PAZNACANAJA;
                 break;
             case 'я':
-                dadacJotKaliPatrebny(papiaredniHuk, c, next);
                 novyHuk = new Huk("я", BAZAVY_HUK.а);
                 novyHuk.halosnaja = true;
                 novyHuk.miakki = Huk.MIAKKASC_PAZNACANAJA;
@@ -340,6 +335,7 @@ public class WordContext {
                 }
             }
             if (novyHuk != null) {
+                novyHuk.fromDB = fromDB;
                 huki.add(novyHuk);
                 papiaredniHuk = novyHuk;
             }
@@ -352,53 +348,7 @@ public class WordContext {
                 }
             }
         }
-        logger.accept("Базавыя гукі з '"+wl+"': " + Fanetyka3.toString(huki, Huk.ipa));
-    }
-
-    void dadacJotKaliPatrebny(Huk papiaredni, char current, char next) {
-        boolean add = false;
-
-        boolean pacatakSlova = papiaredni == null || papiaredni.padzielPasla == Huk.PADZIEL_SLOVY;
-        switch (current) {
-        case 'і':
-            // ФБЛМ стар. 145-146
-            if (next == GrammarDB2.pravilny_nacisk) {
-                // націскны
-                if (pacatakSlova || papiaredni.halosnaja || papiaredni.apostrafPasla || papiaredni.miakki != 0 || papiaredni.zychodnyjaLitary.equals("ў")) {
-                    // дадаем j
-                    add = true;
-                }
-            } else {
-                // ненаціскны
-                if (!pacatakSlova) {
-                    if (papiaredni.halosnaja || papiaredni.miakki != 0 || papiaredni.zychodnyjaLitary.equals("ў")) {
-                        // дадаем j
-                        add = true;
-                    }
-                }
-            }
-            break;
-        case 'е':
-        case 'ё':
-        case 'ю':
-        case 'я':
-            if (pacatakSlova || papiaredni.halosnaja || papiaredni.apostrafPasla || papiaredni.miakki != 0 || papiaredni.zychodnyjaLitary.equals("ў")
-                    || (papiaredni.padzielPasla != 0 && papiaredni.padzielPasla != Huk.PADZIEL_PRYSTAUKA)
-                    || "тдржшч".indexOf(papiaredni.zychodnyjaLitary) >= 0) {
-                /*
-                 * j дадаецца, калі апостраф (аб'яднаць), паміж каранямі (ваенюрыст), злучок (штык-юнкер), ці пачатак слова, у тым ліку пасля прыназоўніка.
-                 * j не дадаецца, калі падзел прыстаўкі і корня (узяць)
-                 */
-                add = true;
-            }
-            break;
-        }
-        if (add) {
-            Huk jot = new Huk("", BAZAVY_HUK.j);
-            jot.setMiakkasc(true);
-            jot.miakki = Huk.MIAKKASC_PAZNACANAJA;
-            huki.add(jot);
-        }
+        logger.accept("Базавыя гукі з '" + wl + "': " + Fanetyka3.toString(huki, Huk.ipa));
     }
 
     /**
@@ -446,7 +396,7 @@ public class WordContext {
         boolean pacatakUKarotki = word.toLowerCase().startsWith("ў");// слова пачынаецца на 'ў'
 
         // шукаем усе падобныя формы з базы
-        Set<WordMorphology> foundForms = new TreeSet<>();
+        List<WordMorphology> foundForms = new ArrayList<>();
         for (Paradigm p : finder.getParadigms(word)) {
             for (Variant v : p.getVariant()) {
                 for (Form f : v.getForm()) {
@@ -454,14 +404,18 @@ public class WordContext {
                         continue;
                     }
                     if (compareWord(word, f.getValue())) {
-                        foundForms.add(new WordMorphology(p, v, f));
+                        WordMorphology newWord = new WordMorphology(p, v, f);
+                        if (foundForms.stream().noneMatch(wm -> wm.compareTo(newWord) == 0)) {
+                            // калі такой формы яшчэ няма ў спісе - дадаем, але параўнанне - толькі па тэксту формы
+                            foundForms.add(newWord);
+                        }
                     }
                 }
             }
         }
 
         // спрабуем ўзяць форму дзе няма замены на г выбухны
-        WordMorphology fromDB = foundForms.stream().filter(wm -> wm.v.getZmienyFanietyki() == null).findFirst().orElse(null);
+        fromDB = foundForms.stream().filter(wm -> wm.v.getZmienyFanietyki() == null).findFirst().orElse(null);
         if (fromDB == null) {
             // калі такой формы няма, спрабуем ўзяць любую форму
             fromDB = foundForms.stream().findFirst().orElse(null);
