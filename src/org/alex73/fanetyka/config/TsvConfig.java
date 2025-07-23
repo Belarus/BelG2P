@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.Predicate;
 
 import org.alex73.fanetyka.config.Case.Example;
 import org.alex73.fanetyka.config.Case.HukCheck;
 import org.alex73.fanetyka.impl.Huk;
+import org.alex73.fanetyka.impl.ProcessRunner;
 
 public class TsvConfig implements IConfig {
     private final String configName;
@@ -167,6 +169,11 @@ public class TsvConfig implements IConfig {
                 }
                 t.checks.add(check = new HukCheck());
                 check.which = readHuki(1, c);
+                check.whichFunctions = new Predicate[check.which.length];
+                for (int i = 0; i < check.which.length; i++) {
+                    String w = check.which[i];
+                    check.whichFunctions[i] = ProcessRunner.checkHukFactory(w);
+                }
                 readMultiMode(7, c, check.miakkasc, Huk.MIAKKASC_ASIMILACYJNAJA);
                 readMultiMode(8, c, check.miakkasc, Huk.MIAKKASC_PAZNACANAJA);
                 if (check.miakkasc.maskYes != 0 && check.miakkasc.maskNo != 0) {

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 
 import org.alex73.fanetyka.config.Case;
 import org.alex73.fanetyka.config.IConfig;
@@ -188,57 +189,39 @@ public class ProcessRunner implements IProcess {
     }
 
     /**
+     * Вяртае Predicate, які правярае гук на адпаведнасць гукам у табліцы.
+     */
+    public static Predicate<Huk> checkHukFactory(String which) {
+        switch (which) {
+        case "любы":
+            return h -> true;
+        case "звонкі":
+            return huk -> huk.isZvonki();
+        case "глухі":
+            return huk -> huk.isHluchi();
+        case "галосны":
+            return huk -> huk.halosnaja;
+        case "зычны":
+            return huk -> !huk.halosnaja;
+        case "шыпячы":
+            return huk -> huk.isSypiacy();
+        case "свісцячы":
+            return huk -> huk.isSvisciacy();
+        case "санорны":
+            return huk -> huk.isSanorny();
+        default:
+            BAZAVY_HUK expected = BAZAVY_HUK.valueOf(which);
+            return huk -> huk.bazavyHuk == expected;
+        }
+    }
+
+    /**
      * Правяраем адзін гук на адпаведнасць гукам у табліцы.
      */
     static boolean checkHuk(String zjava, Case.HukCheck c, Huk huk) {
-        if (c.which == null) {
-            // return true; // табліца пачынаецца з мяжы слова, а не з гука
-        }
-        for (String h : c.which) {
-            switch (h) {
-            case "любы":
+        for (Predicate<Huk> p : c.whichFunctions) {
+            if (p.test(huk)) {
                 return true;
-            case "звонкі":
-                if (huk.isZvonki()) {
-                    return true;
-                }
-                break;
-            case "глухі":
-                if (huk.isHluchi()) {
-                    return true;
-                }
-                break;
-            case "галосны":
-                if (huk.halosnaja) {
-                    return true;
-                }
-                break;
-            case "зычны":
-                if (!huk.halosnaja) { // TODO
-                    return true;
-                }
-                break;
-            case "шыпячы":
-                if (huk.isSypiacy()) {
-                    return true;
-                }
-                break;
-            case "свісцячы":
-                if (huk.isSvisciacy()) {
-                    return true;
-                }
-                break;
-            case "санорны":
-                if (huk.isSanorny()) {
-                    return true;
-                }
-                break;
-            default:
-                BAZAVY_HUK expected = BAZAVY_HUK.valueOf(h);
-                if (huk.bazavyHuk.equals(expected)) {
-                    return true;
-                }
-                break;
             }
         }
         return false;

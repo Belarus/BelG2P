@@ -2,6 +2,9 @@ package org.alex73.fanetyka.config;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+
+import org.alex73.fanetyka.impl.Huk;
 
 public class Case {
     public String name;
@@ -20,6 +23,7 @@ public class Case {
     public static class HukCheck {
         boolean optionalHuk;
         public String[] which;
+        public Predicate<Huk>[] whichFunctions; // праверкі на гукі which
         public MODE apostraf = MODE.DONT_CARE;
         public MultiMode pasziel = new MultiMode();
         public MultiMode miakkasc = new MultiMode();
