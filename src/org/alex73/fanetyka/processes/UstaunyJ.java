@@ -53,17 +53,15 @@ public class UstaunyJ {
         return true;
     }
 
-    @ProcessCase(name = "Пераход 'і' ў 'йі' пасля мяккага знаку", logCountBefore = 2, logCountAfter = 3)
-    public boolean pim(ProcessContext context, Huk h1) {
-        if (h1.bazavyHuk == Huk.BAZAVY_HUK.j) {
-            return false; // не пасля мяккага знаку
-        }
-        ustavicJ(context, 1);
+    @ProcessCase(name = "Пераход 'і' ў 'ы' пасля мяжы і цвёрдага зычнага", logCountBefore = 2, logCountAfter = 2)
+    public boolean mcz(Huk h1, Huk h2) {
+        h2.bazavyHuk = Huk.BAZAVY_HUK.ы;
+        h2.miakki = 0;
         return true;
     }
 
-    @ProcessCase(name = "Пераход 'і' ў 'ы' пасля мяжы і цвёрдага зычнага", logCountBefore = 2, logCountAfter = 2)
-    public boolean mcz(Huk h1, Huk h2) {
+    @ProcessCase(name = "Пераход 'і' ў 'ы' пасля апострафа і мяжы", logCountBefore = 2, logCountAfter = 2)
+    public boolean mcza(Huk h1, Huk h2) {
         h2.bazavyHuk = Huk.BAZAVY_HUK.ы;
         h2.miakki = 0;
         return true;
@@ -89,6 +87,12 @@ public class UstaunyJ {
 
     @ProcessCase(name = "Дадаецца j пасля галоснай ці 'ў т д р ж ш ч'", logCountBefore = 1, logCountAfter = 2)
     public boolean jhal(ProcessContext context) {
+        ustavicJ(context, 1);
+        return true;
+    }
+
+    @ProcessCase(name = "Дадаецца j пасля прыстаўкі, якая канчаецца на 'й'", logCountBefore = 1, logCountAfter = 2)
+    public boolean jpry(ProcessContext context) {
         ustavicJ(context, 1);
         return true;
     }
