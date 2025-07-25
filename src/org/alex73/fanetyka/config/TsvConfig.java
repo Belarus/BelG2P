@@ -220,9 +220,6 @@ public class TsvConfig implements IConfig {
                 if (line[column].isBlank()) {
                     break;
                 }
-                if (line[column + 1].isBlank()) {
-                    continue;
-                }
             } catch (ArrayIndexOutOfBoundsException ex) {
             }
             Case.Example ex = new Case.Example();

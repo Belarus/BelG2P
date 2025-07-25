@@ -64,7 +64,7 @@ public class TsvPrykladyConfig implements IConfig {
                 col++;
             }
             switch (cells.size()) {
-            case 2:
+            default:
                 ex.expected = cells.get(1);
             case 1:
                 ex.word = cells.get(0);
