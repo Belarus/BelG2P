@@ -50,6 +50,7 @@ public class WordContext {
             String wlower = word.toLowerCase();
             if (wlower.equals("ў") || NIENACISKNYJA.contains(wlower)) {
                 // Простыя ненаціскныя словы - не бяром націск і прыстаўкі з базы.
+                logger.accept("Слова '" + word + "' - у спісе ненаціскных, не бяром націск і прыстаўкі з базы");
             } else {
                 // Звычайныя словы - глядзім базу.
                 word = zBazy(word);
@@ -357,7 +358,7 @@ public class WordContext {
     void fanetykaBazy() {
         if (word.indexOf('ґ') > 0 || word.indexOf('Ґ') > 0) {
             // калі ў слове ёсць 'ґ' - шукаем фанетыку ўсё ж для 'г'
-            word = word.toLowerCase().replace('ґ', 'г');
+            word = word.toLowerCase().replace('ґ', 'г'); // TODO - толькі для пошуку фанетыкі і па базе. калі не знайшлі - захоўваем ґ
         }
         String fan = finder.getFan(word);
         if (fan == null) {
