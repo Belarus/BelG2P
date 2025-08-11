@@ -444,15 +444,16 @@ public class WordContext {
 
         if (fromDB == null || !fromDB.isMorphologyDefined()) {
             // пазначаем найбольш распаўсюджаныя прыстаўкі, калі ў базе няма інфармацыі
-            String wl = StressUtils.unstress(w.toLowerCase());
+            String wUnstressed = StressUtils.unstress(w);
+            String wUnstressedLowerCase = wUnstressed.toLowerCase();
             for (Prystauka p : PRYSTAUKI) {
-                if (wl.startsWith(p.beg)) {
+                if (wUnstressedLowerCase.startsWith(p.beg)) {
                     int skipLength = p.result.replaceAll("[/\\|{}]", "").length();
 
                     if (p.result.endsWith("/")) {
                         // гэта прыстаўка - правяраем, ці магчымая яна ў гэтым слове
-                        char nextLetter = skipLength < wl.length() ? wl.charAt(skipLength) : '\0';
-                        char nextLetter2 = skipLength + 1 < wl.length() ? wl.charAt(skipLength + 1) : '\0';
+                        char nextLetter = skipLength < wUnstressedLowerCase.length() ? wUnstressedLowerCase.charAt(skipLength) : '\0';
+                        char nextLetter2 = skipLength + 1 < wUnstressedLowerCase.length() ? wUnstressedLowerCase.charAt(skipLength + 1) : '\0';
                         if (p.beg.endsWith("й")) {
                             // прыстаўка
                         } else if (nextLetter == GrammarDB2.pravilny_apostraf
@@ -469,11 +470,11 @@ public class WordContext {
                         logger.accept("Мяркуем, што няма прыстаўкі");
                     } else {
                         logger.accept("Мяркуем, што прыстаўка '" + p.result + "'");
+                        w = StressUtils.setUsuallyStress(w);
+                        boolean[] stresses = StressUtils.getStressMap(w);
+                        wUnstressed = p.result + wUnstressed.substring(skipLength);
+                        w = StressUtils.applyStressMap(wUnstressed, stresses);
                     }
-                    w = StressUtils.setUsuallyStress(w);
-                    int stress = StressUtils.getStressFromStart(w);
-                    wl = p.result + wl.substring(skipLength);
-                    w = StressUtils.setStressFromStart(wl, stress);
                     break;
                 }
             }

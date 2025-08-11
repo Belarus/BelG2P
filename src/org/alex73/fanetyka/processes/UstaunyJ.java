@@ -67,7 +67,7 @@ public class UstaunyJ {
         return true;
     }
 
-    @ProcessCase(name = "Пераход 'і' ў 'йі' пасля галосный", logCountBefore = 1, logCountAfter = 2)
+    @ProcessCase(name = "Пераход 'і' ў 'йі' пасля галоснай і 'ў' у сярэдзіне слова", logCountBefore = 1, logCountAfter = 2)
     public boolean pss(ProcessContext context) {
         ustavicJ(context, 1);
         return true;
@@ -91,12 +91,26 @@ public class UstaunyJ {
         return true;
     }
 
+    @ProcessCase(name = "Дадаецца j пасля прыстаўкі на галосную, 'ў' ці 'j'", logCountBefore = 1, logCountAfter = 2)
+    public boolean pryhauj(ProcessContext context) {
+        ustavicJ(context, 1);
+        return true;
+    }
+
     @ProcessCase(name = "Дадаецца j пасля прыстаўкі, якая канчаецца на 'й'", logCountBefore = 1, logCountAfter = 2)
     public boolean jpry(ProcessContext context) {
         ustavicJ(context, 1);
         return true;
     }
 
+    @ProcessCase(name = "Дадаецца j пасля мяккага зычнага перад 'і'", logCountBefore = 1, logCountAfter = 2)
+    public boolean jmiaczy(ProcessContext context, Huk h1) {
+        if (h1.bazavyHuk == Huk.BAZAVY_HUK.j) {
+            return false; // не пасля 'й'
+        }
+        ustavicJ(context, 1);
+        return true;
+    }
     @ProcessCase(name = "Дадаецца j пасля мяккага", logCountBefore = 1, logCountAfter = 2)
     public boolean jmiac(ProcessContext context, Huk h1) {
         if (h1.bazavyHuk == Huk.BAZAVY_HUK.j) {
