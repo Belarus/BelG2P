@@ -147,14 +147,14 @@ public class IPAUtils {
             huk = new Huk(s.substring(0, 3), BAZAVY_HUK.дж);
         } else if (s.startsWith("d͡zʲ")) {
             huk = new Huk(s.substring(0, 4), BAZAVY_HUK.дз);
-            huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
+            huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
         } else if (s.startsWith("d͡z")) {
             huk = new Huk(s.substring(0, 3), BAZAVY_HUK.дз);
         } else if (s.startsWith("t͡ʂ")) {
             huk = new Huk(s.substring(0, 3), BAZAVY_HUK.ч);
         } else if (s.startsWith("t͡sʲ")) {
             huk = new Huk(s.substring(0, 4), BAZAVY_HUK.ц);
-            huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
+            huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
         } else if (s.startsWith("t͡s")) {
             huk = new Huk(s.substring(0, 3), BAZAVY_HUK.ц);
         } else {
@@ -171,7 +171,7 @@ public class IPAUtils {
             case 'b':
                 if (c1 == 'ʲ') {
                     huk = new Huk(s.substring(0, 2), BAZAVY_HUK.б);
-                    huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
+                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
                 } else {
                     huk = new Huk(s.substring(0, 1), BAZAVY_HUK.б);
                 }
@@ -179,7 +179,7 @@ public class IPAUtils {
             case 'v':
                 if (c1 == 'ʲ') {
                     huk = new Huk(s.substring(0, 2), BAZAVY_HUK.в);
-                    huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
+                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
                 } else {
                     huk = new Huk(s.substring(0, 1), BAZAVY_HUK.в);
                 }
@@ -190,7 +190,7 @@ public class IPAUtils {
             case 'ɣ':
                 if (c1 == 'ʲ') {
                     huk = new Huk(s.substring(0, 2), BAZAVY_HUK.г);
-                    huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
+                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
                 } else {
                     huk = new Huk(s.substring(0, 1), BAZAVY_HUK.г);
                 }
@@ -198,7 +198,7 @@ public class IPAUtils {
             case 'g':
                 if (c1 == 'ʲ') {
                     huk = new Huk(s.substring(0, 2), BAZAVY_HUK.ґ);
-                    huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
+                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
                 } else {
                     huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ґ);
                 }
@@ -206,7 +206,7 @@ public class IPAUtils {
             case 'd':
                 if (c1 == 'ʲ') {
                     huk = new Huk(s.substring(0, 2), BAZAVY_HUK.д);
-                    huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
+                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
                 } else {
                     huk = new Huk(s.substring(0, 1), BAZAVY_HUK.д);
                 }
@@ -221,7 +221,7 @@ public class IPAUtils {
             case 'z':
                 if (c1 == 'ʲ') {
                     huk = new Huk(s.substring(0, 2), BAZAVY_HUK.з);
-                    huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
+                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
                 } else {
                     huk = new Huk(s.substring(0, 1), BAZAVY_HUK.з);
                 }
@@ -233,7 +233,7 @@ public class IPAUtils {
             case 'k':
                 if (c1 == 'ʲ') {
                     huk = new Huk(s.substring(0, 2), BAZAVY_HUK.к);
-                    huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
+                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
                 } else {
                     huk = new Huk(s.substring(0, 1), BAZAVY_HUK.к);
                 }
@@ -246,12 +246,12 @@ public class IPAUtils {
                     throw new RuntimeException("Няправільнае аднаўленне гуку: " + s);
                 }
                 huk = new Huk(s.substring(0, 2), BAZAVY_HUK.л);
-                huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
+                huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
                 break;
             case 'm':
                 if (c1 == 'ʲ') {
                     huk = new Huk(s.substring(0, 2), BAZAVY_HUK.м);
-                    huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
+                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
                 } else {
                     huk = new Huk(s.substring(0, 1), BAZAVY_HUK.м);
                 }
@@ -262,7 +262,7 @@ public class IPAUtils {
             case 'n':
                 if (c1 == 'ʲ') {
                     huk = new Huk(s.substring(0, 2), BAZAVY_HUK.н);
-                    huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
+                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
                 } else {
                     huk = new Huk(s.substring(0, 1), BAZAVY_HUK.н);
                 }
@@ -274,7 +274,7 @@ public class IPAUtils {
             case 'p':
                 if (c1 == 'ʲ') {
                     huk = new Huk(s.substring(0, 2), BAZAVY_HUK.п);
-                    huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
+                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
                 } else {
                     huk = new Huk(s.substring(0, 1), BAZAVY_HUK.п);
                 }
@@ -285,7 +285,7 @@ public class IPAUtils {
             case 's':
                 if (c1 == 'ʲ') {
                     huk = new Huk(s.substring(0, 2), BAZAVY_HUK.с);
-                    huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
+                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
                 } else {
                     huk = new Huk(s.substring(0, 1), BAZAVY_HUK.с);
                 }
@@ -293,7 +293,7 @@ public class IPAUtils {
             case 't':
                 if (c1 == 'ʲ') {
                     huk = new Huk(s.substring(0, 2), BAZAVY_HUK.т);
-                    huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
+                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
                 } else {
                     huk = new Huk(s.substring(0, 1), BAZAVY_HUK.т);
                 }
@@ -305,7 +305,7 @@ public class IPAUtils {
             case 'f':
                 if (c1 == 'ʲ') {
                     huk = new Huk(s.substring(0, 2), BAZAVY_HUK.ф);
-                    huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
+                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
                 } else {
                     huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ф);
                 }
@@ -313,7 +313,7 @@ public class IPAUtils {
             case 'x':
                 if (c1 == 'ʲ') {
                     huk = new Huk(s.substring(0, 2), BAZAVY_HUK.х);
-                    huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
+                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
                 } else {
                     huk = new Huk(s.substring(0, 1), BAZAVY_HUK.х);
                 }

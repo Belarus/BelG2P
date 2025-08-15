@@ -77,12 +77,18 @@ public class ProcessRunner implements IProcess {
         ProcessContext context = new ProcessContext();
         context.huki = instance.huki;
         context.debug = instance.logPhenomenon;
-        for (String caseName : config.casesOrder) {
-            Method m = methods.get(caseName);
-            Case ca = config.cases.get(caseName);
-            // from end to beginning
-            for (int pos = instance.huki.size() - ca.requiresHuks; pos >= 0; pos--) {
+        // from end to beginning
+        for (int pos = instance.huki.size(); pos >= 0; pos--) {
+            for (String caseName : config.casesOrder) {
+                Method m = methods.get(caseName);
+                Case ca = config.cases.get(caseName);
                 context.currentPosition = pos;
+
+                // ціхапае гукаў на з'яву ?
+                if (context.currentPosition + ca.requiresHuks > context.huki.size()) {
+                    // не хапае гукаў для праверкі
+                    continue;
+                }
 
                 // detect if debug required
                 context.debugPrefix = null;

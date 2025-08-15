@@ -447,7 +447,7 @@ public class WordContext {
             String wUnstressed = StressUtils.unstress(w);
             String wUnstressedLowerCase = wUnstressed.toLowerCase();
             for (Prystauka p : PRYSTAUKI) {
-                if (wUnstressedLowerCase.startsWith(p.beg)) {
+                if (wUnstressedLowerCase.startsWith(p.beg) && wUnstressedLowerCase.length() > p.beg.length()) {
                     int skipLength = p.result.replaceAll("[/\\|{}]", "").length();
 
                     if (p.result.endsWith("/")) {
@@ -467,9 +467,9 @@ public class WordContext {
                     }
 
                     if (p.result.isEmpty()) {
-                        logger.accept("Мяркуем, што няма прыстаўкі");
+                        logger.accept("Мяркуем, што няма прыстаўкі ці першага кораня");
                     } else {
-                        logger.accept("Мяркуем, што прыстаўка '" + p.result + "'");
+                        logger.accept("Мяркуем, што прыстаўка ці першы корань '" + p.result + "'");
                         w = StressUtils.setUsuallyStress(w);
                         boolean[] stresses = StressUtils.getStressMap(w);
                         wUnstressed = p.result + wUnstressed.substring(skipLength);

@@ -33,11 +33,11 @@ public class AhlusennieAzvancennie {
         return true;
     }
 
-    @ProcessCase(name = "Азванчэнне ц->д", logCountBefore = 1, logCountAfter = 1)
-    public boolean azvancennieC(Huk huk, Huk nastupny) {
-        huk.bazavyHuk = BAZAVY_HUK.д;
-        return true;
-    }
+//    @ProcessCase(name = "Азванчэнне ц->д", logCountBefore = 1, logCountAfter = 1)
+//    public boolean azvancennieC(Huk huk, Huk nastupny) {
+//        huk.bazavyHuk = BAZAVY_HUK.д;
+//        return true;
+//    }
 
     @ProcessCase(name = "Азванчэнне", logCountBefore = 1, logCountAfter = 1)
     public boolean azvancennie(Huk huk, Huk nastupny) {
