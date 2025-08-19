@@ -41,11 +41,11 @@ public class UstaunyJ {
         return true;
     }
 
-    @ProcessCase(name = "Пераход 'і' ў 'йі' пасля 'па-'", logCountBefore = 3, logCountAfter = 4)
-    public boolean pa(ProcessContext context) {
-        ustavicJ(context, 2);
-        return true;
-    }
+//    @ProcessCase(name = "Пераход 'і' ў 'йі' пасля 'па-'", logCountBefore = 3, logCountAfter = 4)
+//    public boolean pa(ProcessContext context) {
+//        ustavicJ(context, 2);
+//        return true;
+//    }
 
     @ProcessCase(name = "Пераход 'і' ў 'йі' пасля апострафу", logCountBefore = 1, logCountAfter = 2)
     public boolean pia(ProcessContext context) {

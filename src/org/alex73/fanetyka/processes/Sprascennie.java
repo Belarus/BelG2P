@@ -141,7 +141,7 @@ public class Sprascennie {
         return true;
     }
 
-    @ProcessCase(name = "Спрашчэнне: ш-ч-с -> ш-с", logCountBefore = 3, logCountAfter = 2)
+    @ProcessCase(name = "Спрашчэнне: ш-ч-(с ці ш) -> ш-(с ці ш)", logCountBefore = 3, logCountAfter = 2)
     public boolean scs(ProcessContext context) {
         vydalicNastupny(context, 0);
         return true;
@@ -309,13 +309,13 @@ public class Sprascennie {
         return true;
     }
 
-    @ProcessCase(name = "Прыпадабненне т-ш -> ч-ш, т+ч => ч-ч", logCountBefore = 2, logCountAfter = 2)
-    public boolean pryTS(Huk huk) {
-        huk.bazavyHuk = BAZAVY_HUK.ч;
+    @ProcessCase(name = "Прыпадабненне т-ш -> ч-ш, т+ч => ч-ч пасля галоснага", logCountBefore = 2, logCountAfter = 2)
+    public boolean pryTS(Huk huk1, Huk huk2) {
+        huk2.bazavyHuk = BAZAVY_HUK.ч;
         return true;
     }
 
-    @ProcessCase(name = "Прыпадабненне т-ш -> ч-ш, т+ч => ч-ч на канцы слова", logCountBefore = 3, logCountAfter = 2)
+    @ProcessCase(name = "Прыпадабненне т-ш -> ч-ш, т+ч => ч на канцы слова", logCountBefore = 3, logCountAfter = 2)
     public boolean pryTSe(ProcessContext context) {
         vydalicPapiaredni(context, 1);
         return true;
