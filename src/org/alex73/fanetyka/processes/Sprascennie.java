@@ -183,14 +183,14 @@ public class Sprascennie {
 //        return true;
 //    }
 
-    @ProcessCase(name = "Спрашчэнне падвойнага j", logCountBefore = 1, logCountAfter = 1)
-    public boolean jj(ProcessContext context) {
-        int pos = context.currentPosition;
-        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
-        context.huki.get(pos + 1).debug = context.huki.get(pos).debug || context.huki.get(pos + 1).debug;
-        context.huki.remove(pos);
-        return true;
-    }
+//    @ProcessCase(name = "Спрашчэнне падвойнага j", logCountBefore = 1, logCountAfter = 1)
+//    public boolean jj(ProcessContext context) {
+//        int pos = context.currentPosition;
+//        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+//        context.huki.get(pos + 1).debug = context.huki.get(pos).debug || context.huki.get(pos + 1).debug;
+//        context.huki.remove(pos);
+//        return true;
+//    }
 
 //    @ProcessCase(name="Спрашчэнне: с-с-к -> c-к не на стыку")
 //    public boolean ssk(Huk h1, Huk h2, ProcessContext context) {
