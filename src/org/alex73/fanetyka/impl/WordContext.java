@@ -11,6 +11,8 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 import org.alex73.grammardb.GrammarDB2;
@@ -407,7 +409,8 @@ public class WordContext {
                     if (compareWord(word, f.getValue())) {
                         WordMorphology newWord = new WordMorphology(p, v, f);
                         if (foundForms.stream().noneMatch(wm -> wm.compareTo(newWord) == 0)) {
-                            // калі такой формы яшчэ няма ў спісе - дадаем, але параўнанне - толькі па тэксту формы
+                            // калі такой формы яшчэ няма ў спісе - дадаем, але параўнанне - толькі па
+                            // тэксту формы
                             foundForms.add(newWord);
                         }
                     }
@@ -477,6 +480,15 @@ public class WordContext {
                     }
                     break;
                 }
+            }
+        }
+
+        // калі слова пычынаецца з прыстаўкі са злучком, мяняем злучок на '/' каб
+        // апрацоўвалася як падзел прыстаўкі, а не злучок
+        String wUnstressedLowerCase = StressUtils.unstress(w).toLowerCase();
+        for (String pr : PRYSTAUKI_ZLUCOK) {
+            if (wUnstressedLowerCase.startsWith(pr)) {
+                w = w.replaceFirst("\\-", "/");
             }
         }
 
@@ -554,45 +566,50 @@ public class WordContext {
         }
     }
 
-    static final List<Prystauka> PRYSTAUKI = new ArrayList<>();
+    static final List<Prystauka> PRYSTAUKI;
+    static final List<String> PRYSTAUKI_ZLUCOK;
     static final Set<String> NIENACISKNYJA;
 
+    static Stream<String> readResourceLines(String resourceName) {
+        List<String> lines = new ArrayList<>();
+        try (BufferedReader rd = new BufferedReader(new InputStreamReader(Fanetyka3.class.getResourceAsStream(resourceName), StandardCharsets.UTF_8))) {
+            String s;
+            while ((s = rd.readLine()) != null) {
+                lines.add(s);
+            }
+        } catch (Exception ex) {
+            throw new ExceptionInInitializerError(ex);
+        }
+        return lines.stream().map(s -> s.replaceAll("#.*", "").trim()).filter(s -> !s.isEmpty());
+    }
+
     static {
-        Pattern RE_P = Pattern.compile("(.+)=(.*) #.+");
+        Pattern RE_P = Pattern.compile("(.+)=(.*)");
         Pattern RE_N = Pattern.compile("[A-Z]/(.+)");
 
-        try (BufferedReader rd = new BufferedReader(new InputStreamReader(Fanetyka3.class.getResourceAsStream("prystauki.txt"), StandardCharsets.UTF_8))) {
-            String s;
-            while ((s = rd.readLine()) != null) {
-                Matcher m = RE_P.matcher(s);
-                if (!m.matches()) {
-                    throw new ExceptionInInitializerError(s);
-                }
-                Prystauka p = new Prystauka();
-                p.beg = m.group(1).trim();
-                p.result = m.group(2).trim();
-                if (!p.result.equals("?")) {
-                    PRYSTAUKI.add(p);
-                }
+        PRYSTAUKI = readResourceLines("prystauki.txt").map(s -> {
+            Matcher m = RE_P.matcher(s);
+            if (!m.matches()) {
+                throw new ExceptionInInitializerError(s);
             }
-        } catch (Exception ex) {
-            throw new ExceptionInInitializerError(ex);
-        }
-        Collections.sort(PRYSTAUKI);
+            Prystauka p = new Prystauka();
+            p.beg = m.group(1).trim();
+            p.result = m.group(2).trim();
+            if (!p.result.equals("?")) {
+                return p;
+            } else {
+                return null;
+            }
+        }).filter(p -> p != null).sorted().toList();
 
-        Set<String> nienacisknyja = new HashSet<>();
-        try (BufferedReader rd = new BufferedReader(new InputStreamReader(Fanetyka3.class.getResourceAsStream("nienacisknyja.txt"), StandardCharsets.UTF_8))) {
-            String s;
-            while ((s = rd.readLine()) != null) {
-                Matcher m = RE_N.matcher(s);
-                if (!m.matches()) {
-                    throw new ExceptionInInitializerError(s);
-                }
-                nienacisknyja.add(m.group(1));
+        PRYSTAUKI_ZLUCOK = readResourceLines("prystauki_zlucok.txt").toList();
+
+        NIENACISKNYJA = readResourceLines("nienacisknyja.txt").map(s -> {
+            Matcher m = RE_N.matcher(s);
+            if (!m.matches()) {
+                throw new ExceptionInInitializerError(s);
             }
-        } catch (Exception ex) {
-            throw new ExceptionInInitializerError(ex);
-        }
-        NIENACISKNYJA = Collections.unmodifiableSet(nienacisknyja);
+            return m.group(1);
+        }).collect(Collectors.toUnmodifiableSet());
     }
 }

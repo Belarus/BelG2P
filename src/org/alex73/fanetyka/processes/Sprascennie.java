@@ -43,10 +43,6 @@ public class Sprascennie {
             // неаднолькавыя
             return false;
         }
-        if (h1.miakki != 0 && h2.miakki == 0) {
-            // калі у першым ёсць мяккасць, а ў другім няма - не спрашчаецца
-            return false;
-        }
         vydalicPapiaredni(context, 1);
         h2.padvojeny = true;
         return true;
@@ -92,13 +88,14 @@ public class Sprascennie {
         return true;
     }
 
-    @ProcessCase(name = "Прыпадабненне зычных: ц'-т -> т'-т", logCountBefore = 2, logCountAfter = 2)
+    @ProcessCase(name = "Прыпадабненне зычных: ц'-т -> т-т", logCountBefore = 2, logCountAfter = 2)
     public boolean ct(Huk h1, Huk h2) {
         h1.bazavyHuk = BAZAVY_HUK.т;
+        h1.miakki = 0;
         return true;
     }
 
-    @ProcessCase(name = "Спрашчэнне: с'-т/ц' + (глухі ці санорны ў наступным слове) -> c'", logCountBefore = 3, logCountAfter = 2)
+    @ProcessCase(name = "Спрашчэнне: с'-т/ц + (глухі ці санорны ў наступным слове) -> c'", logCountBefore = 3, logCountAfter = 2)
     public boolean cch(Huk h1, Huk h2, Huk h3, ProcessContext context) {
         context.huki.get(context.currentPosition).padzielPasla = context.huki.get(context.currentPosition + 1).padzielPasla;
         vydalicNastupny(context, 0);
@@ -147,11 +144,11 @@ public class Sprascennie {
         return true;
     }
 
-    @ProcessCase(name = "Спрашчэнне: ж-дж -> ж (толькі на канцы слова)", logCountBefore = 2, logCountAfter = 1)
-    public boolean zdzz(Huk h1, Huk h2, ProcessContext context) {
-        vydalicNastupny(context, 0);
-        return true;
-    }
+//    @ProcessCase(name = "Спрашчэнне: ж-дж -> ж (толькі на канцы слова)", logCountBefore = 2, logCountAfter = 1)
+//    public boolean zdzz(Huk h1, Huk h2, ProcessContext context) {
+//        vydalicNastupny(context, 0);
+//        return true;
+//    }
 
 //    @ProcessCase(name="Спрашчэнне: д-дж -> дж, д-дз -> дз (не пасля галоснай)")
 //    public boolean ddz1(ProcessContext context) {
@@ -339,9 +336,10 @@ public class Sprascennie {
         return true;
     }
 
-    @ProcessCase(name = "Прыпадабненне дз+д => д'+д", logCountBefore = 2, logCountAfter = 2)
+    @ProcessCase(name = "Прыпадабненне дз+д => д+д", logCountBefore = 2, logCountAfter = 2)
     public boolean dzd(Huk h1, Huk h2, ProcessContext context) {
         h1.bazavyHuk = BAZAVY_HUK.д;
+        h1.miakki = 0;
         return true;
     }
 

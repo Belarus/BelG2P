@@ -55,8 +55,9 @@ public class Fanetyka3 {
 
             config.processPierachody.process(this);
             config.processMiakkasc.process(this);
-            config.processAhlusennieAzvancennie.process(this);
             config.processSprascennie.process(this);
+            config.processAhlusennieAzvancennie.process(this);
+//            config.processSprascennie.process(this);
             config.processSypiacyjaSvisciacyja.process(this);
             config.processBilabijalnyV.process(this);
             config.processHubnaZubnyM.process(this);

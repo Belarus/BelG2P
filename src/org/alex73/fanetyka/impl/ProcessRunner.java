@@ -71,17 +71,19 @@ public class ProcessRunner implements IProcess {
     }
 
     /**
-     * Для кожнай табліцы праходзіць па ўсіх гуках.
+     * Для кожнай табліцы праходзіць па ўсіх з'явах. Ідзе ад пачатку спіса з'яў на
+     * старонцы да канца. Такім чынам, пазіцыя з'явы на старонцы будзе ўплываць на
+     * парадак выканання.
      */
     public void process(Fanetyka3 instance) throws Exception {
         ProcessContext context = new ProcessContext();
         context.huki = instance.huki;
         context.debug = instance.logPhenomenon;
         // from end to beginning
-        for (int pos = instance.huki.size(); pos >= 0; pos--) {
-            for (String caseName : config.casesOrder) {
-                Method m = methods.get(caseName);
-                Case ca = config.cases.get(caseName);
+        for (String caseName : config.casesOrder) {
+            Method m = methods.get(caseName);
+            Case ca = config.cases.get(caseName);
+            for (int pos = instance.huki.size(); pos >= 0; pos--) {
                 context.currentPosition = pos;
 
                 // ціхапае гукаў на з'яву ?
@@ -176,8 +178,8 @@ public class ProcessRunner implements IProcess {
         for (int i = context.currentPosition; i < before; i++) {
             if (!checkHuk(ca.name, ca.checks.get(i - context.currentPosition), context.huki.get(i))) {
                 if (context.debugPrefix != null) {
-                    context.debug.add(context.debugPrefix + " гук не супадае ў пазіцыі +" + (i - context.currentPosition) + ": '" + context.huki.get(i) + "' замест '"
-                            + String.join(" ", ca.checks.get(i - context.currentPosition).which) + "'");
+                    context.debug.add(context.debugPrefix + " гук не супадае ў пазіцыі +" + (i - context.currentPosition) + ": '" + context.huki.get(i)
+                            + "' замест '" + String.join(" ", ca.checks.get(i - context.currentPosition).which) + "'");
                 }
                 return false;
             }
@@ -275,7 +277,7 @@ public class ProcessRunner implements IProcess {
     }
 
     static boolean checkValue(String zjava, String umova, Case.MultiMode mode, int value) {
-        if ((mode.maskError & value) != 0  && !Huk.SKIP_ERRORS) {
+        if ((mode.maskError & value) != 0 && !Huk.SKIP_ERRORS) {
             throw new RuntimeException("У з'яве '%s' не можа выконвацца ўмова '%s' у значэнні %d".formatted(zjava, umova, value));
         }
 
