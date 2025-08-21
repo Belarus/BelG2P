@@ -73,37 +73,37 @@ public class UstaunyJ {
         return true;
     }
 
-    @ProcessCase(name = "Дадаецца j на пачатку слова ці пасля падзелу", logCountBefore = 1, logCountAfter = 2)
+    @ProcessCase(name = "Дадаецца j перад галоснай на пачатку слова ці пасля падзелу", logCountBefore = 1, logCountAfter = 2)
     public boolean jpac(ProcessContext context) {
         ustavicJ(context, 0);
         return true;
     }
 
-    @ProcessCase(name = "Дадаецца j пасля апострафу", logCountBefore = 1, logCountAfter = 2)
+    @ProcessCase(name = "Дадаецца j перад галоснай пасля апострафу", logCountBefore = 1, logCountAfter = 2)
     public boolean japo(ProcessContext context) {
         ustavicJ(context, 0);
         return true;
     }
 
-    @ProcessCase(name = "Дадаецца j пасля галоснай ці 'ў т д р ж ш ч'", logCountBefore = 1, logCountAfter = 2)
+    @ProcessCase(name = "Дадаецца j перад галоснай пасля галоснай ці 'ў т д р ж ш ч'", logCountBefore = 1, logCountAfter = 2)
     public boolean jhal(ProcessContext context) {
         ustavicJ(context, 1);
         return true;
     }
 
-    @ProcessCase(name = "Дадаецца j пасля прыстаўкі на галосную, 'ў' ці 'j'", logCountBefore = 1, logCountAfter = 2)
+    @ProcessCase(name = "Пераход 'і' ў 'йі' пасля прыстаўкі на галосную, 'ў' ці 'j'", logCountBefore = 1, logCountAfter = 2)
     public boolean pryhauj(ProcessContext context) {
         ustavicJ(context, 1);
         return true;
     }
 
-    @ProcessCase(name = "Дадаецца j пасля прыстаўкі, якая канчаецца на 'й'", logCountBefore = 1, logCountAfter = 2)
+    @ProcessCase(name = "Дадаецца j перад галоснай пасля прыстаўкі, якая канчаецца на 'й'", logCountBefore = 1, logCountAfter = 2)
     public boolean jpry(ProcessContext context) {
         ustavicJ(context, 1);
         return true;
     }
 
-    @ProcessCase(name = "Дадаецца j пасля мяккага зычнага перад 'і'", logCountBefore = 1, logCountAfter = 2)
+    @ProcessCase(name = "Пераход 'і' ў 'йі' пасля мяккага зычнага", logCountBefore = 1, logCountAfter = 2)
     public boolean jmiaczy(ProcessContext context, Huk h1) {
         if (h1.bazavyHuk == Huk.BAZAVY_HUK.j) {
             return false; // не пасля 'й'
@@ -111,7 +111,7 @@ public class UstaunyJ {
         ustavicJ(context, 1);
         return true;
     }
-    @ProcessCase(name = "Дадаецца j пасля мяккага", logCountBefore = 1, logCountAfter = 2)
+    @ProcessCase(name = "Дадаецца j перад галоснай пасля мяккага", logCountBefore = 1, logCountAfter = 2)
     public boolean jmiac(ProcessContext context, Huk h1) {
         if (h1.bazavyHuk == Huk.BAZAVY_HUK.j) {
             return false; // не пасля 'й'
