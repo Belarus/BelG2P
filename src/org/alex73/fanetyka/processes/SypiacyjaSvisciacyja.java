@@ -35,19 +35,19 @@ public class SypiacyjaSvisciacyja {
         }
     }
 
-    @ProcessCase(name = "Пераход шыпячых ц/дз у свісцячыя", logCountBefore = 2, logCountAfter = 2)
+    @ProcessCase(name = "Пераход шыпячых перад свісцячымі ва ўскосных склонах", logCountBefore = 3, logCountAfter = 3)
     public boolean sycdz(Huk huk) {
         BAZAVY_HUK replaceTo = sypiacyja2svisciacyja.get(huk.bazavyHuk);
         huk.bazavyHuk = replaceTo;
         return true;
     }
 
-    @ProcessCase(name = "Пераход шыпячых перад с/з у свісцячыя", logCountBefore = 2, logCountAfter = 2)
-    public boolean sysz(Huk huk) {
-        BAZAVY_HUK replaceTo = sypiacyja2svisciacyja.get(huk.bazavyHuk);
-        huk.bazavyHuk = replaceTo;
-        return true;
-    }
+//    @ProcessCase(name = "Пераход шыпячых перад с/з у свісцячыя", logCountBefore = 2, logCountAfter = 2)
+//    public boolean sysz(Huk huk) {
+//        BAZAVY_HUK replaceTo = sypiacyja2svisciacyja.get(huk.bazavyHuk);
+//        huk.bazavyHuk = replaceTo;
+//        return true;
+//    }
 
     @ProcessCase(name = "Пераход свісцячых у шыпячыя", logCountBefore = 2, logCountAfter = 2)
     public boolean sv(Huk huk) {
