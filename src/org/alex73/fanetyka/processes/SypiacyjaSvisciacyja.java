@@ -57,8 +57,9 @@ public class SypiacyjaSvisciacyja {
             if (!nonKa.isEmpty()) {
                 String word = StressUtils.unstress(huk.wordContext.word);
                 String last3 = word.length() >= 3 ? word.substring(word.length() - 3) : word;
-                context.debug.add("Заўвага: вымаўленне “-" + last3 + "” у слове “" + word + "”, калі пачатковая форма “" + String.join(",", nonKa)
-                        + "”, а не “" + String.join(",", ka) + "”");
+                String msg = String.format("Заўвага: вымаўленне “-%s” у слове “%s”, калі пачатковая форма “%s”, а не “%s”", last3, word,
+                        String.join(",", nonKa), String.join(",", ka));
+                context.debug.addFirst(msg);
             }
             BAZAVY_HUK replaceTo = sypiacyja2svisciacyja.get(huk.bazavyHuk);
             huk.bazavyHuk = replaceTo;
