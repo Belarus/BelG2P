@@ -22,8 +22,8 @@ public class UstaunyJ {
 
     @ProcessCase(name = "Пераход 'і' ў 'йі' напачатку слова пад націскам", logCountBefore = 1, logCountAfter = 2)
     public boolean pin(ProcessContext context, Huk huk) {
-        if (huk.fromDB != null) {
-            if ("^і".equals(huk.fromDB.v.getZmienyFanietyki())) {
+        if (huk.wordContext.asnounaja != null) {
+            if ("^і".equals(huk.wordContext.asnounaja.v.getZmienyFanietyki())) {
                 // выключэнні(тут застаецца “і”): іба (нескл.), ібіс (заал.), івалга, ігрэк,
                 // ікаць, ілька (заал.), Ільмень, інкі (гіст.), іпуцкі, Істрыя, іфні (нескл.),
                 // ішыяс

@@ -34,7 +34,7 @@ public class WordContextTest {
         GrammarFinder mockFinder = mock(GrammarFinder.class);
         when(mockFinder.getFan("тэст")).thenReturn("ttt");
 
-        WordContext wc = new WordContext(mockFinder, "тэст", null, logger);
+        WordInitialConverter wc = new WordInitialConverter(mockFinder, "тэст", null, logger);
 
         assertEquals(3, wc.huki.size());
         assertEquals(Huk.BAZAVY_HUK.т, wc.huki.get(0).bazavyHuk);
@@ -45,87 +45,87 @@ public class WordContextTest {
     @Test
     void testStandardizesApostrophesAndStress() {
         String input = "не́’";
-        WordContext wc = new WordContext(emptyFinder, input, null, logger);
+        WordInitialConverter wc = new WordInitialConverter(emptyFinder, input, null, logger);
         assertEquals("не́’".replace('́', GrammarDB2.pravilny_nacisk).replace('’', GrammarDB2.pravilny_apostraf), wc.word);
     }
 
     @Test
     void testJakannieUPrynazounikach1() {
-        WordContext next1a = new WordContext(emptyFinder, "ё´н", null, logger);
-        WordContext wca = new WordContext(emptyFinder, "не", next1a, logger);
+        WordInitialConverter next1a = new WordInitialConverter(emptyFinder, "ё´н", null, logger);
+        WordInitialConverter wca = new WordInitialConverter(emptyFinder, "не", next1a, logger);
         assertEquals("ня", wca.word);
         assertTrue((wca.huki.getLast().padzielPasla & Huk.PADZIEL_PRYNAZOUNIK) != 0);
     }
 
     @Test
     void testJakannieUPrynazounikach2() {
-        WordContext next2b = new WordContext(emptyFinder, "і´м", null, logger);
-        WordContext next1b = new WordContext(emptyFinder, "з", next2b, logger);
-        WordContext wcb = new WordContext(emptyFinder, "не", next1b, logger);
+        WordInitialConverter next2b = new WordInitialConverter(emptyFinder, "і´м", null, logger);
+        WordInitialConverter next1b = new WordInitialConverter(emptyFinder, "з", next2b, logger);
+        WordInitialConverter wcb = new WordInitialConverter(emptyFinder, "не", next1b, logger);
         assertEquals("ня", wcb.word);
         assertTrue((wcb.huki.getLast().padzielPasla & Huk.PADZIEL_PRYNAZOUNIK) != 0);
     }
 
     @Test
     void testJakannieUPrynazounikach3() {
-        WordContext next2c = new WordContext(emptyFinder, "яго´", null, logger);
-        WordContext next1c = new WordContext(emptyFinder, "з", next2c, logger);
-        WordContext wcc = new WordContext(emptyFinder, "не", next1c, logger);
+        WordInitialConverter next2c = new WordInitialConverter(emptyFinder, "яго´", null, logger);
+        WordInitialConverter next1c = new WordInitialConverter(emptyFinder, "з", next2c, logger);
+        WordInitialConverter wcc = new WordInitialConverter(emptyFinder, "не", next1c, logger);
         assertEquals("не", wcc.word);
         assertTrue((wcc.huki.getLast().padzielPasla & Huk.PADZIEL_PRYNAZOUNIK) != 0);
     }
 
     @Test
     void testJakannieUPrynazounikach4() {
-        WordContext next1d = new WordContext(emptyFinder, "яго´", null, logger);
-        WordContext wcd = new WordContext(emptyFinder, "без", next1d, logger);
+        WordInitialConverter next1d = new WordInitialConverter(emptyFinder, "яго´", null, logger);
+        WordInitialConverter wcd = new WordInitialConverter(emptyFinder, "без", next1d, logger);
         assertEquals("без", wcd.word);
         assertTrue((wcd.huki.getLast().padzielPasla & Huk.PADZIEL_PRYNAZOUNIK) != 0);
     }
 
     @Test
     void testJakannieUPrynazounikach5() {
-        WordContext next1e = new WordContext(emptyFinder, "вё´скі", null, logger);
-        WordContext wce = new WordContext(emptyFinder, "без", next1e, logger);
+        WordInitialConverter next1e = new WordInitialConverter(emptyFinder, "вё´скі", null, logger);
+        WordInitialConverter wce = new WordInitialConverter(emptyFinder, "без", next1e, logger);
         assertEquals("бяз", wce.word);
         assertTrue((wce.huki.getLast().padzielPasla & Huk.PADZIEL_PRYNAZOUNIK) != 0);
     }
 
     @Test
     void testPrynazouniki1() {
-        WordContext next1 = new WordContext(emptyFinder, "яго", null, logger);
-        WordContext wc = new WordContext(emptyFinder, "з", next1, logger);
+        WordInitialConverter next1 = new WordInitialConverter(emptyFinder, "яго", null, logger);
+        WordInitialConverter wc = new WordInitialConverter(emptyFinder, "з", next1, logger);
         assertTrue((wc.huki.getLast().padzielPasla & Huk.PADZIEL_PRYNAZOUNIK) != 0);
     }
 
     @Test
     void testPrynazouniki2() {
-        WordContext next1 = new WordContext(emptyFinder, "яго", null, logger);
-        WordContext wc = new WordContext(emptyFinder, "праз", next1, logger);
+        WordInitialConverter next1 = new WordInitialConverter(emptyFinder, "яго", null, logger);
+        WordInitialConverter wc = new WordInitialConverter(emptyFinder, "праз", next1, logger);
         assertTrue((wc.huki.getLast().padzielPasla & Huk.PADZIEL_PRYNAZOUNIK) != 0);
     }
 
     @Test
     void testPrynazouniki3() {
-        WordContext next1 = new WordContext(emptyFinder, "яго", null, logger);
-        WordContext wc = new WordContext(emptyFinder, "ад", next1, logger);
+        WordInitialConverter next1 = new WordInitialConverter(emptyFinder, "яго", null, logger);
+        WordInitialConverter wc = new WordInitialConverter(emptyFinder, "ад", next1, logger);
         assertTrue((wc.huki.getLast().padzielPasla & Huk.PADZIEL_PRYNAZOUNIK) == 0);
     }
 
     @Test
     void testNaciskNaPiersySklad() {
-        WordContext next2a = new WordContext(emptyFinder, "і´м", null, logger);
-        WordContext next1a = new WordContext(emptyFinder, "з", next2a, logger);
+        WordInitialConverter next2a = new WordInitialConverter(emptyFinder, "і´м", null, logger);
+        WordInitialConverter next1a = new WordInitialConverter(emptyFinder, "з", next2a, logger);
         assertTrue(next1a.naciskNaPiersySklad());
 
-        WordContext next2b = new WordContext(emptyFinder, "яго´", null, logger);
-        WordContext next1b = new WordContext(emptyFinder, "з", next2b, logger);
+        WordInitialConverter next2b = new WordInitialConverter(emptyFinder, "яго´", null, logger);
+        WordInitialConverter next1b = new WordInitialConverter(emptyFinder, "з", next2b, logger);
         assertFalse(next1b.naciskNaPiersySklad());
     }
 
     @Test
     void testMiakkasc() {
-        WordContext wc = new WordContext(emptyFinder, "ль", null, logger);
+        WordInitialConverter wc = new WordInitialConverter(emptyFinder, "ль", null, logger);
         assertEquals(1, wc.huki.size());
         assertEquals(Huk.BAZAVY_HUK.л, wc.huki.get(0).bazavyHuk);
         assertEquals(Huk.MIAKKASC_PAZNACANAJA, wc.huki.get(0).miakki);
@@ -133,14 +133,14 @@ public class WordContextTest {
 
     @Test
     void testAutamatycnyjaNaciski() {
-        assertEquals("яно+".replace('+', '\u0301'), new WordContext(emptyFinder, "яно", null, logger).word);
-        assertEquals("ё+лкі".replace('+', '\u0301'), new WordContext(emptyFinder, "ёлкі", null, logger).word);
+        assertEquals("яно+".replace('+', '\u0301'), new WordInitialConverter(emptyFinder, "яно", null, logger).word);
+        assertEquals("ё+лкі".replace('+', '\u0301'), new WordInitialConverter(emptyFinder, "ёлкі", null, logger).word);
     }
 
     @Test
     void testZBazyUKarotki() {
         // калі няма ў базе
-        WordContext wcn = new WordContext(emptyFinder, "ўяўны", null, logger);
+        WordInitialConverter wcn = new WordInitialConverter(emptyFinder, "ўяўны", null, logger);
         assertEquals("ўяўны", wcn.word);
 
         // калі ёсць у базе
@@ -155,11 +155,11 @@ public class WordContextTest {
         db.getAllParadigms().add(p);
         GrammarFinder finder = new GrammarFinder(db);
 
-        WordContext wcy = new WordContext(finder, "ўяўны", null, logger);
+        WordInitialConverter wcy = new WordInitialConverter(finder, "ўяўны", null, logger);
         assertEquals("ўя+ўны".replace('+', '\u0301'), wcy.word);
     }
 
-    private void checkDebug(List<WordContext> words, String... debugs) {
+    private void checkDebug(List<WordInitialConverter> words, String... debugs) {
         assertEquals(words.size(), debugs.length);
         for (int i = 0; i < words.size(); i++) {
             List<Huk> huki = words.get(i).huki;
@@ -174,42 +174,42 @@ public class WordContextTest {
 
     @Test
     public void debugInsideOne() throws Exception {
-        List<WordContext> words = List.of(new WordContext(emptyFinder, "н(ов)ы", null, logger));
+        List<WordInitialConverter> words = List.of(new WordInitialConverter(emptyFinder, "н(ов)ы", null, logger));
         Fanetyka3.applyDebug(words);
         checkDebug(words, "-++-");
     }
 
     @Test
     public void debugStartOne() throws Exception {
-        List<WordContext> words = List.of(new WordContext(emptyFinder, "(нов)ы", null, logger));
+        List<WordInitialConverter> words = List.of(new WordInitialConverter(emptyFinder, "(нов)ы", null, logger));
         Fanetyka3.applyDebug(words);
         checkDebug(words, "+++-");
     }
 
     @Test
     public void debugEndOne() throws Exception {
-        List<WordContext> words = List.of(new WordContext(emptyFinder, "н(овы)", null, logger));
+        List<WordInitialConverter> words = List.of(new WordInitialConverter(emptyFinder, "н(овы)", null, logger));
         Fanetyka3.applyDebug(words);
         checkDebug(words, "-+++");
     }
 
     @Test
     public void debugTwo() throws Exception {
-        List<WordContext> words = List.of(new WordContext(emptyFinder, "н(овы", null, logger), new WordContext(emptyFinder, "нов)ы", null, logger));
+        List<WordInitialConverter> words = List.of(new WordInitialConverter(emptyFinder, "н(овы", null, logger), new WordInitialConverter(emptyFinder, "нов)ы", null, logger));
         Fanetyka3.applyDebug(words);
         checkDebug(words, "-+++", "+++-");
     }
 
     @Test
     public void debugThree() throws Exception {
-        List<WordContext> words = List.of(new WordContext(emptyFinder, "н(овы", null, logger), new WordContext(emptyFinder, "новы", null, logger),
-                new WordContext(emptyFinder, "нов)ы", null, logger));
+        List<WordInitialConverter> words = List.of(new WordInitialConverter(emptyFinder, "н(овы", null, logger), new WordInitialConverter(emptyFinder, "новы", null, logger),
+                new WordInitialConverter(emptyFinder, "нов)ы", null, logger));
         Fanetyka3.applyDebug(words);
         checkDebug(words, "-+++", "++++", "+++-");
     }
 
     @Test
     public void empty() throws Exception {
-        new WordContext(emptyFinder, "", null, logger);
+        new WordInitialConverter(emptyFinder, "", null, logger);
     }
 }

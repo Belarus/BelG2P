@@ -90,12 +90,12 @@ public class Fanetyka3 {
      * debug.
      */
     protected void prepareWordsForProcessing() throws Exception {
-        List<WordContext> words = new ArrayList<>();
-        WordContext nextWord = null;
+        List<WordInitialConverter> words = new ArrayList<>();
+        WordInitialConverter nextWord = null;
         for (int i = inputWords.size() - 1; i >= 0; i--) {
             // апрацоўваем словы, ад канца да пачатку,
             // бо патрэбна спасылка на наступнае слова
-            WordContext w = new WordContext(config.finder, inputWords.get(i), nextWord, log -> logPhenomenon.add(log));
+            WordInitialConverter w = new WordInitialConverter(config.finder, inputWords.get(i), nextWord, log -> logPhenomenon.add(log));
             words.add(w);
             nextWord = w;
         }
@@ -104,15 +104,15 @@ public class Fanetyka3 {
         applyDebug(words);
 
         // збіраем гукі з усіх слоў
-        for (WordContext w : words) {
+        for (WordInitialConverter w : words) {
             huki.addAll(w.huki);
         }
     }
 
-    static void applyDebug(List<WordContext> words) {
+    static void applyDebug(List<WordInitialConverter> words) {
         // пазначаем debug для гукаў
         boolean inDebug = false;
-        for (WordContext w : words) {
+        for (WordInitialConverter w : words) {
             boolean wordHasOwnDebug = w.debugPartEnd > 0;
             if (wordHasOwnDebug) {
                 if (w.applyDebug(w.debugPartBegin, w.debugPartEnd)) {

@@ -300,11 +300,11 @@ public class Sprascennie {
         return true;
     }
 
-    @ProcessCase(name = "Прыпадабненне дч -> тч, дц -> тц", logCountBefore = 2, logCountAfter = 2)
-    public boolean pryDC(Huk huk1, Huk huk2) {
-        huk1.bazavyHuk = BAZAVY_HUK.т;
-        return true;
-    }
+//    @ProcessCase(name = "Прыпадабненне дч -> тч, дц -> тц", logCountBefore = 2, logCountAfter = 2)
+//    public boolean pryDC(Huk huk1, Huk huk2) {
+//        huk1.bazavyHuk = BAZAVY_HUK.т;
+//        return true;
+//    }
 
     @ProcessCase(name = "Прыпадабненне т-ш -> ч-ш, т+ч => ч-ч пасля галоснага", logCountBefore = 2, logCountAfter = 2)
     public boolean pryTS(Huk huk1, Huk huk2) {

@@ -1,11 +1,16 @@
 package org.alex73.fanetyka.processes;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.alex73.fanetyka.config.ProcessCase;
 import org.alex73.fanetyka.impl.Huk;
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
+import org.alex73.fanetyka.impl.ProcessContext;
+import org.alex73.grammardb.StressUtils;
+import org.alex73.grammardb.WordMorphology;
 
 public class SypiacyjaSvisciacyja {
     static final String sypiacyja2svisciacyja_str = "ш/с, ж/з, дж/дз, ч/ц";
@@ -36,10 +41,30 @@ public class SypiacyjaSvisciacyja {
     }
 
     @ProcessCase(name = "Пераход шыпячых перад свісцячымі ва ўскосных склонах", logCountBefore = 3, logCountAfter = 3)
-    public boolean sycdz(Huk huk) {
-        BAZAVY_HUK replaceTo = sypiacyja2svisciacyja.get(huk.bazavyHuk);
-        huk.bazavyHuk = replaceTo;
-        return true;
+    public boolean sycdz(Huk huk, ProcessContext context) {
+        // Толькі калі пачатковая форма заканчваецца на "-ка" // FAN-58
+        Set<String> ka = new TreeSet<>();
+        Set<String> nonKa = new TreeSet<>();
+        for (WordMorphology mf : huk.wordContext.amonimy) {
+            String f0 = StressUtils.unstress(mf.v.getLemma()).toLowerCase();
+            if (f0.endsWith("ка")) {
+                ka.add(f0);
+            } else {
+                nonKa.add(f0);
+            }
+        }
+        if (!ka.isEmpty()) {
+            if (!nonKa.isEmpty()) {
+                String word = StressUtils.unstress(huk.wordContext.word);
+                String last3 = word.length() >= 3 ? word.substring(word.length() - 3) : word;
+                context.debug.add("Заўвага: вымаўленне “-" + last3 + "” у слове “" + word + "”, калі пачатковая форма “" + String.join(",", nonKa)
+                        + "”, а не “" + String.join(",", ka) + "”");
+            }
+            BAZAVY_HUK replaceTo = sypiacyja2svisciacyja.get(huk.bazavyHuk);
+            huk.bazavyHuk = replaceTo;
+            return true;
+        }
+        return false;
     }
 
 //    @ProcessCase(name = "Пераход шыпячых перад с/з у свісцячыя", logCountBefore = 2, logCountAfter = 2)
