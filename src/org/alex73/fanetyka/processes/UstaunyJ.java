@@ -6,17 +6,10 @@ import org.alex73.fanetyka.impl.ProcessContext;
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 
 public class UstaunyJ {
-//    @ProcessCase(name = "Злучнік 'і' пераходзіць у 'ы'", logCountBefore = 3, logCountAfter = 3)
-//    public boolean zi1(Huk h1, Huk h2) {
-//        h2.bazavyHuk = Huk.BAZAVY_HUK.ы;
-//        h2.miakki = 0;
-//        return true;
-//    }
 
     @ProcessCase(name = "Злучнік 'і' пераходзіць у 'й'", logCountBefore = 3, logCountAfter = 3)
     public boolean zi2(Huk h1, Huk h2) {
         h2.bazavyHuk = Huk.BAZAVY_HUK.j;
-        h2.halosnaja = false;
         return true;
     }
 
@@ -37,15 +30,8 @@ public class UstaunyJ {
     @ProcessCase(name = "Пераход 'і' ў 'й' напачатку слова не пад націскам", logCountBefore = 2, logCountAfter = 2)
     public boolean pinn(Huk h1, Huk h2) {
         h2.bazavyHuk = Huk.BAZAVY_HUK.j;
-        h2.halosnaja = false;
         return true;
     }
-
-//    @ProcessCase(name = "Пераход 'і' ў 'йі' пасля 'па-'", logCountBefore = 3, logCountAfter = 4)
-//    public boolean pa(ProcessContext context) {
-//        ustavicJ(context, 2);
-//        return true;
-//    }
 
     @ProcessCase(name = "Пераход 'і' ў 'йі' пасля апострафу", logCountBefore = 1, logCountAfter = 2)
     public boolean pia(ProcessContext context) {
@@ -111,6 +97,7 @@ public class UstaunyJ {
         ustavicJ(context, 1);
         return true;
     }
+
     @ProcessCase(name = "Дадаецца j перад галоснай пасля мяккага", logCountBefore = 1, logCountAfter = 2)
     public boolean jmiac(ProcessContext context, Huk h1) {
         if (h1.bazavyHuk == Huk.BAZAVY_HUK.j) {

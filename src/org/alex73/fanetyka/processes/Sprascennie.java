@@ -95,43 +95,14 @@ public class Sprascennie {
         return true;
     }
 
-    @ProcessCase(name = "Спрашчэнне: с'-т/ц + (глухі ці санорны ў наступным слове) -> c'", logCountBefore = 3, logCountAfter = 2)
+    @ProcessCase(name = "Спрашчэнне: шумны глухі шчылінны + шумны глухі змычна-шчылінны + мяжа + любы зычны", logCountBefore = 3, logCountAfter = 2)
     public boolean cch(Huk h1, Huk h2, Huk h3, ProcessContext context) {
         context.huki.get(context.currentPosition).padzielPasla = context.huki.get(context.currentPosition + 1).padzielPasla;
         vydalicNastupny(context, 0);
         return true;
-//        if (h3.isSanorny()) {
-//            // калі санорны - не спрашчаецца
-//            return false;
-//        }
-//        if (h3.isSypiacy()) {
-//            // шыпячы ў наступным слове
-//            if (h3.isHluchi()) {
-//                h1.bazavyHuk = Huk.BAZAVY_HUK.ш;
-//                h1.miakki = 0;
-//                vydalicNastupny(context, 0);
-//            } else if (h3.isZvonki()) {
-//                h1.bazavyHuk = Huk.BAZAVY_HUK.ж;
-//                h1.miakki = 0;
-//                vydalicNastupny(context, 0);
-//            } else {
-//                throw new RuntimeException();
-//            }
-//        } else {
-//            // нешыпячы ў наступным слове
-//            if (h3.isHluchi()) {
-//                vydalicNastupny(context, 0);
-//            } else if (h3.isZvonki()) {
-//                h1.bazavyHuk = Huk.BAZAVY_HUK.з;
-//                vydalicNastupny(context, 0);
-//            } else {
-//                throw new RuntimeException();
-//            }
-//        }
-//        return true;
     }
 
-    @ProcessCase(name = "Спрашчэнне: шумны звонкі шчылінны + шумны звонкі змычны/шумны звонкі змычна-шчылінны + звонкі", logCountBefore = 3, logCountAfter = 2)
+    @ProcessCase(name = "Спрашчэнне: шумны звонкі шчылінны + шумны звонкі змычны/шумны звонкі змычна-шчылінны + звонкі/санорны", logCountBefore = 3, logCountAfter = 2)
     public boolean zdz(ProcessContext context) {
         context.huki.get(context.currentPosition).padzielPasla = context.huki.get(context.currentPosition + 1).padzielPasla;
         vydalicNastupny(context, 0);

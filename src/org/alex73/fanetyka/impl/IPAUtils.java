@@ -106,7 +106,7 @@ public class IPAUtils {
             return IPA.ɨ;
         case j:
             if (h.miakki != Huk.MIAKKASC_PAZNACANAJA) {
-                //TODO throw new RuntimeException("мусіць быць мяккі: " + h.bazavyHuk);
+              throw new RuntimeException("мусіць быць мяккі: " + h.bazavyHuk);
             }
             // ён заўсёды мяккі
             return IPA.j;
@@ -166,7 +166,6 @@ public class IPAUtils {
                 return null;
             case 'a':
                 huk = new Huk(s.substring(0, 1), BAZAVY_HUK.а);
-                huk.halosnaja = true;
                 break;
             case 'b':
                 if (c1 == 'ʲ') {
@@ -213,7 +212,6 @@ public class IPAUtils {
                 break;
             case 'ɛ':
                 huk = new Huk(s.substring(0, 1), BAZAVY_HUK.э);
-                huk.halosnaja = true;
                 break;
             case 'ʐ':
                 huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ж);
@@ -228,7 +226,6 @@ public class IPAUtils {
                 break;
             case 'i':
                 huk = new Huk(s.substring(0, 1), BAZAVY_HUK.і);
-                huk.halosnaja = true;
                 break;
             case 'k':
                 if (c1 == 'ʲ') {
@@ -269,7 +266,6 @@ public class IPAUtils {
                 break;
             case 'ɔ':
                 huk = new Huk(s.substring(0, 1), BAZAVY_HUK.о);
-                huk.halosnaja = true;
                 break;
             case 'p':
                 if (c1 == 'ʲ') {
@@ -300,7 +296,6 @@ public class IPAUtils {
                 break;
             case 'u':
                 huk = new Huk(s.substring(0, 1), BAZAVY_HUK.у);
-                huk.halosnaja = true;
                 break;
             case 'f':
                 if (c1 == 'ʲ') {
@@ -323,7 +318,6 @@ public class IPAUtils {
                 break;
             case 'ɨ':
                 huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ы);
-                huk.halosnaja = true;
                 break;
             case 'j':
                 huk = new Huk(s.substring(0, 1), BAZAVY_HUK.j);
@@ -333,7 +327,7 @@ public class IPAUtils {
                 throw new RuntimeException("Невядомы гук: " + s);
             }
         }
-        if (context.stress && huk.halosnaja) {
+        if (context.stress && Huk.halosnyja.contains(huk.bazavyHuk)) {
             huk.stress = true;
             context.stress = false;
         }
@@ -372,7 +366,7 @@ public class IPAUtils {
             if (h.stress) {
                 setIpaStress(huki, hal, i, parent);
             }
-            if (h.halosnaja && h.bazavyHuk != BAZAVY_HUK.j) {
+            if (Huk.halosnyja.contains(h.bazavyHuk)) {
                 hal = i;
             }
             if ((h.padzielPasla & Huk.PADZIEL_SLOVY) != 0 || (h.padzielPasla & Huk.PADZIEL_KARANI) != 0) {
@@ -391,9 +385,9 @@ public class IPAUtils {
             Huk h = huki.get(i);
             if (h.bazavyHuk == BAZAVY_HUK.ў || h.bazavyHuk == BAZAVY_HUK.j || h.bazavyHuk == BAZAVY_HUK.р) {
                 s.append('J');
-            } else if (h.halosnaja) {
+            } else if (Huk.halosnyja.contains(h.bazavyHuk)) {
                 s.append('H');
-            } else if (h.isSanorny()) {
+            } else if (Huk.sanornyja.contains(h.bazavyHuk)) {
                 s.append('S');
             } else {
                 s.append("Z");

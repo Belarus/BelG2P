@@ -21,7 +21,6 @@ public class UstaunyA {
     private void ustavicA(ProcessContext context, int offsetFromCurrent) {
         int pos = context.currentPosition + offsetFromCurrent;
         Huk a = new Huk("", BAZAVY_HUK.а);
-        a.halosnaja = true;
         context.huki.add(pos, a);
     }
 }

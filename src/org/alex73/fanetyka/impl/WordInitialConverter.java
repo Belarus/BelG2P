@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -171,7 +169,6 @@ public class WordInitialConverter {
             switch (c) {
             case 'а':
                 novyHuk = new Huk("а", BAZAVY_HUK.а);
-                novyHuk.halosnaja = true;
                 break;
             case 'б':
                 novyHuk = new Huk("б", BAZAVY_HUK.б);
@@ -190,12 +187,10 @@ public class WordInitialConverter {
                 break;
             case 'е':
                 novyHuk = new Huk("е", BAZAVY_HUK.э);
-                novyHuk.halosnaja = true;
                 novyHuk.miakki = Huk.MIAKKASC_PAZNACANAJA;
                 break;
             case 'ё':
                 novyHuk = new Huk("ё", BAZAVY_HUK.о);
-                novyHuk.halosnaja = true;
                 novyHuk.miakki = Huk.MIAKKASC_PAZNACANAJA;
                 break;
             case 'ж':
@@ -218,7 +213,6 @@ public class WordInitialConverter {
                 break;
             case 'і':
                 novyHuk = new Huk("і", BAZAVY_HUK.і);
-                novyHuk.halosnaja = true;
                 novyHuk.miakki = Huk.MIAKKASC_PAZNACANAJA;
                 break;
             case 'й':
@@ -239,7 +233,6 @@ public class WordInitialConverter {
                 break;
             case 'о':
                 novyHuk = new Huk("о", BAZAVY_HUK.о);
-                novyHuk.halosnaja = true;
                 break;
             case 'п':
                 novyHuk = new Huk("п", BAZAVY_HUK.п);
@@ -255,7 +248,6 @@ public class WordInitialConverter {
                 break;
             case 'у':
                 novyHuk = new Huk("у", BAZAVY_HUK.у);
-                novyHuk.halosnaja = true;
                 break;
             case 'ў':
                 novyHuk = new Huk("ў", BAZAVY_HUK.ў);
@@ -277,7 +269,6 @@ public class WordInitialConverter {
                 break;
             case 'ы':
                 novyHuk = new Huk("ы", BAZAVY_HUK.ы);
-                novyHuk.halosnaja = true;
                 break;
             case 'ь':
                 if (papiaredniHuk != null) {
@@ -286,16 +277,13 @@ public class WordInitialConverter {
                 break;
             case 'э':
                 novyHuk = new Huk("э", BAZAVY_HUK.э);
-                novyHuk.halosnaja = true;
                 break;
             case 'ю':
                 novyHuk = new Huk("ю", BAZAVY_HUK.у);
-                novyHuk.halosnaja = true;
                 novyHuk.miakki = Huk.MIAKKASC_PAZNACANAJA;
                 break;
             case 'я':
                 novyHuk = new Huk("я", BAZAVY_HUK.а);
-                novyHuk.halosnaja = true;
                 novyHuk.miakki = Huk.MIAKKASC_PAZNACANAJA;
                 break;
             case GrammarDB2.pravilny_apostraf:
@@ -326,7 +314,7 @@ public class WordInitialConverter {
                 }
                 break;
             case GrammarDB2.pravilny_nacisk:
-                if (papiaredniHuk == null || !papiaredniHuk.halosnaja || papiaredniHuk.padzielPasla == Huk.PADZIEL_ZLUCOK
+                if (papiaredniHuk == null || !Huk.halosnyja.contains(papiaredniHuk.bazavyHuk) || papiaredniHuk.padzielPasla == Huk.PADZIEL_ZLUCOK
                         || papiaredniHuk.padzielPasla == Huk.PADZIEL_SLOVY) {
                     if (!Huk.SKIP_ERRORS) {
                         throw new RuntimeException("Няправільная пазнака націску - пасля " + papiaredniHuk);
@@ -379,7 +367,7 @@ public class WordInitialConverter {
     boolean naciskNaPiersySklad() {
         // на які склад націск ?
         for (Huk h : huki) {
-            if (h.halosnaja) {
+            if (Huk.halosnyja.contains(h.bazavyHuk)) {
                 return h.stress;
             }
         }

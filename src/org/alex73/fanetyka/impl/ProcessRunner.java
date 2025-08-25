@@ -204,19 +204,19 @@ public class ProcessRunner implements IProcess {
         case "любы":
             return h -> true;
         case "звонкі":
-            return huk -> huk.isZvonki();
+            return huk -> Huk.parnyja_zvonkija.contains(huk.bazavyHuk);
         case "глухі":
-            return huk -> huk.isHluchi();
+            return huk -> Huk.hluchija.contains(huk.bazavyHuk);
         case "галосны":
-            return huk -> huk.halosnaja;
+            return huk -> Huk.halosnyja.contains(huk.bazavyHuk);
         case "зычны":
-            return huk -> !huk.halosnaja;
+            return huk -> !Huk.halosnyja.contains(huk.bazavyHuk);
         case "шыпячы":
-            return huk -> huk.isSypiacy();
+            return huk -> Huk.sypiacyja.contains(huk.bazavyHuk);
         case "свісцячы":
-            return huk -> huk.isSvisciacy();
+            return huk -> Huk.sviasciacyja.contains(huk.bazavyHuk);
         case "санорны":
-            return huk -> huk.isSanorny();
+            return huk -> Huk.sanornyja.contains(huk.bazavyHuk);
         default:
             BAZAVY_HUK expected = BAZAVY_HUK.valueOf(which);
             return huk -> huk.bazavyHuk == expected;
