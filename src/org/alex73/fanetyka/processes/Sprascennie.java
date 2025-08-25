@@ -131,7 +131,7 @@ public class Sprascennie {
 //        return true;
     }
 
-    @ProcessCase(name = "Спрашчэнне: з'-д/дз' +(звонкі ці санорны ў наступным слове) -> з'", logCountBefore = 3, logCountAfter = 2)
+    @ProcessCase(name = "Спрашчэнне: шумны звонкі шчылінны + шумны звонкі змычны/шумны звонкі змычна-шчылінны + звонкі", logCountBefore = 3, logCountAfter = 2)
     public boolean zdz(ProcessContext context) {
         context.huki.get(context.currentPosition).padzielPasla = context.huki.get(context.currentPosition + 1).padzielPasla;
         vydalicNastupny(context, 0);
