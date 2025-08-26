@@ -270,9 +270,15 @@ public class Sprascennie {
 //        return true;
 //    }
 
-    @ProcessCase(name = "Прыпадабненне т-ш -> ч-ш, т+ч => ч-ч пасля галоснага", logCountBefore = 2, logCountAfter = 2)
+    @ProcessCase(name = "Прыпадабненне т-ш -> ч-ш пасля галоснага", logCountBefore = 2, logCountAfter = 2)
     public boolean pryTS(Huk huk1, Huk huk2) {
         huk2.bazavyHuk = BAZAVY_HUK.ч;
+        return true;
+    }
+
+    @ProcessCase(name = "Прыпадабненне: шумны пярэднеязычны змычны+шумны пярэднеязычны змычна-шчылінны", logCountBefore = 2, logCountAfter = 2)
+    public boolean prySPZSPZS(Huk huk1, Huk huk2, Huk huk3) {
+        huk2.bazavyHuk = huk3.bazavyHuk;
         return true;
     }
 
