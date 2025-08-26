@@ -179,7 +179,7 @@ public class TsvConfig implements IConfig {
                 if (check.miakkasc.maskYes != 0 && check.miakkasc.maskNo != 0) {
                     err(c, 3, "Няправільная камбінацыя пазнак мяккасці");
                 }
-                check.padvojeny = readMode(9, c);
+                //TODO remove check.padvojeny = readMode(9, c);
                 check.nacisk = readMode(10, c);
                 if (header.contains("неабавязковы")) {
                     check.optionalHuk = true;

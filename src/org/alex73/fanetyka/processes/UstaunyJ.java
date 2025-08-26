@@ -110,7 +110,6 @@ public class UstaunyJ {
     private void ustavicJ(ProcessContext context, int offsetFromCurrent) {
         int pos = context.currentPosition + offsetFromCurrent;
         Huk jot = new Huk("", BAZAVY_HUK.j);
-        jot.setMiakkasc(true);
         jot.miakki = Huk.MIAKKASC_PAZNACANAJA;
         context.huki.add(pos, jot);
     }

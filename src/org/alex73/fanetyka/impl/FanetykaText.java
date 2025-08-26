@@ -3,6 +3,8 @@ package org.alex73.fanetyka.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.alex73.fanetyka.impl.str.ToStringIPA;
+import org.alex73.fanetyka.impl.str.ToStringSkolny;
 import org.alex73.grammardb.GrammarDB2;
 import org.alex73.grammardb.GrammarFinder;
 
@@ -35,8 +37,8 @@ public class FanetykaText {
                 if (c != ' ') {
                     f.calcFanetyka(words);
                     words.clear();
-                    ipa += f.toString(Huk.ipa);
-                    skola += f.toString(Huk.skolny);
+                    ipa += f.toString(new ToStringIPA());
+                    skola += f.toString(new ToStringSkolny());
                     why.addAll(f.logPhenomenon);
                     f = new Fanetyka3(config);
                     ipa += c;
@@ -48,8 +50,8 @@ public class FanetykaText {
             words.add(word);
         }
         f.calcFanetyka(words);
-        ipa += f.toString(Huk.ipa);
-        skola += f.toString(Huk.skolny);
+        ipa +=  f.toString(new ToStringIPA());
+        skola += f.toString(new ToStringSkolny());
         why.addAll(f.logPhenomenon);
     }
 

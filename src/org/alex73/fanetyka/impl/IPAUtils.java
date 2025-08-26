@@ -2,9 +2,9 @@ package org.alex73.fanetyka.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
+import org.alex73.fanetyka.impl.str.ToStringIPA;
 
 /**
  * Handles stress placement using the IPA standard, placing stress before the syllable.
@@ -16,7 +16,7 @@ public class IPAUtils {
         pʲ, r, s, sʲ, t, tʲ, u, u̯, f, fʲ, x, xʲ, t͡s, t͡sʲ, t͡ʂ, ʂ, ɨ, j
     }
 
-    public static Function<Huk, IPA> ipa_enum = h -> {
+    public static IPA huk2ipa(Huk h) {
         switch (h.bazavyHuk) {
         case а:
             return IPA.a;
@@ -112,7 +112,7 @@ public class IPAUtils {
             return IPA.j;
         }
         throw new RuntimeException("Невядомы базавы гук: " + h.bazavyHuk);
-    };
+    }
 
     public static class ParseIpaContext {
         public String fan;
@@ -123,237 +123,229 @@ public class IPAUtils {
         }
     }
 
-    public static List<Huk> parseIpa(String fan) {
+    public static List<Huk> parseIpa(String fan) { // TODO check ё, ю, я
         ParseIpaContext context = new ParseIpaContext(fan);
         List<Huk> huki = new ArrayList<>();
         while (!context.fan.isEmpty()) {
-            Huk h = parseIpa(context);
-            if (h != null) {
-                huki.add(h);
+            String s = context.fan;
+            Huk huk;
+            if (s.startsWith("u̯")) {
+                huk = new Huk(s.substring(0, 2), BAZAVY_HUK.ў);
+            } else if (s.startsWith("d͡ʐ")) {
+                huk = new Huk(s.substring(0, 3), BAZAVY_HUK.дж);
+            } else if (s.startsWith("d͡zʲ")) {
+                huk = new Huk(s.substring(0, 4), BAZAVY_HUK.дз);
+                huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
+            } else if (s.startsWith("d͡z")) {
+                huk = new Huk(s.substring(0, 3), BAZAVY_HUK.дз);
+            } else if (s.startsWith("t͡ʂ")) {
+                huk = new Huk(s.substring(0, 3), BAZAVY_HUK.ч);
+            } else if (s.startsWith("t͡sʲ")) {
+                huk = new Huk(s.substring(0, 4), BAZAVY_HUK.ц);
+                huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
+            } else if (s.startsWith("t͡s")) {
+                huk = new Huk(s.substring(0, 3), BAZAVY_HUK.ц);
+            } else {
+                char c1 = s.length() > 1 ? s.charAt(1) : 0;
+                switch (s.charAt(0)) {
+                case 'ˈ':
+                    context.stress = true;
+                    context.fan = context.fan.substring(1);
+                    continue;
+                case 'a':
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.а);
+                    break;
+                case 'b':
+                    if (c1 == 'ʲ') {
+                        huk = new Huk(s.substring(0, 2), BAZAVY_HUK.б);
+                        huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
+                    } else {
+                        huk = new Huk(s.substring(0, 1), BAZAVY_HUK.б);
+                    }
+                    break;
+                case 'v':
+                    if (c1 == 'ʲ') {
+                        huk = new Huk(s.substring(0, 2), BAZAVY_HUK.в);
+                        huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
+                    } else {
+                        huk = new Huk(s.substring(0, 1), BAZAVY_HUK.в);
+                    }
+                    break;
+                case 'β':
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.β);
+                    break;
+                case 'ɣ':
+                    if (c1 == 'ʲ') {
+                        huk = new Huk(s.substring(0, 2), BAZAVY_HUK.г);
+                        huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
+                    } else {
+                        huk = new Huk(s.substring(0, 1), BAZAVY_HUK.г);
+                    }
+                    break;
+                case 'g':
+                    if (c1 == 'ʲ') {
+                        huk = new Huk(s.substring(0, 2), BAZAVY_HUK.ґ);
+                        huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
+                    } else {
+                        huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ґ);
+                    }
+                    break;
+                case 'd':
+                    if (c1 == 'ʲ') {
+                        huk = new Huk(s.substring(0, 2), BAZAVY_HUK.д);
+                        huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
+                    } else {
+                        huk = new Huk(s.substring(0, 1), BAZAVY_HUK.д);
+                    }
+                    break;
+                case 'ɛ':
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.э);
+                    break;
+                case 'ʐ':
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ж);
+                    break;
+                case 'z':
+                    if (c1 == 'ʲ') {
+                        huk = new Huk(s.substring(0, 2), BAZAVY_HUK.з);
+                        huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
+                    } else {
+                        huk = new Huk(s.substring(0, 1), BAZAVY_HUK.з);
+                    }
+                    break;
+                case 'i':
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.і);
+                    break;
+                case 'k':
+                    if (c1 == 'ʲ') {
+                        huk = new Huk(s.substring(0, 2), BAZAVY_HUK.к);
+                        huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
+                    } else {
+                        huk = new Huk(s.substring(0, 1), BAZAVY_HUK.к);
+                    }
+                    break;
+                case 'ɫ':
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.л);
+                    break;
+                case 'l':
+                    if (c1 != 'ʲ' && !Huk.SKIP_ERRORS) {
+                        throw new RuntimeException("Няправільнае аднаўленне гуку: " + s);
+                    }
+                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.л);
+                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
+                    break;
+                case 'm':
+                    if (c1 == 'ʲ') {
+                        huk = new Huk(s.substring(0, 2), BAZAVY_HUK.м);
+                        huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
+                    } else {
+                        huk = new Huk(s.substring(0, 1), BAZAVY_HUK.м);
+                    }
+                    break;
+                case 'ɱ':
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ɱ);
+                    break;
+                case 'n':
+                    if (c1 == 'ʲ') {
+                        huk = new Huk(s.substring(0, 2), BAZAVY_HUK.н);
+                        huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
+                    } else {
+                        huk = new Huk(s.substring(0, 1), BAZAVY_HUK.н);
+                    }
+                    break;
+                case 'ɔ':
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.о);
+                    break;
+                case 'p':
+                    if (c1 == 'ʲ') {
+                        huk = new Huk(s.substring(0, 2), BAZAVY_HUK.п);
+                        huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
+                    } else {
+                        huk = new Huk(s.substring(0, 1), BAZAVY_HUK.п);
+                    }
+                    break;
+                case 'r':
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.р);
+                    break;
+                case 's':
+                    if (c1 == 'ʲ') {
+                        huk = new Huk(s.substring(0, 2), BAZAVY_HUK.с);
+                        huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
+                    } else {
+                        huk = new Huk(s.substring(0, 1), BAZAVY_HUK.с);
+                    }
+                    break;
+                case 't':
+                    if (c1 == 'ʲ') {
+                        huk = new Huk(s.substring(0, 2), BAZAVY_HUK.т);
+                        huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
+                    } else {
+                        huk = new Huk(s.substring(0, 1), BAZAVY_HUK.т);
+                    }
+                    break;
+                case 'u':
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.у);
+                    break;
+                case 'f':
+                    if (c1 == 'ʲ') {
+                        huk = new Huk(s.substring(0, 2), BAZAVY_HUK.ф);
+                        huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
+                    } else {
+                        huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ф);
+                    }
+                    break;
+                case 'x':
+                    if (c1 == 'ʲ') {
+                        huk = new Huk(s.substring(0, 2), BAZAVY_HUK.х);
+                        huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
+                    } else {
+                        huk = new Huk(s.substring(0, 1), BAZAVY_HUK.х);
+                    }
+                    break;
+                case 'ʂ':
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ш);
+                    break;
+                case 'ɨ':
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ы);
+                    break;
+                case 'j':
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.j);
+                    huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
+                    break;
+                default:
+                    throw new RuntimeException("Невядомы гук: " + s);
+                }
+            }
+            huki.add(huk);
+            if (context.stress && Huk.halosnyja.contains(huk.bazavyHuk)) {
+                huk.stress = true;
+                context.stress = false;
+            }
+            String sipa = new ToStringIPA().huk2str(huk);
+            context.fan = context.fan.substring(sipa.length());
+
+            char cafter = context.fan.length() > 0 ? context.fan.charAt(0) : 0;
+            if (cafter == 'ː') {
+                huki.add(huk);
+                huk.zychodnyjaLitary = huk.zychodnyjaLitary + "ː";
+                context.fan = context.fan.substring(1);
+                sipa += cafter;
+            }
+
+            if (!s.startsWith(sipa) || !sipa.equals(huk.zychodnyjaLitary)) {
+                throw new RuntimeException("Няправільнае аднаўленне гуку: " + new ToStringIPA().huk2str(huk) + " => " + s);
+            }
+
+            char cspace = context.fan.length() > 0 ? context.fan.charAt(0) : 0;
+            if (cspace == ' ') {
+                huk.padzielPasla |= Huk.PADZIEL_SLOVY;
+                context.fan = context.fan.substring(1);
+                sipa += cspace;
             }
         }
         if (context.stress) {
             throw new RuntimeException("Няправільнае аднаўленне націску: " + fan);
         }
         return huki;
-    }
-
-    private static Huk parseIpa(ParseIpaContext context) { // TODO check ё, ю, я
-        String s = context.fan;
-        Huk huk;
-        if (s.startsWith("u̯")) {
-            huk = new Huk(s.substring(0, 2), BAZAVY_HUK.ў);
-        } else if (s.startsWith("d͡ʐ")) {
-            huk = new Huk(s.substring(0, 3), BAZAVY_HUK.дж);
-        } else if (s.startsWith("d͡zʲ")) {
-            huk = new Huk(s.substring(0, 4), BAZAVY_HUK.дз);
-            huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-        } else if (s.startsWith("d͡z")) {
-            huk = new Huk(s.substring(0, 3), BAZAVY_HUK.дз);
-        } else if (s.startsWith("t͡ʂ")) {
-            huk = new Huk(s.substring(0, 3), BAZAVY_HUK.ч);
-        } else if (s.startsWith("t͡sʲ")) {
-            huk = new Huk(s.substring(0, 4), BAZAVY_HUK.ц);
-            huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-        } else if (s.startsWith("t͡s")) {
-            huk = new Huk(s.substring(0, 3), BAZAVY_HUK.ц);
-        } else {
-            char c1 = s.length() > 1 ? s.charAt(1) : 0;
-            switch (s.charAt(0)) {
-            case 'ˈ':
-                context.stress = true;
-                context.fan = context.fan.substring(1);
-                return null;
-            case 'a':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.а);
-                break;
-            case 'b':
-                if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.б);
-                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.б);
-                }
-                break;
-            case 'v':
-                if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.в);
-                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.в);
-                }
-                break;
-            case 'β':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.β);
-                break;
-            case 'ɣ':
-                if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.г);
-                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.г);
-                }
-                break;
-            case 'g':
-                if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.ґ);
-                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ґ);
-                }
-                break;
-            case 'd':
-                if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.д);
-                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.д);
-                }
-                break;
-            case 'ɛ':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.э);
-                break;
-            case 'ʐ':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ж);
-                break;
-            case 'z':
-                if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.з);
-                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.з);
-                }
-                break;
-            case 'i':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.і);
-                break;
-            case 'k':
-                if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.к);
-                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.к);
-                }
-                break;
-            case 'ɫ':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.л);
-                break;
-            case 'l':
-                if (c1 != 'ʲ' && !Huk.SKIP_ERRORS) {
-                    throw new RuntimeException("Няправільнае аднаўленне гуку: " + s);
-                }
-                huk = new Huk(s.substring(0, 2), BAZAVY_HUK.л);
-                huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                break;
-            case 'm':
-                if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.м);
-                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.м);
-                }
-                break;
-            case 'ɱ':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ɱ);
-                break;
-            case 'n':
-                if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.н);
-                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.н);
-                }
-                break;
-            case 'ɔ':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.о);
-                break;
-            case 'p':
-                if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.п);
-                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.п);
-                }
-                break;
-            case 'r':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.р);
-                break;
-            case 's':
-                if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.с);
-                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.с);
-                }
-                break;
-            case 't':
-                if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.т);
-                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.т);
-                }
-                break;
-            case 'u':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.у);
-                break;
-            case 'f':
-                if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.ф);
-                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ф);
-                }
-                break;
-            case 'x':
-                if (c1 == 'ʲ') {
-                    huk = new Huk(s.substring(0, 2), BAZAVY_HUK.х);
-                    huk.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                } else {
-                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.х);
-                }
-                break;
-            case 'ʂ':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ш);
-                break;
-            case 'ɨ':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ы);
-                break;
-            case 'j':
-                huk = new Huk(s.substring(0, 1), BAZAVY_HUK.j);
-                huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
-                break;
-            default:
-                throw new RuntimeException("Невядомы гук: " + s);
-            }
-        }
-        if (context.stress && Huk.halosnyja.contains(huk.bazavyHuk)) {
-            huk.stress = true;
-            context.stress = false;
-        }
-        String sipa = Huk.ipa.apply(huk);
-        context.fan = context.fan.substring(sipa.length());
-
-        char cafter = context.fan.length() > 0 ? context.fan.charAt(0) : 0;
-        if (cafter == 'ː') {
-            huk.padvojeny = true;
-            huk.zychodnyjaLitary = huk.zychodnyjaLitary + "ː";
-            context.fan = context.fan.substring(1);
-            sipa += cafter;
-        }
-
-        if (!s.startsWith(sipa) || !sipa.equals(huk.zychodnyjaLitary)) {
-            throw new RuntimeException("Няправільнае аднаўленне гуку: " + Huk.ipa.apply(huk) + " => " + s);
-        }
-
-        char cspace = context.fan.length() > 0 ? context.fan.charAt(0) : 0;
-        if (cspace == ' ') {
-            huk.padzielPasla |= Huk.PADZIEL_SLOVY;
-            context.fan = context.fan.substring(1);
-            sipa += cspace;
-        }
-
-        return huk;
     }
 
     /**

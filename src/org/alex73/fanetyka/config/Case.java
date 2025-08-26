@@ -27,7 +27,7 @@ public class Case {
         public MODE apostraf = MODE.DONT_CARE;
         public MultiMode pasziel = new MultiMode();
         public MultiMode miakkasc = new MultiMode();
-        public MODE padvojeny = MODE.DONT_CARE;
+        //public MODE padvojeny = MODE.DONT_CARE;
         public MODE nacisk = MODE.DONT_CARE;
     }
 

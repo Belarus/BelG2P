@@ -2,7 +2,10 @@ package org.alex73.fanetyka.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
+
+import org.alex73.fanetyka.impl.str.ToStringBase;
+import org.alex73.fanetyka.impl.str.ToStringIPA;
+import org.alex73.fanetyka.impl.str.ToStringSkolny;
 
 /**
  * Converter.
@@ -132,41 +135,13 @@ public class Fanetyka3 {
     }
 
     public String toString() {
-        return toString(Huk.ipa) + " / " + toString(Huk.skolny);
+        return new ToStringIPA().toString(huki) + " / " +new ToStringSkolny().toString(huki);
     }
 
     /**
      * Convert sounds to specific text representation.
      */
-    public String toString(Function<Huk, String> hukConverter) {
-        return toString(huki, hukConverter);
-    }
-
-    public static String toString(List<Huk> huki, Function<Huk, String> hukConverter) {
-        StringBuilder out = new StringBuilder();
-        for (Huk huk : huki) {
-            out.append(hukConverter.apply(huk));
-            if ((huk.padzielPasla & (Huk.PADZIEL_SLOVY | Huk.PADZIEL_PRYNAZOUNIK)) != 0) {
-                out.append(' ');
-            }
-        }
-        return out.toString().trim();
-    }
-
-    /**
-     * Convert to list of sounds.
-     */
-    public List<String> toSoundList(Function<Huk, String> hukConverter) {
-        List<String> result = new ArrayList<String>();
-        for (Huk huk : huki) {
-            result.add(hukConverter.apply(huk));
-            if ((huk.padzielPasla & (Huk.PADZIEL_SLOVY | Huk.PADZIEL_PRYNAZOUNIK)) != 0) {
-                result.add(" ");
-            }
-        }
-        if (!result.isEmpty() && result.get(result.size() - 1).isBlank()) {
-            result.remove(result.size() - 1);
-        }
-        return result;
+    public String toString(ToStringBase hukConverter) {
+        return hukConverter.toString(huki);
     }
 }

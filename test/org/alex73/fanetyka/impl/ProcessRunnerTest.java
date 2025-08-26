@@ -59,29 +59,6 @@ public class ProcessRunnerTest {
     }
 
     @Test
-    public void testPadvojeny() throws Exception {
-        c.padvojeny = Case.MODE.ERROR;
-        shouldPass();
-        c.padvojeny = Case.MODE.DONT_CARE;
-        shouldPass();
-        c.padvojeny = Case.MODE.YES;
-        shouldNotPass();
-        c.padvojeny = Case.MODE.NO;
-        shouldPass();
-
-        h.padvojeny = true;
-
-        c.padvojeny = Case.MODE.ERROR;
-        shouldBeError();
-        c.padvojeny = Case.MODE.DONT_CARE;
-        shouldPass();
-        c.padvojeny = Case.MODE.YES;
-        shouldPass();
-        c.padvojeny = Case.MODE.NO;
-        shouldNotPass();
-    }
-
-    @Test
     public void testNacisk() throws Exception {
         c.nacisk = Case.MODE.ERROR;
         shouldPass();

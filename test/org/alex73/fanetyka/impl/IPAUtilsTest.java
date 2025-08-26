@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
+import org.alex73.fanetyka.impl.str.ToStringIPA;
 import org.junit.jupiter.api.Test;
 
 class IPAUtilsTest {
@@ -33,16 +34,16 @@ class IPAUtilsTest {
         List<Huk> result = IPAUtils.parseIpa("dʲa");
         assertEquals(2, result.size());
         assertEquals(BAZAVY_HUK.д, result.get(0).bazavyHuk);
-        assertEquals(Huk.MIAKKASC_PAZNACANAJA, result.get(0).miakki);
+        assertEquals(Huk.MIAKKASC_ASIMILACYJNAJA, result.get(0).miakki);
         assertEquals(BAZAVY_HUK.а, result.get(1).bazavyHuk);
     }
 
     @Test
     void parseIpaHandlesLong() {
         List<Huk> result = IPAUtils.parseIpa("dː");
-        assertEquals(1, result.size());
+        assertEquals(2, result.size());
         assertEquals(BAZAVY_HUK.д, result.get(0).bazavyHuk);
-        assertTrue(result.get(0).padvojeny);
+        assertEquals(BAZAVY_HUK.д, result.get(1).bazavyHuk);
     }
 
     @Test
@@ -70,7 +71,7 @@ class IPAUtilsTest {
     @Test
     void ipaEnumHandlesKnownHuk() {
         Huk huk = new Huk("a", BAZAVY_HUK.а);
-        IPAUtils.IPA result = IPAUtils.ipa_enum.apply(huk);
-        assertEquals(IPAUtils.IPA.a, result);
+        String result = new ToStringIPA().huk2str(huk);
+        assertEquals("a", result);
     }
 }

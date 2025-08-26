@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
+import org.alex73.fanetyka.impl.str.ToStringIPA;
 import org.alex73.grammardb.GrammarDB2;
 import org.alex73.grammardb.GrammarFinder;
 import org.alex73.grammardb.StressUtils;
@@ -341,7 +342,7 @@ public class WordInitialConverter {
                 }
             }
         }
-        logger.accept("Базавыя гукі з '" + wl + "': " + Fanetyka3.toString(huki, Huk.ipa));
+        logger.accept("Базавыя гукі з '" + wl + "': " + new ToStringIPA().toString(huki));
     }
 
     /**

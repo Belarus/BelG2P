@@ -17,6 +17,7 @@ import org.alex73.fanetyka.config.IConfig;
 import org.alex73.fanetyka.config.ProcessCase;
 import org.alex73.fanetyka.config.TsvConfig;
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
+import org.alex73.fanetyka.impl.str.ToStringIPA;
 
 public class ProcessRunner implements IProcess {
     public final Class<?> processType;
@@ -137,11 +138,11 @@ public class ProcessRunner implements IProcess {
                 // таго як сам зробіць іншыя праверкі
                 ProcessCase ann = m.getAnnotation(ProcessCase.class);
                 String before = context.dump(ann.logCountBefore());
-                String wordBefore = instance.toString(Huk.ipa);
+                String wordBefore = instance.toString(new ToStringIPA());
                 boolean changed = (Boolean) m.invoke(processor, parameters.toArray());
                 if (changed) {
                     String after = context.dump(ann.logCountAfter());
-                    String wordAfter = instance.toString(Huk.ipa);
+                    String wordAfter = instance.toString(new ToStringIPA());
                     instance.logPhenomenon.add(ca.name + ": [" + before + " -> " + after + "]. " + ca.logMessage + "; " + wordBefore + "=>" + wordAfter);
                     if (caseName.equals(instance.debugRuleName)) {
                         instance.debugRuleProcessed = true; // ці выканалася гэтае правіла
@@ -248,9 +249,6 @@ public class ProcessRunner implements IProcess {
         }
         if (!checkValue(zjava, "мяккасць", c.miakkasc, huk.miakki)) {
             return "мяккасць " + huk.miakki;
-        }
-        if (!checkValue(zjava, "падвоены", c.padvojeny, huk.padvojeny)) {
-            return "падвоены";
         }
         if (!checkValue(zjava, "націск", c.nacisk, huk.stress)) {
             return "націск";

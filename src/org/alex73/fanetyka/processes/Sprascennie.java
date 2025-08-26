@@ -37,17 +37,6 @@ public class Sprascennie {
         return true;
     }
 
-    @ProcessCase(name = "Прыпадабненне аднолькавых зычных", logCountBefore = 2, logCountAfter = 1)
-    public boolean eq2(Huk h1, Huk h2, ProcessContext context) {
-        if (h1.bazavyHuk != h2.bazavyHuk) {
-            // неаднолькавыя
-            return false;
-        }
-        vydalicPapiaredni(context, 1);
-        h2.padvojeny = true;
-        return true;
-    }
-
     @ProcessCase(name = "Спрашчэнне: с/ш-с-к -> c-к не на стыку", logCountBefore = 3, logCountAfter = 2)
     public boolean sss(ProcessContext context) {
         vydalicPapiaredni(context, 1);
@@ -66,9 +55,7 @@ public class Sprascennie {
 
     @ProcessCase(name = "Спрашчэнне: с-т-с -> c:", logCountBefore = 3, logCountAfter = 1)
     public boolean sts(Huk h1, Huk h2, Huk h3, ProcessContext context) {
-        h1.padvojeny = true;
         h1.miakki = h3.miakki;
-        vydalicNastupny(context, 0);
         vydalicNastupny(context, 0);
         return true;
     }
@@ -253,8 +240,8 @@ public class Sprascennie {
 
     @ProcessCase(name = "Прыпадабненне: с'-ш -> ш:, с'-ж -> ж:, с'-з -> з:, з’+ш-> ш:, з’+ж-> ж:", logCountBefore = 2, logCountAfter = 1)
     public boolean ss(Huk h1, Huk h2, ProcessContext context) {
-        vydalicPapiaredni(context, 1);
-        h2.padvojeny = true;
+        h1.bazavyHuk = h2.bazavyHuk;
+        h1.miakki = h2.miakki;
         return true;
     }
 
