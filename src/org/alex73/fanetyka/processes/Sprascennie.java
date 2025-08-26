@@ -95,15 +95,8 @@ public class Sprascennie {
         return true;
     }
 
-    @ProcessCase(name = "Спрашчэнне: шумны глухі шчылінны + шумны глухі змычна-шчылінны + мяжа + любы зычны", logCountBefore = 3, logCountAfter = 2)
+    @ProcessCase(name = "Спрашчэнне: шумны шчылінны + шумны змычна-шчылінны + мяжа + любы зычны", logCountBefore = 3, logCountAfter = 2)
     public boolean cch(Huk h1, Huk h2, Huk h3, ProcessContext context) {
-        context.huki.get(context.currentPosition).padzielPasla = context.huki.get(context.currentPosition + 1).padzielPasla;
-        vydalicNastupny(context, 0);
-        return true;
-    }
-
-    @ProcessCase(name = "Спрашчэнне: шумны звонкі шчылінны + шумны звонкі змычны/шумны звонкі змычна-шчылінны + звонкі/санорны", logCountBefore = 3, logCountAfter = 2)
-    public boolean zdz(ProcessContext context) {
         context.huki.get(context.currentPosition).padzielPasla = context.huki.get(context.currentPosition + 1).padzielPasla;
         vydalicNastupny(context, 0);
         return true;

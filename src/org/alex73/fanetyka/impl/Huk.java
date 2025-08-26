@@ -26,6 +26,9 @@ public class Huk {
     public static final int MIAKKASC_PAZNACANAJA = 2;
     public static final int MASK_MIAKKASC_USIE = 3;
 
+    /**
+     * Кожны гук мусіць быць: галосным, альбо санорным, альбо парным звонкім, альбо глухім.
+     */
     public enum BAZAVY_HUK {
         а, б, в, β, г, ґ, д, э, дж, дз, ж, з, і, к, л, м, ɱ, н, о, п, р, с, т, у, ў, ф, х, ц, ч, ш, ы, j
     }
