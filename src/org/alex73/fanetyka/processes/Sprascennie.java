@@ -162,20 +162,20 @@ public class Sprascennie {
 //        return true;
 //    }
 
-    @ProcessCase(name = "Спрашчэнне аднолькавых зычных (не пасля галоснай)", logCountBefore = 3, logCountAfter = 2)
-    public boolean eq1(Huk h1, Huk h2, Huk h3, ProcessContext context) {
-        if (h2.bazavyHuk != h3.bazavyHuk) {
-            if (context.debugPrefix != null) {
-                context.debug.add(context.debugPrefix + " другі і трэці гукі не супадаюць");
-            }
-            return false;
-        }
-        int pos = context.currentPosition + 1;
-        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
-        context.huki.get(pos + 1).debug = context.huki.get(pos).debug || context.huki.get(pos + 1).debug;
-        context.huki.remove(pos);
-        return true;
-    }
+//    @ProcessCase(name = "Спрашчэнне аднолькавых зычных (не пасля галоснай)", logCountBefore = 3, logCountAfter = 2)
+//    public boolean eq1(Huk h1, Huk h2, Huk h3, ProcessContext context) {
+//        if (h2.bazavyHuk != h3.bazavyHuk) {
+//            if (context.debugPrefix != null) {
+//                context.debug.add(context.debugPrefix + " другі і трэці гукі не супадаюць");
+//            }
+//            return false;
+//        }
+//        int pos = context.currentPosition + 1;
+//        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
+//        context.huki.get(pos + 1).debug = context.huki.get(pos).debug || context.huki.get(pos + 1).debug;
+//        context.huki.remove(pos);
+//        return true;
+//    }
 
     @ProcessCase(name = "Прыпадабненне свісцячых па мяккасці", logCountBefore = 2, logCountAfter = 2)
     public boolean eq2(Huk h1, Huk h2) {
