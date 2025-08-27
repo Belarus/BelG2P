@@ -320,6 +320,7 @@ public class Sprascennie {
         int pos = context.currentPosition + offsetFromCurrent;
         context.huki.get(pos).zychodnyjaLitary += context.huki.get(pos + 1).zychodnyjaLitary;
         context.huki.get(pos).debug = context.huki.get(pos + 1).debug || context.huki.get(pos).debug;
+        context.huki.get(pos).padzielPasla = context.huki.get(pos + 1).padzielPasla | context.huki.get(pos).padzielPasla;
         context.huki.remove(pos + 1);
     }
 }
