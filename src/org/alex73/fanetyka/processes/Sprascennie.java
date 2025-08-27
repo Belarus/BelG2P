@@ -6,30 +6,38 @@ import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 import org.alex73.fanetyka.impl.ProcessContext;
 
 public class Sprascennie {
-    @ProcessCase(name = "Спрашчэнне: с-ц-к пераходзіць у с-к", logCountBefore = 3, logCountAfter = 2)
+    @ProcessCase(name = "Спрашчэнне: шумны глухі шчылінны + шумны глухі змычна-шчылінны + шумны глухі змычны", logCountBefore = 3, logCountAfter = 2)
     public boolean sck(ProcessContext context) {
+        // толькі калі перад гэтымі гукамі не ідзе зычны
+        if (context.currentPosition > 0) {
+            Huk h = context.huki.get(context.currentPosition - 1);
+            if (!Huk.halosnyja.contains(h.bazavyHuk)) {
+                // перад с-ц-к стаіць зычны - не спрашчаецца
+                return false;
+            }
+        }
         vydalicNastupny(context, 0);
         return true;
     }
 
-    @ProcessCase(name = "Спрашчэнне: с-т-ч пераходзіць у ш-ч", logCountBefore = 3, logCountAfter = 2)
+    @ProcessCase(name = "Спрашчэнне: шумны глухі шчылінны + шумны глухі змычны + шумны глухі змычна-шчылінны", logCountBefore = 3, logCountAfter = 2)
     public boolean stc(ProcessContext context) {
         vydalicNastupny(context, 0);
         return true;
     }
 
-    @ProcessCase(name = "Спрашчэнне: с-т-н -> с-н", logCountBefore = 3, logCountAfter = 2)
+    @ProcessCase(name = "Спрашчэнне: шумны шчылінны зубны + шумны змычны зубны + санорны носавы", logCountBefore = 3, logCountAfter = 2)
     public boolean stn(ProcessContext context) {
-        vydalicPapiaredni(context, 2);
-        return true;
-    }
-
-    @ProcessCase(name = "Спрашчэнне: з-д-н -> з-н", logCountBefore = 3, logCountAfter = 2)
-    public boolean zdn(Huk h1, Huk h2, Huk h3, ProcessContext context) {
-        h1.miakki = h3.miakki;
         vydalicNastupny(context, 0);
         return true;
     }
+
+//    @ProcessCase(name = "Спрашчэнне: з-д-н -> з-н", logCountBefore = 3, logCountAfter = 2)
+//    public boolean zdn(Huk h1, Huk h2, Huk h3, ProcessContext context) {
+//        h1.miakki = h3.miakki;
+//        vydalicNastupny(context, 0);
+//        return true;
+//    }
 
     @ProcessCase(name = "Спрашчэнне: р-к-с-к -> р-c-к", logCountBefore = 4, logCountAfter = 3)
     public boolean rksk(ProcessContext context) {
