@@ -4,7 +4,12 @@ import org.alex73.fanetyka.config.ProcessCase;
 import org.alex73.fanetyka.impl.Huk;
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 
-public class Pierachody {
+public class PierachodyV {
+    @ProcessCase(name = "Білабіяльны 'в'", logCountBefore = 1, logCountAfter = 1)
+    public boolean b(Huk huk) {
+        huk.bazavyHuk = BAZAVY_HUK.β;
+        return true;
+    }
 
     @ProcessCase(name = "Пераход 'ф'->'ў' перад звонкім пасля галоснага", logCountBefore = 3, logCountAfter = 3)
     public boolean fh(Huk huk1, Huk huk2) {
