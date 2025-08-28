@@ -39,31 +39,27 @@ public class Sprascennie {
 //        return true;
 //    }
 
-    @ProcessCase(name = "Спрашчэнне: р-к-с-к -> р-c-к", logCountBefore = 4, logCountAfter = 3)
-    public boolean rksk(ProcessContext context) {
-        vydalicNastupny(context, 0);
-        return true;
-    }
+//    @ProcessCase(name = "Спрашчэнне: р-к-с-к -> р-c-к", logCountBefore = 4, logCountAfter = 3)
+//    public boolean rksk(ProcessContext context) {
+//        vydalicNastupny(context, 0);
+//        return true;
+//    }
 
-    @ProcessCase(name = "Спрашчэнне: с/ш-с-к -> c-к не на стыку", logCountBefore = 3, logCountAfter = 2)
+    @ProcessCase(name = "Спрашчэнне: шумны шчылінны пярэднеязычны + шумны шчылінны пярэднеязычны + шумны змычны", logCountBefore = 3, logCountAfter = 2)
     public boolean sss(ProcessContext context) {
         vydalicPapiaredni(context, 1);
         return true;
     }
 
-    @ProcessCase(name = "Спрашчэнне: х-с-к -> c-к не на стыку", logCountBefore = 4, logCountAfter = 3)
+    @ProcessCase(name = "Спрашчэнне: зычны + заднеязычны + шумны глухі шчылінны + заднеязычны", logCountBefore = 4, logCountAfter = 3)
     public boolean sks(ProcessContext context, Huk h1) {
-        if (h1.bazavyHuk == Huk.BAZAVY_HUK.j) {
-            // калі перад х стаіць j - не спрашчаецца
-            return false;
-        }
         vydalicPapiaredni(context, 2);
         return true;
     }
 
-    @ProcessCase(name = "Спрашчэнне: с-т-с -> c:", logCountBefore = 3, logCountAfter = 1)
+    @ProcessCase(name = "Спрашчэнне: с-т-с -> c:", logCountBefore = 3, logCountAfter = 2)
     public boolean sts(Huk h1, Huk h2, Huk h3, ProcessContext context) {
-        h1.miakki = h3.miakki;
+        //h1.miakki = h3.miakki;
         vydalicNastupny(context, 0);
         return true;
     }
@@ -97,11 +93,11 @@ public class Sprascennie {
         return true;
     }
 
-    @ProcessCase(name = "Спрашчэнне: ш-ч-(с ці ш) -> ш-(с ці ш)", logCountBefore = 3, logCountAfter = 2)
-    public boolean scs(ProcessContext context) {
-        vydalicNastupny(context, 0);
-        return true;
-    }
+//    @ProcessCase(name = "Спрашчэнне: ш-ч-(с ці ш) -> ш-(с ці ш)", logCountBefore = 3, logCountAfter = 2)
+//    public boolean scs(ProcessContext context) {
+//        vydalicNastupny(context, 0);
+//        return true;
+//    }
 
 //    @ProcessCase(name = "Спрашчэнне: ж-дж -> ж (толькі на канцы слова)", logCountBefore = 2, logCountAfter = 1)
 //    public boolean zdzz(Huk h1, Huk h2, ProcessContext context) {
