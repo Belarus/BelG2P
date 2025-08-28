@@ -16,51 +16,38 @@ public class Sprascennie {
                 return false;
             }
         }
-        vydalicNastupny(context, 0);
+        context.vydalicPasla(0);
         return true;
     }
 
     @ProcessCase(name = "Спрашчэнне: шумны глухі шчылінны + шумны глухі змычны + шумны глухі змычна-шчылінны", logCountBefore = 3, logCountAfter = 2)
     public boolean stc(ProcessContext context) {
-        vydalicNastupny(context, 0);
+        context.vydalicPasla(0);
         return true;
     }
 
     @ProcessCase(name = "Спрашчэнне: шумны шчылінны зубны + шумны змычны зубны + санорны носавы", logCountBefore = 3, logCountAfter = 2)
     public boolean stn(ProcessContext context) {
-        vydalicNastupny(context, 0);
+        context.vydalicPasla(0);
         return true;
     }
 
-//    @ProcessCase(name = "Спрашчэнне: з-д-н -> з-н", logCountBefore = 3, logCountAfter = 2)
-//    public boolean zdn(Huk h1, Huk h2, Huk h3, ProcessContext context) {
-//        h1.miakki = h3.miakki;
-//        vydalicNastupny(context, 0);
-//        return true;
-//    }
-
-//    @ProcessCase(name = "Спрашчэнне: р-к-с-к -> р-c-к", logCountBefore = 4, logCountAfter = 3)
-//    public boolean rksk(ProcessContext context) {
-//        vydalicNastupny(context, 0);
-//        return true;
-//    }
-
     @ProcessCase(name = "Спрашчэнне: шумны шчылінны пярэднеязычны + шумны шчылінны пярэднеязычны + шумны змычны", logCountBefore = 3, logCountAfter = 2)
     public boolean sss(ProcessContext context) {
-        vydalicPapiaredni(context, 1);
+        context.vydalicPierad(1);
         return true;
     }
 
     @ProcessCase(name = "Спрашчэнне: зычны + заднеязычны + шумны глухі шчылінны + заднеязычны", logCountBefore = 4, logCountAfter = 3)
     public boolean sks(ProcessContext context, Huk h1) {
-        vydalicPapiaredni(context, 2);
+        context.vydalicPierad(2);
         return true;
     }
 
     @ProcessCase(name = "Спрашчэнне: с-т-с -> c:", logCountBefore = 3, logCountAfter = 2)
     public boolean sts(Huk h1, Huk h2, Huk h3, ProcessContext context) {
-        //h1.miakki = h3.miakki;
-        vydalicNastupny(context, 0);
+        // h1.miakki = h3.miakki;
+        context.vydalicPasla(0);
         return true;
     }
 
@@ -69,7 +56,7 @@ public class Sprascennie {
         h2.zychodnyjaLitary = h1.zychodnyjaLitary + h2.zychodnyjaLitary;
         h2.debug = h1.debug || h2.debug;
         h2.bazavyHuk = BAZAVY_HUK.ш;
-        context.huki.remove(context.currentPosition);
+        context.huki.remove(context.currentPosition); //TODO
         return true;
     }
 
@@ -88,85 +75,9 @@ public class Sprascennie {
 
     @ProcessCase(name = "Спрашчэнне: шумны шчылінны + шумны змычна-шчылінны + мяжа + любы зычны", logCountBefore = 3, logCountAfter = 2)
     public boolean cch(Huk h1, Huk h2, Huk h3, ProcessContext context) {
-        context.huki.get(context.currentPosition).padzielPasla = context.huki.get(context.currentPosition + 1).padzielPasla; //TODO "|" in vydalicNastupny ? 
-        vydalicNastupny(context, 0);
+        context.vydalicPasla(0);
         return true;
     }
-
-//    @ProcessCase(name = "Спрашчэнне: ш-ч-(с ці ш) -> ш-(с ці ш)", logCountBefore = 3, logCountAfter = 2)
-//    public boolean scs(ProcessContext context) {
-//        vydalicNastupny(context, 0);
-//        return true;
-//    }
-
-//    @ProcessCase(name = "Спрашчэнне: ж-дж -> ж (толькі на канцы слова)", logCountBefore = 2, logCountAfter = 1)
-//    public boolean zdzz(Huk h1, Huk h2, ProcessContext context) {
-//        vydalicNastupny(context, 0);
-//        return true;
-//    }
-
-//    @ProcessCase(name="Спрашчэнне: д-дж -> дж, д-дз -> дз (не пасля галоснай)")
-//    public boolean ddz1(ProcessContext context) {
-//        int pos = context.currentPosition + 1;
-//        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
-//        context.huki.remove(pos);
-//        return true;
-//    }
-//
-//    @ProcessCase(name="Спрашчэнне: д-дж -> дж, д-дз -> дз (не перад галоснай)")
-//    public boolean ddz2(ProcessContext context) {
-//        int pos = context.currentPosition;
-//        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
-//        context.huki.remove(pos);
-//        return true;
-//    }
-
-//    @ProcessCase(name="Спрашчэнне: т-ч-> ч, т-ц -> ц (не пасля галоснай)")
-//    public boolean tc1(ProcessContext context) {
-//        int pos = context.currentPosition + 1;
-//        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
-//        context.huki.remove(pos);
-//        return true;
-//    }
-
-//    @ProcessCase(name="Спрашчэнне: т-ч-> ч, т-ц -> ц(не перад галоснай)")
-//    public boolean tc2(ProcessContext context) {
-//        int pos = context.currentPosition;
-//        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
-//        context.huki.get(pos + 1).padvojeny = true;
-//        context.huki.remove(pos);
-//        return true;
-//    }
-
-//    @ProcessCase(name = "Спрашчэнне падвойнага j", logCountBefore = 1, logCountAfter = 1)
-//    public boolean jj(ProcessContext context) {
-//        int pos = context.currentPosition;
-//        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
-//        context.huki.get(pos + 1).debug = context.huki.get(pos).debug || context.huki.get(pos + 1).debug;
-//        context.huki.remove(pos);
-//        return true;
-//    }
-
-//    @ProcessCase(name="Спрашчэнне: с-с-к -> c-к не на стыку")
-//    public boolean ssk(Huk h1, Huk h2, ProcessContext context) {
-//        vydalicNastupny(context, 0);
-//        return true;
-//    }
-
-//    @ProcessCase(name = "Спрашчэнне аднолькавых зычных (не пасля галоснай)", logCountBefore = 3, logCountAfter = 2)
-//    public boolean eq1(Huk h1, Huk h2, Huk h3, ProcessContext context) {
-//        if (h2.bazavyHuk != h3.bazavyHuk) {
-//            if (context.debugPrefix != null) {
-//                context.debug.add(context.debugPrefix + " другі і трэці гукі не супадаюць");
-//            }
-//            return false;
-//        }
-//        int pos = context.currentPosition + 1;
-//        context.huki.get(pos + 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary + context.huki.get(pos + 1).zychodnyjaLitary;
-//        context.huki.get(pos + 1).debug = context.huki.get(pos).debug || context.huki.get(pos + 1).debug;
-//        context.huki.remove(pos);
-//        return true;
-//    }
 
     @ProcessCase(name = "Прыпадабненне свісцячых па мяккасці", logCountBefore = 2, logCountAfter = 2)
     public boolean eq2(Huk h1, Huk h2) {
@@ -176,19 +87,13 @@ public class Sprascennie {
 
     @ProcessCase(name = "Спрашчэнне: н-т-ш-ч -> н-ш-ч", logCountBefore = 4, logCountAfter = 3)
     public boolean ntsc(Huk h1, Huk h2, ProcessContext context) {
-        vydalicPapiaredni(context, 2);
+        context.vydalicPierad(2);
         return true;
     }
 
-//    @ProcessCase(name = "Спрашчэнне: н-д-ш -> н-ш, н-т-ш -> н-ш",logCountBefore = 3, logCountAfter = 2)
-//    public boolean nds(Huk h1, Huk h2, ProcessContext context) {
-//        vydalicPapiaredni(context, 2);
-//        return true;
-//    }
-
     @ProcessCase(name = "Спрашчэнне: н-т-с -> н-с", logCountBefore = 3, logCountAfter = 2)
     public boolean nts(Huk h1, Huk h2, ProcessContext context) {
-        vydalicPapiaredni(context, 2);
+        context.vydalicPierad(2);
         return true;
     }
 
@@ -199,7 +104,7 @@ public class Sprascennie {
             return false;
         }
         huk2.bazavyHuk = BAZAVY_HUK.ц;
-        vydalicNastupny(context, 1);
+        context.vydalicPasla(1);
         return true;
     }
 
@@ -215,13 +120,13 @@ public class Sprascennie {
 
     @ProcessCase(name = "Спрашчэнне: б-р-с -> б-с", logCountBefore = 3, logCountAfter = 2)
     public boolean brs(Huk h1, Huk h2, ProcessContext context) {
-        vydalicNastupny(context, 0);
+        context.vydalicPasla(0);
         return true;
     }
 
     @ProcessCase(name = "Спрашчэнне: м-л'-с -> м-с", logCountBefore = 3, logCountAfter = 2)
     public boolean mls(Huk h1, Huk h2, ProcessContext context) {
-        vydalicNastupny(context, 0);
+        context.vydalicPasla(0);
         return true;
     }
 
@@ -255,12 +160,6 @@ public class Sprascennie {
         return true;
     }
 
-//    @ProcessCase(name = "Прыпадабненне дч -> тч, дц -> тц", logCountBefore = 2, logCountAfter = 2)
-//    public boolean pryDC(Huk huk1, Huk huk2) {
-//        huk1.bazavyHuk = BAZAVY_HUK.т;
-//        return true;
-//    }
-
     @ProcessCase(name = "Прыпадабненне т-ш -> ч-ш пасля галоснага", logCountBefore = 2, logCountAfter = 2)
     public boolean pryTS(Huk huk1, Huk huk2) {
         huk2.bazavyHuk = BAZAVY_HUK.ч;
@@ -275,7 +174,7 @@ public class Sprascennie {
 
     @ProcessCase(name = "Прыпадабненне т-ш -> ч-ш, т+ч => ч на канцы слова", logCountBefore = 3, logCountAfter = 2)
     public boolean pryTSe(ProcessContext context) {
-        vydalicPapiaredni(context, 1);
+        context.vydalicPierad(1);
         return true;
     }
 
@@ -302,29 +201,5 @@ public class Sprascennie {
         h1.bazavyHuk = BAZAVY_HUK.д;
         h1.miakki = 0;
         return true;
-    }
-
-    /*
-     * @ProcessCase(name="Падваенне аднолькавых зычных") public boolean eq(Huk h1,
-     * Huk h2, Huk h3, ProcessContext context) { if (h2.bazavyHuk != h3.bazavyHuk) {
-     * return null; } int pos = context.currentPosition + 1; context.huki.get(pos +
-     * 1).zychodnyjaLitary = context.huki.get(pos).zychodnyjaLitary +
-     * context.huki.get(pos + 1).zychodnyjaLitary; context.huki.remove(pos);
-     * h3.padvojeny = true; return true; }
-     */
-
-    private void vydalicPapiaredni(ProcessContext context, int offsetFromCurrent) {
-        int pos = context.currentPosition + offsetFromCurrent;
-        context.huki.get(pos).zychodnyjaLitary += context.huki.get(pos - 1).zychodnyjaLitary + context.huki.get(pos).zychodnyjaLitary;
-        context.huki.get(pos).debug = context.huki.get(pos - 1).debug || context.huki.get(pos).debug;
-        context.huki.remove(pos - 1);
-    }
-
-    private void vydalicNastupny(ProcessContext context, int offsetFromCurrent) {
-        int pos = context.currentPosition + offsetFromCurrent;
-        context.huki.get(pos).zychodnyjaLitary += context.huki.get(pos + 1).zychodnyjaLitary;
-        context.huki.get(pos).debug = context.huki.get(pos + 1).debug || context.huki.get(pos).debug;
-        context.huki.get(pos).padzielPasla = context.huki.get(pos + 1).padzielPasla | context.huki.get(pos).padzielPasla;
-        context.huki.remove(pos + 1);
     }
 }

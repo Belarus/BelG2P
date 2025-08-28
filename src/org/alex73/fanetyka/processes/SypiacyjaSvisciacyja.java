@@ -68,13 +68,6 @@ public class SypiacyjaSvisciacyja {
         return false;
     }
 
-//    @ProcessCase(name = "Пераход шыпячых перад с/з у свісцячыя", logCountBefore = 2, logCountAfter = 2)
-//    public boolean sysz(Huk huk) {
-//        BAZAVY_HUK replaceTo = sypiacyja2svisciacyja.get(huk.bazavyHuk);
-//        huk.bazavyHuk = replaceTo;
-//        return true;
-//    }
-
     @ProcessCase(name = "Пераход свісцячых у шыпячыя", logCountBefore = 2, logCountAfter = 2)
     public boolean sv(Huk huk) {
         BAZAVY_HUK replaceTo = svisciacyja2sypiacyja.get(huk.bazavyHuk);

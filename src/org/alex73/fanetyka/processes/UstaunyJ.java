@@ -23,7 +23,7 @@ public class UstaunyJ {
                 return false;
             }
         }
-        ustavicJ(context, 0);
+        context.dadac(0, jot());
         return true;
     }
 
@@ -32,12 +32,6 @@ public class UstaunyJ {
         h2.bazavyHuk = Huk.BAZAVY_HUK.j;
         return true;
     }
-    // TODO remove
-//    @ProcessCase(name = "Пераход 'і' ў 'йі' пасля апострафу", logCountBefore = 1, logCountAfter = 2)
-//    public boolean pia(ProcessContext context) {
-//        ustavicJ(context, 0);
-//        return true;
-//    }
 
     @ProcessCase(name = "Пераход 'і' ў 'ы' пасля цвёрдага зычнага і мяжы", logCountBefore = 2, logCountAfter = 2)
     public boolean mcz(Huk h1, Huk h2) {
@@ -55,37 +49,37 @@ public class UstaunyJ {
 
     @ProcessCase(name = "Пераход 'і' ў 'йі' пасля галоснай і 'ў' у сярэдзіне слова", logCountBefore = 1, logCountAfter = 2)
     public boolean pss(ProcessContext context) {
-        ustavicJ(context, 1);
+        context.dadac(1, jot());
         return true;
     }
 
     @ProcessCase(name = "Дадаецца j перад галоснай на пачатку слова ці пасля падзелу", logCountBefore = 1, logCountAfter = 2)
     public boolean jpac(ProcessContext context) {
-        ustavicJ(context, 0);
+        context.dadac(0, jot());
         return true;
     }
 
     @ProcessCase(name = "Дадаецца j перад галоснай пасля апострафу", logCountBefore = 1, logCountAfter = 2)
     public boolean japo(ProcessContext context) {
-        ustavicJ(context, 0);
+        context.dadac(0, jot());
         return true;
     }
 
     @ProcessCase(name = "Дадаецца j перад галоснай пасля галоснай ці 'ў т д р ж ш ч'", logCountBefore = 1, logCountAfter = 2)
     public boolean jhal(ProcessContext context) {
-        ustavicJ(context, 1);
+        context.dadac(1, jot());
         return true;
     }
 
     @ProcessCase(name = "Пераход 'і' ў 'йі' пасля прыстаўкі на галосную, 'ў' ці 'j'", logCountBefore = 1, logCountAfter = 2)
     public boolean pryhauj(ProcessContext context) {
-        ustavicJ(context, 1);
+        context.dadac(1, jot());
         return true;
     }
 
     @ProcessCase(name = "Дадаецца j перад галоснай пасля прыстаўкі, якая канчаецца на 'й'", logCountBefore = 1, logCountAfter = 2)
     public boolean jpry(ProcessContext context) {
-        ustavicJ(context, 1);
+        context.dadac(1, jot());
         return true;
     }
 
@@ -94,7 +88,7 @@ public class UstaunyJ {
         if (h1.bazavyHuk == Huk.BAZAVY_HUK.j) {
             return false; // не пасля 'й'
         }
-        ustavicJ(context, 1);
+        context.dadac(1, jot());
         return true;
     }
 
@@ -103,14 +97,13 @@ public class UstaunyJ {
         if (h1.bazavyHuk == Huk.BAZAVY_HUK.j) {
             return false; // не пасля 'й'
         }
-        ustavicJ(context, 1);
+        context.dadac(1, jot());
         return true;
     }
 
-    private void ustavicJ(ProcessContext context, int offsetFromCurrent) {
-        int pos = context.currentPosition + offsetFromCurrent;
+    private Huk jot() {
         Huk jot = new Huk("", BAZAVY_HUK.j);
         jot.miakki = Huk.MIAKKASC_PAZNACANAJA;
-        context.huki.add(pos, jot);
+        return jot;
     }
 }
