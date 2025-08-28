@@ -117,7 +117,7 @@ public class WordInitialConverter {
     }
 
     private void checkNextWord() {
-        if (nextWord != null) {
+        if (nextWord != null) { // TODO мо не варта прыляпляць - і так адбываюцца ? "вось дам/воз дам - аднолькава ?"
             // прыназоўнікі "без", "не" - мусяць прыляпляцца да слова, бо ёсць працэсы, якія
             // з імі адбываюцца: мяккасць, аглушэнне/азванчэнне
             // яканне робім адразу тут
@@ -129,19 +129,7 @@ public class WordInitialConverter {
             // таму яканне не ўзнікае ад прыляпляння прыназоўнікаў да назоўнікаў.
             switch (wl) {
             case "не":
-                appendToNextWord = true;
-                if (nextWord.naciskNaPiersySklad()) {
-                    word = "ня";
-                    logger.accept("'не' пераходзіць у 'ня' перад словам з націскам на першы склад");
-                }
-                break;
             case "без":
-                appendToNextWord = true;
-                if (nextWord.naciskNaPiersySklad()) {
-                    word = "бяз";
-                    logger.accept("'без' пераходзіць у 'бяз' перад словам з націскам на першы склад");
-                }
-                break;
             case "праз":
             case "з":
                 appendToNextWord = true;
@@ -161,12 +149,6 @@ public class WordInitialConverter {
         for (int i = 0; i < wl.length(); i++) {
             char c = wl.charAt(i);
             Huk novyHuk = null;
-            char next;
-            try {
-                next = wl.charAt(i + 1);
-            } catch (StringIndexOutOfBoundsException ex) {
-                next = 0;
-            }
             switch (c) {
             case 'а':
                 novyHuk = new Huk("а", BAZAVY_HUK.а);

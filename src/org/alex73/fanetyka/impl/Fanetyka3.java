@@ -2,7 +2,9 @@ package org.alex73.fanetyka.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 import org.alex73.fanetyka.impl.str.ToStringBase;
 import org.alex73.fanetyka.impl.str.ToStringIPA;
 import org.alex73.fanetyka.impl.str.ToStringSkolny;
@@ -86,11 +88,16 @@ public class Fanetyka3 {
      * базе, і робім змены:
      *
      * - З базы бяром: націскі, змены фанетыкі, дакладную фанетыку, пазначэнне
-     * межаў. - Пазначаем найбольш распаўсюджаныя прыстаўкі, калі слова няма ў базе.
-     * - Захоўваем пазначаныя карыстальнікам межы і націскі. - Дадаем яканне ў
-     * прыназоўнікі "без" і "не". - Пазначаем межы для некаторых прыназоўнікаў
-     * адмыслова, каб яны разглядаліся як частка слова. - Пазначаем месца дужак для
-     * debug.
+     * межаў.
+     * 
+     * - Пазначаем найбольш распаўсюджаныя прыстаўкі, калі слова няма ў базе.
+     * 
+     * - Захоўваем пазначаныя карыстальнікам межы і націскі.
+     * 
+     * - Пазначаем межы для некаторых прыназоўнікаў адмыслова, каб яны разглядаліся
+     * як частка слова.
+     * 
+     * - Пазначаем месца дужак для debug.
      */
     protected void prepareWordsForProcessing() throws Exception {
         List<WordInitialConverter> words = new ArrayList<>();
@@ -109,6 +116,41 @@ public class Fanetyka3 {
         // збіраем гукі з усіх слоў
         for (WordInitialConverter w : words) {
             huki.addAll(w.huki);
+        }
+
+        // яканне
+        jakannie();
+    }
+
+    static final Set<String> JAKANNIE_WORDS = Set.of("не", "без");
+
+    /**
+     * Яканне ў прыназоўніках "без" і "не".
+     */
+    void jakannie() {
+        for (int i = 0; i < huki.size() - 1; i++) {
+            Huk h = huki.get(i);
+            if ("е".equals(h.zychodnyjaLitary) && !h.stress) { // ненаціскны 'е'
+                if (!JAKANNIE_WORDS.contains(h.wordContext.word.toLowerCase())) {
+                    continue; // не прыназоўнік "не" ці "без"
+                }
+                boolean change = false;
+                // шукаем наступны галосны
+                for (int j = i + 1; j < huki.size() - 1; j++) {
+                    if (Huk.halosnyja.contains(huki.get(j).bazavyHuk)) {
+                        // знайшлі наступны галосны
+                        if (huki.get(j).stress) {
+                            // націск на наступным галосным
+                            change = true;
+                        }
+                        break;
+                    }
+                }
+                if (change) {
+                    h.bazavyHuk = BAZAVY_HUK.а;
+                    logPhenomenon.add("Яканне ў '" + h.wordContext.word + "' перад словам з націскам на першы склад");
+                }
+            }
         }
     }
 
@@ -135,7 +177,7 @@ public class Fanetyka3 {
     }
 
     public String toString() {
-        return new ToStringIPA().toString(huki) + " / " +new ToStringSkolny().toString(huki);
+        return new ToStringIPA().toString(huki) + " / " + new ToStringSkolny().toString(huki);
     }
 
     /**
