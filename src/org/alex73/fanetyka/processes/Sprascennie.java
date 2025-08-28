@@ -88,7 +88,7 @@ public class Sprascennie {
 
     @ProcessCase(name = "Спрашчэнне: шумны шчылінны + шумны змычна-шчылінны + мяжа + любы зычны", logCountBefore = 3, logCountAfter = 2)
     public boolean cch(Huk h1, Huk h2, Huk h3, ProcessContext context) {
-        context.huki.get(context.currentPosition).padzielPasla = context.huki.get(context.currentPosition + 1).padzielPasla;
+        context.huki.get(context.currentPosition).padzielPasla = context.huki.get(context.currentPosition + 1).padzielPasla; //TODO "|" in vydalicNastupny ? 
         vydalicNastupny(context, 0);
         return true;
     }

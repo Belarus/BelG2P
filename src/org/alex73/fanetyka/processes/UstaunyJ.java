@@ -32,14 +32,14 @@ public class UstaunyJ {
         h2.bazavyHuk = Huk.BAZAVY_HUK.j;
         return true;
     }
+    // TODO remove
+//    @ProcessCase(name = "Пераход 'і' ў 'йі' пасля апострафу", logCountBefore = 1, logCountAfter = 2)
+//    public boolean pia(ProcessContext context) {
+//        ustavicJ(context, 0);
+//        return true;
+//    }
 
-    @ProcessCase(name = "Пераход 'і' ў 'йі' пасля апострафу", logCountBefore = 1, logCountAfter = 2)
-    public boolean pia(ProcessContext context) {
-        ustavicJ(context, 0);
-        return true;
-    }
-
-    @ProcessCase(name = "Пераход 'і' ў 'ы' пасля мяжы і цвёрдага зычнага", logCountBefore = 2, logCountAfter = 2)
+    @ProcessCase(name = "Пераход 'і' ў 'ы' пасля цвёрдага зычнага і мяжы", logCountBefore = 2, logCountAfter = 2)
     public boolean mcz(Huk h1, Huk h2) {
         h2.bazavyHuk = Huk.BAZAVY_HUK.ы;
         h2.miakki = 0;

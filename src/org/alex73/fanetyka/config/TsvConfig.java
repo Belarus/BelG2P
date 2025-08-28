@@ -153,7 +153,7 @@ public class TsvConfig implements IConfig {
                     // была мяжа
                     err(c, 0, "слупок мяжы пасля папярэдняга слупку мяжы");
                 }
-                check.apostraf = readMode(2, c);
+                readMultiMode(2, c, check.pasziel, Huk.PADZIEL_APOSTRAF);
                 readMultiMode(3, c, check.pasziel, Huk.PADZIEL_PRYSTAUKA | Huk.PADZIEL_PRYNAZOUNIK);
                 readMultiMode(4, c, check.pasziel, Huk.PADZIEL_KARANI);
                 readMultiMode(5, c, check.pasziel, Huk.PADZIEL_SLOVY);

@@ -24,10 +24,8 @@ public class Case {
         boolean optionalHuk;
         public String[] which;
         public Predicate<Huk>[] whichFunctions; // праверкі на гукі which
-        public MODE apostraf = MODE.DONT_CARE;
         public MultiMode pasziel = new MultiMode();
         public MultiMode miakkasc = new MultiMode();
-        //public MODE padvojeny = MODE.DONT_CARE;
         public MODE nacisk = MODE.DONT_CARE;
     }
 

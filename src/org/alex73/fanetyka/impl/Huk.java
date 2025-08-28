@@ -19,6 +19,7 @@ public class Huk {
     public static final int PADZIEL_KARANI = 2;
     public static final int PADZIEL_SLOVY = 4;
     public static final int PADZIEL_ZLUCOK = 8;
+    public static final int PADZIEL_APOSTRAF = 32;
     public static final int MIAKKASC_ASIMILACYJNAJA = 1;
     public static final int MIAKKASC_PAZNACANAJA = 2;
     public static final int MASK_MIAKKASC_USIE = 3;
@@ -61,7 +62,6 @@ public class Huk {
     public String zychodnyjaLitary;
     public BAZAVY_HUK bazavyHuk;
     public int miakki;
-    public boolean apostrafPasla;
     public boolean stressIpa;
     public boolean stress;
 

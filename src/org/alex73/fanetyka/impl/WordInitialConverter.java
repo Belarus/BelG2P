@@ -289,19 +289,19 @@ public class WordInitialConverter {
                 break;
             case GrammarDB2.pravilny_apostraf:
                 if (papiaredniHuk != null) {
-                    papiaredniHuk.apostrafPasla = true;
+                    papiaredniHuk.padzielPasla |= Huk.PADZIEL_APOSTRAF;
                 }
                 break;
             case '/':
                 // у базе так пазначаецца прыстаўка
                 if (papiaredniHuk != null) {
-                    papiaredniHuk.padzielPasla = Huk.PADZIEL_PRYSTAUKA;
+                    papiaredniHuk.padzielPasla |= Huk.PADZIEL_PRYSTAUKA;
                 }
                 break;
             case '|':
                 // у базе так пазначаецца мяжа ў двухкаранёвых словах
                 if (papiaredniHuk != null) {
-                    papiaredniHuk.padzielPasla = Huk.PADZIEL_KARANI;
+                    papiaredniHuk.padzielPasla |= Huk.PADZIEL_KARANI;
                 }
                 break;
             case '{':
@@ -311,7 +311,7 @@ public class WordInitialConverter {
             case '-':
                 // злучок
                 if (papiaredniHuk != null) {
-                    papiaredniHuk.padzielPasla = Huk.PADZIEL_ZLUCOK;
+                    papiaredniHuk.padzielPasla |= Huk.PADZIEL_ZLUCOK;
                 }
                 break;
             case GrammarDB2.pravilny_nacisk:
@@ -359,7 +359,7 @@ public class WordInitialConverter {
         }
         logger.accept("Адмысловая фанетыка з базы: " + fan);
         huki = IPAUtils.parseIpa(fan);
-        huki.getLast().padzielPasla = Huk.PADZIEL_SLOVY;
+        huki.getLast().padzielPasla |= Huk.PADZIEL_SLOVY;
     }
 
     /**

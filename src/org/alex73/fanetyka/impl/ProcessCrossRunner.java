@@ -103,12 +103,10 @@ public class ProcessCrossRunner implements IProcess {
     public static boolean miazaUsiaredzinieSlova(Huk h1, Huk h2, List<String> log, String debugHuki) {
         // ці ёсць мяжа ?
         switch (h1.padzielPasla) {
-        case Huk.PADZIEL_KARANI:
+        case Huk.PADZIEL_KARANI://TODO зліць межы ?
         case Huk.PADZIEL_PRYSTAUKA:
         case Huk.PADZIEL_PRYNAZOUNIK:
-            return true;
-        }
-        if (h1.apostrafPasla) {
+        case Huk.PADZIEL_APOSTRAF:
             return true;
         }
         if (debugHuki != null) {

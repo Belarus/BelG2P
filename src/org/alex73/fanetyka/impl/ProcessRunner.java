@@ -241,9 +241,9 @@ public class ProcessRunner implements IProcess {
      * выканалася, альбо null, калі ўсё добра.
      */
     static String checkRules(String zjava, Case.HukCheck c, Huk huk) {
-        if (!checkValue(zjava, "апостраф", c.apostraf, huk.apostrafPasla)) {
-            return "апостраф";
-        }
+//        if (!checkValue(zjava, "апостраф", c.apostraf, huk.apostrafPasla)) {
+//            return "апостраф";
+//        }
         if (!checkValue(zjava, "падзел", c.pasziel, huk.padzielPasla)) {
             return "падзел " + huk.padzielPasla;
         }

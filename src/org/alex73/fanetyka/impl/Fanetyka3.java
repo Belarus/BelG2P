@@ -56,16 +56,17 @@ public class Fanetyka3 {
         while (true) {
             startIteration();
 
+            config.processUstaunyJ.process(this);
+
             config.processPierachody.process(this);
             config.processMiakkasc.process(this);
             config.processSprascennie.process(this);
             config.processAhlusennieAzvancennie.process(this);
-//            config.processSprascennie.process(this);
             config.processSypiacyjaSvisciacyja.process(this);
-            config.processBilabijalnyV.process(this);
             config.processHubnaZubnyM.process(this);
             config.processUstaunyA.process(this);
-            config.processUstaunyJ.process(this);
+
+            config.processBilabijalnyV.process(this);
             String hnew = toString();
             if (hnew.equals(prev)) {
                 // nothing was changed during last iteration - conversion finished

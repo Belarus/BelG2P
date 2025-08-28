@@ -47,17 +47,19 @@ public class FanetykaConfig {
     private final List<String> debugCases = new ArrayList<String>();
 
     public FanetykaConfig(GrammarFinder finder) throws Exception {
-        this(finder, () -> {
-            Map<String, byte[]> configs = new TreeMap<>();
-            for (String t : CONFIG_NAMES) {
-                try (InputStream in = TsvConfig.class.getResourceAsStream("/" + t + ".tsv")) {
-                    configs.put(t, in.readAllBytes());
-                } catch (IOException ex) {
-                    throw new RuntimeException("Can't read /" + t + ".tsv from jar");
-                }
+        this(finder, () -> loadBuiltinConfigs());
+    }
+
+    public static Map<String, byte[]> loadBuiltinConfigs() {
+        Map<String, byte[]> configs = new TreeMap<>();
+        for (String t : CONFIG_NAMES) {
+            try (InputStream in = TsvConfig.class.getResourceAsStream("/" + t + ".tsv")) {
+                configs.put(t, in.readAllBytes());
+            } catch (IOException ex) {
+                throw new RuntimeException("Can't read /" + t + ".tsv from jar");
             }
-            return configs;
-        });
+        }
+        return configs;
     }
 
     public FanetykaConfig(GrammarFinder finder, Map<String, byte[]> configs) throws Exception {
