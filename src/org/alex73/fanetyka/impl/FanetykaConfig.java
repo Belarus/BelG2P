@@ -13,9 +13,10 @@ import java.util.function.Supplier;
 
 import org.alex73.fanetyka.config.TsvConfig;
 import org.alex73.fanetyka.processes.AhlusennieAzvancennie;
-import org.alex73.fanetyka.processes.PierachodyV;
 import org.alex73.fanetyka.processes.HubnaZubnyM;
 import org.alex73.fanetyka.processes.Miakkasc;
+import org.alex73.fanetyka.processes.PierachodyV;
+import org.alex73.fanetyka.processes.Prypadabniennie;
 import org.alex73.fanetyka.processes.Sprascennie;
 import org.alex73.fanetyka.processes.SypiacyjaSvisciacyja;
 import org.alex73.fanetyka.processes.UstaunyA;
@@ -33,6 +34,7 @@ public class FanetykaConfig {
     protected final ProcessCrossRunner processMiakkasc;
     protected final ProcessRunner processAhlusennieAzvancennie;
     protected final ProcessRunner processSprascennie;
+    protected final ProcessRunner processPrypadabniennie;
     protected final ProcessRunner processSypiacyjaSvisciacyja;
     protected final ProcessRunner processPierachodyV;
     protected final ProcessRunner processHubnaZubnyM;
@@ -40,7 +42,7 @@ public class FanetykaConfig {
     protected final ProcessRunner processUstaunyJ;
 
     static final List<String> CONFIG_NAMES = List.of("Miakkasc", "AhlusennieAzvancennie", "PierachodyV", "HubnaZubnyM", "Pryklady", "Sprascennie",
-            "SypiacyjaSvisciacyja", "UstaunyA", "UstaunyJ");
+            "Prypadabniennie", "SypiacyjaSvisciacyja", "UstaunyA", "UstaunyJ");
 
     private final List<String> debugCases = new ArrayList<String>();
 
@@ -71,6 +73,7 @@ public class FanetykaConfig {
         this.processPryklady = new ProcessPrykladyRunner(configs);
         this.processAhlusennieAzvancennie = new ProcessRunner(AhlusennieAzvancennie.class, configs);
         this.processSprascennie = new ProcessRunner(Sprascennie.class, configs);
+        this.processPrypadabniennie = new ProcessRunner(Prypadabniennie.class, configs);
         this.processSypiacyjaSvisciacyja = new ProcessRunner(SypiacyjaSvisciacyja.class, configs);
         this.processPierachodyV = new ProcessRunner(PierachodyV.class, configs);
         this.processHubnaZubnyM = new ProcessRunner(HubnaZubnyM.class, configs);
@@ -81,6 +84,7 @@ public class FanetykaConfig {
         debugCases.addAll(this.processPryklady.getDebugCases());
         debugCases.addAll(this.processAhlusennieAzvancennie.getDebugCases());
         debugCases.addAll(this.processSprascennie.getDebugCases());
+        debugCases.addAll(this.processPrypadabniennie.getDebugCases());
         debugCases.addAll(this.processSypiacyjaSvisciacyja.getDebugCases());
         debugCases.addAll(this.processPierachodyV.getDebugCases());
         debugCases.addAll(this.processHubnaZubnyM.getDebugCases());

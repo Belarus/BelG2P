@@ -62,6 +62,7 @@ public class Fanetyka3 {
 
             config.processMiakkasc.process(this);
             config.processSprascennie.process(this);
+            config.processPrypadabniennie.process(this);
             config.processAhlusennieAzvancennie.process(this);
             config.processSypiacyjaSvisciacyja.process(this);
             config.processHubnaZubnyM.process(this);
@@ -125,7 +126,7 @@ public class Fanetyka3 {
     static final Set<String> JAKANNIE_WORDS = Set.of("не", "без");
 
     /**
-     * Яканне ў прыназоўніках "без" і "не".
+     * Яканне ў прыназоўніках "без" і "не". Робіць яканне ў выразах "не ў хаце".
      */
     void jakannie() {
         for (int i = 0; i < huki.size() - 1; i++) {
