@@ -44,19 +44,15 @@ public class Sprascennie {
         return true;
     }
 
-    @ProcessCase(name = "Спрашчэнне: с-т-с -> c:", logCountBefore = 3, logCountAfter = 2)
+    @ProcessCase(name = "Спрашчэнне: Шумны глухі шчылінны, пярэднеязычны апікальны, зубны + Шумны глухі змычны, пярэднеязычны апікальны, зубны + Шумны глухі шчылінны, пярэднеязычны апікальны, зубны", logCountBefore = 3, logCountAfter = 2)
     public boolean sts(Huk h1, Huk h2, Huk h3, ProcessContext context) {
-        // h1.miakki = h3.miakki;
         context.vydalicPasla(0);
         return true;
     }
 
-    @ProcessCase(name = "Спрашчэнне: з-д-ч -> ш-ч", logCountBefore = 3, logCountAfter = 2)
+    @ProcessCase(name = "Спрашчэнне: Шумны звонкі шчылінны, пярэднеязычны апікальны, зубны + Шумны звонкі змычны, пярэднеязычны апікальны, зубны + Шумны глухі змычна-шчылінны, пярэднеязычны апікальны, пярэднепаднябенны", logCountBefore = 3, logCountAfter = 2)
     public boolean zdc(Huk h1, Huk h2, ProcessContext context) {
-        h2.zychodnyjaLitary = h1.zychodnyjaLitary + h2.zychodnyjaLitary;
-        h2.debug = h1.debug || h2.debug;
-        h2.bazavyHuk = BAZAVY_HUK.ш;
-        context.huki.remove(context.currentPosition); // TODO
+        context.vydalicPasla(0);
         return true;
     }
 
@@ -116,15 +112,5 @@ public class Sprascennie {
         h1.bazavyHuk = Huk.BAZAVY_HUK.ч;
         h1.miakki = 0;
         return true;
-    }
-
-    @ProcessCase(name = "Спрашчэнне: з'-с -> с:", logCountBefore = 2, logCountAfter = 1)
-    public boolean zs(Huk h1, Huk h2, ProcessContext context) {
-        throw new RuntimeException("Спрашчэнне: з'-с -> с:");
-    }
-
-    @ProcessCase(name = "Спрашчэнне: з'-з -> з", logCountBefore = 2, logCountAfter = 1)
-    public boolean zz(Huk h1, Huk h2, ProcessContext context) {
-        throw new RuntimeException("Спрашчэнне: з'-з -> з");
     }
 }
