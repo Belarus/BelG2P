@@ -95,22 +95,22 @@ public class Sprascennie {
         return true;
     }
 
-    @ProcessCase(name = "Спрашчэнне: б-р-с -> б-с", logCountBefore = 3, logCountAfter = 2)
-    public boolean brs(Huk h1, Huk h2, ProcessContext context) {
-        context.vydalicPasla(0);
-        return true;
-    }
-
-    @ProcessCase(name = "Спрашчэнне: м-л'-с -> м-с", logCountBefore = 3, logCountAfter = 2)
-    public boolean mls(Huk h1, Huk h2, ProcessContext context) {
-        context.vydalicPasla(0);
-        return true;
-    }
-
     @ProcessCase(name = "Спрашчэнне: ц-ч -> ч", logCountBefore = 2, logCountAfter = 1)
     public boolean cc(Huk hal, Huk h1, Huk h2, ProcessContext context) {
         h1.bazavyHuk = Huk.BAZAVY_HUK.ч;
         h1.miakki = 0;
+        return true;
+    }
+
+    @ProcessCase(name = "Спрашчэнне: д-т -> т", logCountBefore = 3, logCountAfter = 2)
+    public boolean zdt(ProcessContext context) {
+        context.vydalicPasla(0);
+        return true;
+    }
+
+    @ProcessCase(name = "Спрашчэнне: с-ш -> ш", logCountBefore = 3, logCountAfter = 2)
+    public boolean zss(ProcessContext context) {
+        context.vydalicPasla(0);
         return true;
     }
 }
