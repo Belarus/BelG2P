@@ -75,4 +75,11 @@ public class SypiacyjaSvisciacyja {
         huk.miakki = 0;
         return true;
     }
+
+    @ProcessCase(name = "Пераход шыпячых у свісцячыя", logCountBefore = 2, logCountAfter = 2)
+    public boolean ss(Huk huk) {
+        BAZAVY_HUK replaceTo = sypiacyja2svisciacyja.get(huk.bazavyHuk);
+        huk.bazavyHuk = replaceTo;
+        return true;
+    }
 }

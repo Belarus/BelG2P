@@ -7,12 +7,6 @@ import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 
 public class Prypadabniennie {
 
-    @ProcessCase(name = "Прыпадабненне: ш-с-> с-с", logCountBefore = 2, logCountAfter = 2)
-    public boolean ss(Huk h1, Huk h2) {
-        h1.bazavyHuk = BAZAVY_HUK.с;
-        return true;
-    }
-
     @ProcessCase(name = "Прыпадабненне зычных: ц'-т -> т-т", logCountBefore = 2, logCountAfter = 2)
     public boolean ct(Huk h1, Huk h2) {
         h1.bazavyHuk = BAZAVY_HUK.т;
