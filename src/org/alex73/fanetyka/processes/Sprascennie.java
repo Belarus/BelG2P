@@ -76,22 +76,22 @@ public class Sprascennie {
 
     @ProcessCase(name = "Спрашчэнне: т-с не на мяжы -> ц", logCountBefore = 2, logCountAfter = 1)
     public boolean ts(Huk huk1, Huk huk2, ProcessContext context) {
-        if (huk1.bazavyHuk == Huk.BAZAVY_HUK.н) {
-            // першы гук 'н' - іншамоўнае слова
+        if (context.currentPosition>0 && context.huki.get(context.currentPosition-1).bazavyHuk == Huk.BAZAVY_HUK.н) {
+            // перад першым гукам - 'н', іншамоўнае слова
             return false;
         }
-        huk2.bazavyHuk = BAZAVY_HUK.ц;
-        context.vydalicPasla(1);
+        huk1.bazavyHuk = BAZAVY_HUK.ц;
+        context.vydalicPasla(0);
         return true;
     }
 
     @ProcessCase(name = "Пераход: т-с на мяжы -> ц-с", logCountBefore = 2, logCountAfter = 2)
     public boolean ts_miaza(Huk huk1, Huk huk2, ProcessContext context) {
-        if (huk1.bazavyHuk == Huk.BAZAVY_HUK.н) {
-            // першы гук 'н' - іншамоўнае слова
+        if (context.currentPosition>0 && context.huki.get(context.currentPosition-1).bazavyHuk == Huk.BAZAVY_HUK.н) {
+            // перад першым гукам - 'н', іншамоўнае слова
             return false;
         }
-        huk2.bazavyHuk = BAZAVY_HUK.ц;
+        huk1.bazavyHuk = BAZAVY_HUK.ц;
         return true;
     }
 
