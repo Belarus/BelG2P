@@ -6,7 +6,7 @@ import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 import org.alex73.fanetyka.impl.ProcessContext;
 
 public class Sprascennie {
-    @ProcessCase(name = "Спрашчэнне: шумны глухі шчылінны + шумны глухі змычна-шчылінны + шумны глухі змычны", logCountBefore = 3, logCountAfter = 2)
+    @ProcessCase(name = "Спрашчэнне: шумны глухі шчылінны пярэднеязычны + шумны глухі змычна-шчылінны пярэднеязычны + шумны глухі змычны", logCountBefore = 3, logCountAfter = 2)
     public boolean sck(ProcessContext context) {
         // толькі калі перад гэтымі гукамі не ідзе зычны
         if (context.currentPosition > 0) {
