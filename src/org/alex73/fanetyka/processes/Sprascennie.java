@@ -76,7 +76,7 @@ public class Sprascennie {
 
     @ProcessCase(name = "Спрашчэнне: т-с не на мяжы -> ц", logCountBefore = 2, logCountAfter = 1)
     public boolean ts(Huk huk1, Huk huk2, ProcessContext context) {
-        if (context.currentPosition>0 && context.huki.get(context.currentPosition-1).bazavyHuk == Huk.BAZAVY_HUK.н) {
+        if (context.currentPosition > 0 && context.huki.get(context.currentPosition - 1).bazavyHuk == Huk.BAZAVY_HUK.н) {
             // перад першым гукам - 'н', іншамоўнае слова
             return false;
         }
@@ -87,7 +87,7 @@ public class Sprascennie {
 
     @ProcessCase(name = "Пераход: т-с на мяжы -> ц-с", logCountBefore = 2, logCountAfter = 2)
     public boolean ts_miaza(Huk huk1, Huk huk2, ProcessContext context) {
-        if (context.currentPosition>0 && context.huki.get(context.currentPosition-1).bazavyHuk == Huk.BAZAVY_HUK.н) {
+        if (context.currentPosition > 0 && context.huki.get(context.currentPosition - 1).bazavyHuk == Huk.BAZAVY_HUK.н) {
             // перад першым гукам - 'н', іншамоўнае слова
             return false;
         }
@@ -111,6 +111,12 @@ public class Sprascennie {
     @ProcessCase(name = "Спрашчэнне: с-ш -> ш", logCountBefore = 3, logCountAfter = 2)
     public boolean zss(ProcessContext context) {
         context.vydalicPasla(0);
+        return true;
+    }
+
+    @ProcessCase(name = "Спрашчэнне: шчылінны пярэднепаднябенны цвёрды + шчылінны пярэднепаднябенны цвёрды + шчылінны пярэднепаднябенны цвёрды", logCountBefore = 3, logCountAfter = 2)
+    public boolean sssy(ProcessContext context) {
+        context.vydalicPierad(2);
         return true;
     }
 }

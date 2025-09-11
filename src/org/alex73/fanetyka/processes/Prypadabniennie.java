@@ -63,12 +63,6 @@ public class Prypadabniennie {
         return true;
     }
 
-    @ProcessCase(name = "Прыпадабненне д+дж => дж:, д+дз => дз:", logCountBefore = 2, logCountAfter = 2)
-    public boolean ddz(Huk h1, Huk h2, ProcessContext context) {
-        h1.bazavyHuk = h2.bazavyHuk;
-        return true;
-    }
-
     @ProcessCase(name = "Прыпадабненне дз+д => д+д", logCountBefore = 2, logCountAfter = 2)
     public boolean dzd(Huk h1, Huk h2, ProcessContext context) {
         h1.bazavyHuk = BAZAVY_HUK.д;
