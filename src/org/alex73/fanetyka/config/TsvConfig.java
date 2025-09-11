@@ -53,7 +53,7 @@ public class TsvConfig implements IConfig {
     }
 
     private static final String[] TASK_HEADERS = new String[] { "Умовы:", "якія гукі", "апостраф", "прыстаўка+(прыстаўка ці корань)", "корань+корань",
-            "мяжа слова", "злучок", "мяккасць - асіміляцыйная", "мяккасць - пазначаная", "доўгі гук", "націск" };
+            "мяжа слова", "злучок", "мяккасць - асіміляцыйная", "мяккасць - пазначаная", "націск" };
 
     private void readTask() throws Exception {
         Case t = new Case();
@@ -180,7 +180,7 @@ public class TsvConfig implements IConfig {
                     err(c, 3, "Няправільная камбінацыя пазнак мяккасці");
                 }
                 //TODO remove check.padvojeny = readMode(9, c);
-                check.nacisk = readMode(10, c);
+                check.nacisk = readMode(9, c);
                 if (header.contains("неабавязковы")) {
                     check.optionalHuk = true;
                 } else {
