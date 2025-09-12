@@ -20,19 +20,6 @@ public class Prypadabniennie {
         return true;
     }
 
-//    @ProcessCase(name = "Прыпадабненне: с'-ш -> ш:, с'-ж -> ж:, с'-з -> з:, з’+ш-> ш:, з’+ж-> ж:", logCountBefore = 2, logCountAfter = 1)
-//    public boolean ss(Huk h1, Huk h2, ProcessContext context) {
-//        h1.bazavyHuk = h2.bazavyHuk;
-//        h1.miakki = h2.miakki;
-//        return true;
-//    }
-
-    @ProcessCase(name = "Прыпадабненне: с'+ц-> сц, с'ч -> сч", logCountBefore = 2, logCountAfter = 2)
-    public boolean sc(Huk h1, Huk h2) {
-        h1.miakki = 0;
-        return true;
-    }
-
     @ProcessCase(name = "Прыпадабненне т-ш -> ч-ш пасля галоснага", logCountBefore = 2, logCountAfter = 2)
     public boolean pryTS(Huk huk1, Huk huk2) {
         huk2.bazavyHuk = BAZAVY_HUK.ч;
@@ -54,12 +41,6 @@ public class Prypadabniennie {
     @ProcessCase(name = "Прыпадабненне ґ+г => г:", logCountBefore = 2, logCountAfter = 2)
     public boolean gh(Huk h1, Huk h2, ProcessContext context) {
         h1.bazavyHuk = BAZAVY_HUK.г;
-        return true;
-    }
-
-    @ProcessCase(name = "Прыпадабненне т+ц => ц:", logCountBefore = 2, logCountAfter = 2)
-    public boolean tc(Huk h1, Huk h2, ProcessContext context) {
-        h1.bazavyHuk = h2.bazavyHuk;
         return true;
     }
 

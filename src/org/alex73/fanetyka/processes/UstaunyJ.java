@@ -33,15 +33,8 @@ public class UstaunyJ {
         return true;
     }
 
-    @ProcessCase(name = "Пераход 'і' ў 'ы' пасля цвёрдага зычнага і мяжы", logCountBefore = 2, logCountAfter = 2)
+    @ProcessCase(name = "Пераход 'і' ў 'ы' пасля цвёрдага зычнага і мяжы (ці апострафа)", logCountBefore = 2, logCountAfter = 2)
     public boolean mcz(Huk h1, Huk h2) {
-        h2.bazavyHuk = Huk.BAZAVY_HUK.ы;
-        h2.miakki = 0;
-        return true;
-    }
-
-    @ProcessCase(name = "Пераход 'і' ў 'ы' пасля апострафа і мяжы", logCountBefore = 2, logCountAfter = 2)
-    public boolean mcza(Huk h1, Huk h2) {
         h2.bazavyHuk = Huk.BAZAVY_HUK.ы;
         h2.miakki = 0;
         return true;
