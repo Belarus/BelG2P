@@ -40,7 +40,7 @@ public class SypiacyjaSvisciacyja {
         }
     }
 
-    @ProcessCase(name = "Пераход шыпячых перад свісцячымі ва ўскосных склонах", logCountBefore = 3, logCountAfter = 3)
+    @ProcessCase(name = "Пераход шыпячых перад свісцячымі (ва ўскосных склонах)", logCountBefore = 3, logCountAfter = 3)
     public boolean sycdz(Huk huk, ProcessContext context) {
         // Толькі калі пачатковая форма заканчваецца на "-ка" // FAN-58
         Set<String> ka = new TreeSet<>();
