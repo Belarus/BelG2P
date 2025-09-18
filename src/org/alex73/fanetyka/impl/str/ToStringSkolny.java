@@ -9,6 +9,8 @@ import org.alex73.fanetyka.impl.IPAUtils.IPA;
 
 /**
  * Канвертавання гукаў у String для школьнай натацыі.
+ * 
+ * Combining Double Inverted Breve - U+0361
  */
 public class ToStringSkolny extends ToStringBase {
     static final Map<IPA, String> SKOLNY_MAP = new HashMap<>();
@@ -22,14 +24,14 @@ public class ToStringSkolny extends ToStringBase {
         SKOLNY_MAP.put(IPA.βʲ, "в'");
         SKOLNY_MAP.put(IPA.ɣ, "г");
         SKOLNY_MAP.put(IPA.ɣʲ, "г'");
-        SKOLNY_MAP.put(IPA.g, "ѓ");
-        SKOLNY_MAP.put(IPA.gʲ, "ѓ'");
+        SKOLNY_MAP.put(IPA.g, "ґ");
+        SKOLNY_MAP.put(IPA.gʲ, "ґ'");
         SKOLNY_MAP.put(IPA.d, "д");
         SKOLNY_MAP.put(IPA.dʲ, "д'");
         SKOLNY_MAP.put(IPA.ɛ, "э");
-        SKOLNY_MAP.put(IPA.d͡ʐ, "дж");
-        SKOLNY_MAP.put(IPA.d͡z, "дз");
-        SKOLNY_MAP.put(IPA.d͡zʲ, "дз'");
+        SKOLNY_MAP.put(IPA.d͡ʐ, "д\u0361ж");
+        SKOLNY_MAP.put(IPA.d͡z, "д\u0361з");
+        SKOLNY_MAP.put(IPA.d͡zʲ, "д\u0361з'");
         SKOLNY_MAP.put(IPA.ʐ, "ж");
         SKOLNY_MAP.put(IPA.z, "з");
         SKOLNY_MAP.put(IPA.zʲ, "з'");
@@ -63,6 +65,8 @@ public class ToStringSkolny extends ToStringBase {
         SKOLNY_MAP.put(IPA.ʂ, "ш");
         SKOLNY_MAP.put(IPA.ɨ, "ы");
         SKOLNY_MAP.put(IPA.j, "й");
+        SKOLNY_MAP.put(IPA.ɐ, "ӑ");// "\u2009\u2DF6");// 2DF6
+        SKOLNY_MAP.put(IPA.ə, "ъ");// "\u2009\uA679"); // A679
     }
 
     @Override

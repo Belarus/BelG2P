@@ -21,6 +21,8 @@ public class ToStringArfaep extends ToStringBase {
         ARFAEP_MAP.put(IPA.d͡ʐ, "ž");
         ARFAEP_MAP.put(IPA.d͡z, "z");
         ARFAEP_MAP.put(IPA.d͡zʲ, "z'");
+        ARFAEP_MAP.put(IPA.ɐ, "а");
+        ARFAEP_MAP.put(IPA.ə, "ы'");
     }
 
     @Override

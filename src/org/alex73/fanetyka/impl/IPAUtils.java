@@ -1,25 +1,31 @@
 package org.alex73.fanetyka.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 import org.alex73.fanetyka.impl.str.ToStringIPA;
 
 /**
- * Handles stress placement using the IPA standard, placing stress before the syllable.
+ * Handles stress placement using the IPA standard, placing stress before the
+ * syllable.
  */
 public class IPAUtils {
 
+    public static final Map<String, Integer> IPA_STRESSES;
+
     public enum IPA {
-        a, b, bʲ, v, vʲ, β, βʲ, ɣ, ɣʲ, g, gʲ, d, dʲ, ɛ, d͡ʐ, d͡z, d͡zʲ, ʐ, z, zʲ, i, k, kʲ, ɫ, lʲ, m, mʲ, ɱ, n, nʲ, ɔ, p,
-        pʲ, r, s, sʲ, t, tʲ, u, u̯, f, fʲ, x, xʲ, t͡s, t͡sʲ, t͡ʂ, ʂ, ɨ, j
+        a, ɐ, b, bʲ, v, vʲ, β, βʲ, ɣ, ɣʲ, g, gʲ, d, dʲ, ɛ, d͡ʐ, d͡z, d͡zʲ, ʐ, z, zʲ, i, k, kʲ, ɫ, lʲ, m, mʲ, ɱ, n, nʲ, ɔ, p, pʲ, r, s, sʲ, t, tʲ, u, u̯, f, fʲ,
+        x, xʲ, t͡s, t͡sʲ, t͡ʂ, ʂ, ɨ, ə, j
     }
 
     public static IPA huk2ipa(Huk h) {
         switch (h.bazavyHuk) {
         case а:
-            return IPA.a;
+            return h.redukavany ? IPA.ɐ : IPA.a;
         case б:
             return h.miakki == 0 ? IPA.b : IPA.bʲ;
         case в:
@@ -103,10 +109,10 @@ public class IPAUtils {
             if (h.miakki != 0 && !Huk.SKIP_ERRORS) {
                 throw new RuntimeException("Небывае мяккі: " + h.bazavyHuk);
             }
-            return IPA.ɨ;
+            return h.redukavany ? IPA.ə : IPA.ɨ;
         case j:
             if (h.miakki != Huk.MIAKKASC_PAZNACANAJA) {
-              throw new RuntimeException("мусіць быць мяккі: " + h.bazavyHuk);
+                throw new RuntimeException("мусіць быць мяккі: " + h.bazavyHuk);
             }
             // ён заўсёды мяккі
             return IPA.j;
@@ -154,6 +160,10 @@ public class IPAUtils {
                     continue;
                 case 'a':
                     huk = new Huk(s.substring(0, 1), BAZAVY_HUK.а);
+                    break;
+                case 'ɐ':
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.а);
+                    huk.redukavany = true;
                     break;
                 case 'b':
                     if (c1 == 'ʲ') {
@@ -307,6 +317,10 @@ public class IPAUtils {
                 case 'ɨ':
                     huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ы);
                     break;
+                case 'ə':
+                    huk = new Huk(s.substring(0, 1), BAZAVY_HUK.ы);
+                    huk.redukavany = true;
+                    break;
                 case 'j':
                     huk = new Huk(s.substring(0, 1), BAZAVY_HUK.j);
                     huk.miakki = Huk.MIAKKASC_PAZNACANAJA;
@@ -349,7 +363,8 @@ public class IPAUtils {
     }
 
     /**
-     * Set stress using IPA standard - before syllable. It required to define syllables borders.
+     * Set stress using IPA standard - before syllable. It required to define
+     * syllables borders.
      */
     public static void setIpaStress(List<Huk> huki, Fanetyka3 parent) {
         int hal = 0;
@@ -449,5 +464,26 @@ public class IPAUtils {
         if (pierad >= 0) {
             huki.get(prevHalIndex + pierad).stressIpa = true;
         }
+    }
+
+    static {
+        Map<String, Integer> ipaStresses = new HashMap<>();
+        WordInitialConverter.readResourceLines("ipa_stress.txt").forEach(s -> {
+            if (s.isBlank()) {
+                return;
+            }
+            int p = s.indexOf('ˈ');
+            if (p < 0) {
+                throw new RuntimeException("No stress in '" + s + "' in the ipa_stress.txt");
+            }
+            s = s.substring(0, p) + s.substring(p + 1);
+            if (!s.matches("[HZJS]+")) {
+                throw new RuntimeException("Wrong line '" + s + "' in the ipa_stress.txt");
+            }
+            if (ipaStresses.put(s, p) != null) {
+                throw new RuntimeException("Duplicate line '" + s + "' in the ipa_stress.txt");
+            }
+        });
+        IPA_STRESSES = Collections.unmodifiableMap(ipaStresses);
     }
 }

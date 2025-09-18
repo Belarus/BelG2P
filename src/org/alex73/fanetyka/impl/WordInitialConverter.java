@@ -298,6 +298,7 @@ public class WordInitialConverter {
                 }
                 break;
             case GrammarDB2.pravilny_nacisk:
+            case '+':
                 if (papiaredniHuk == null || !Huk.halosnyja.contains(papiaredniHuk.bazavyHuk) || papiaredniHuk.padzielPasla == Huk.PADZIEL_ZLUCOK
                         || papiaredniHuk.padzielPasla == Huk.PADZIEL_SLOVY) {
                     if (!Huk.SKIP_ERRORS) {

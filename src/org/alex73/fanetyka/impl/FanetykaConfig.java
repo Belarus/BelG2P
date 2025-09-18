@@ -18,7 +18,7 @@ import org.alex73.fanetyka.processes.Pazicyjnyja;
 import org.alex73.fanetyka.processes.Prypadabniennie;
 import org.alex73.fanetyka.processes.Sprascennie;
 import org.alex73.fanetyka.processes.SypiacyjaSvisciacyja;
-import org.alex73.fanetyka.processes.UstaunyA;
+import org.alex73.fanetyka.processes.Redukavanyja;
 import org.alex73.fanetyka.processes.UstaunyJ;
 import org.alex73.grammardb.GrammarFinder;
 
@@ -36,11 +36,11 @@ public class FanetykaConfig {
     protected final ProcessRunner processPrypadabniennie;
     protected final ProcessRunner processSypiacyjaSvisciacyja;
     protected final ProcessRunner processPazicyjnyja;
-    protected final ProcessRunner processUstaunyA;
+    protected final ProcessRunner processRedukavanyja;
     protected final ProcessRunner processUstaunyJ;
 
     static final List<String> CONFIG_NAMES = List.of("Miakkasc", "AhlusennieAzvancennie", "Pazicyjnyja", "Pryklady", "Sprascennie", "Prypadabniennie",
-            "SypiacyjaSvisciacyja", "UstaunyA", "UstaunyJ");
+            "SypiacyjaSvisciacyja", "Redukavanyja", "UstaunyJ");
 
     private final List<String> debugCases = new ArrayList<String>();
 
@@ -74,7 +74,7 @@ public class FanetykaConfig {
         this.processPrypadabniennie = new ProcessRunner(Prypadabniennie.class, configs);
         this.processSypiacyjaSvisciacyja = new ProcessRunner(SypiacyjaSvisciacyja.class, configs);
         this.processPazicyjnyja = new ProcessRunner(Pazicyjnyja.class, configs);
-        this.processUstaunyA = new ProcessRunner(UstaunyA.class, configs);
+        this.processRedukavanyja = new ProcessRunner(Redukavanyja.class, configs);
         this.processUstaunyJ = new ProcessRunner(UstaunyJ.class, configs);
 
         debugCases.addAll(this.processMiakkasc.getDebugCases());
@@ -84,7 +84,7 @@ public class FanetykaConfig {
         debugCases.addAll(this.processPrypadabniennie.getDebugCases());
         debugCases.addAll(this.processSypiacyjaSvisciacyja.getDebugCases());
         debugCases.addAll(this.processPazicyjnyja.getDebugCases());
-        debugCases.addAll(this.processUstaunyA.getDebugCases());
+        debugCases.addAll(this.processRedukavanyja.getDebugCases());
         debugCases.addAll(this.processUstaunyJ.getDebugCases());
 
         Collections.sort(debugCases, Collator.getInstance(Locale.of("be")));

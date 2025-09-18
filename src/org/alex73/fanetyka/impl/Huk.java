@@ -65,6 +65,9 @@ public class Huk {
     public boolean stressIpa;
     public boolean stress;
 
+    // толькі ўстаўны "а" ці "ы"
+    public boolean redukavany;
+
     /**
      * Гэты гук аддзелены ад наступнага.
      */

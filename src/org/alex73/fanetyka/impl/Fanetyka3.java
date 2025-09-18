@@ -64,7 +64,7 @@ public class Fanetyka3 {
             config.processPrypadabniennie.process(this);
             config.processAhlusennieAzvancennie.process(this);
             config.processSypiacyjaSvisciacyja.process(this);
-            config.processUstaunyA.process(this);
+            config.processRedukavanyja.process(this);
             config.processPazicyjnyja.process(this);
             String hnew = toString();
             if (hnew.equals(prev)) {
