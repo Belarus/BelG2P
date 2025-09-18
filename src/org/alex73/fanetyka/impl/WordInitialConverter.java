@@ -38,8 +38,7 @@ public class WordInitialConverter {
     private boolean appendToNextWord;
     protected List<Huk> huki;
     protected float debugPartBegin = 0, debugPartEnd = 0; // if debug, value will be from 0 to 1 - position in word
-    private WordContext wordContext=new WordContext();
-    //private WordMorphology fromDB;
+    private WordContext wordContext = new WordContext();
 
     public WordInitialConverter(GrammarFinder finder, String wordToProcess, WordInitialConverter nextWord, Consumer<String> logger) {
         this.finder = finder;
@@ -118,16 +117,8 @@ public class WordInitialConverter {
     }
 
     private void checkNextWord() {
-        if (nextWord != null) { // TODO мо не варта прыляпляць - і так адбываюцца ? "вось дам/воз дам - аднолькава ?"
-            // прыназоўнікі "без", "не" - мусяць прыляпляцца да слова, бо ёсць працэсы, якія
-            // з імі адбываюцца: мяккасць, аглушэнне/азванчэнне
-            // яканне робім адразу тут
+        if (nextWord != null) {
             String wl = StressUtils.unstress(word.toLowerCase());
-            // яканне адбываецца калі ў наступным слове націск прыпадае на першы склад,
-            // альбо нават у трэцім слове: "ня ў лад", "ня з ім"
-            // Яканне адбываецца толькі ў некаторых часціцах і прыназоўніках, і не
-            // адбываецца ў астатніх: "дзе вёска"(але "ня вёска"),
-            // таму яканне не ўзнікае ад прыляпляння прыназоўнікаў да назоўнікаў.
             switch (wl) {
             case "не":
             case "без":
@@ -347,27 +338,6 @@ public class WordInitialConverter {
     }
 
     /**
-     * Ці прыпадае ў гэтым слове націск на першы склад ?
-     */
-    boolean naciskNaPiersySklad() {
-        // на які склад націск ?
-        for (Huk h : huki) {
-            if (Huk.halosnyja.contains(h.bazavyHuk)) {
-                return h.stress;
-            }
-        }
-        // Слова без галосных - магчыма прыназоўнік.
-        // Не ўлічваем "ў", "з" - бяром з наступнага слова, бо "не з ім" - мусіць
-        // пераходзіць у "ня з ім".
-        if (nextWord != null) {
-            return nextWord.naciskNaPiersySklad();
-        } else {
-            // наступнага слова няма
-            return false;
-        }
-    }
-
-    /**
      * Узяць слова з базы, калі ёсць.
      */
     String zBazy(String w) {
@@ -411,6 +381,10 @@ public class WordInitialConverter {
             if (p >= 0) {
                 w = w.substring(0, p + 1) + GrammarDB2.pravilny_nacisk + w.substring(p + 1);
                 logger.accept("Аўтаматычна пазначаныя націскі: " + w);
+            } else if (!StressUtils.hasStress(w) && StressUtils.syllCount(w) == 1) {
+                // пазначаем націск у аднаскладовых
+                w = StressUtils.setStressFromStart(w, 0);
+                logger.accept("Аўтаматычна пазначаныя націскі: " + w);
             }
         } else {
             if (foundForms.stream().map(f -> f.getFanetykaApplied()).distinct().count() > 1) {
@@ -419,6 +393,11 @@ public class WordInitialConverter {
             }
             w = wordContext.asnounaja.getFanetykaApplied(); // нават калі прыстаўкі не вызначаныя, могуць быць змены фанетыкі
             logger.accept("Націскі, пазначэнне ґ і прыставак з базы " + wordContext.asnounaja.p.getPdgId() + wordContext.asnounaja.v.getId() + ": " + w);
+            if (!StressUtils.hasStress(w) && StressUtils.syllCount(w) == 1) {
+                // пазначаем націск у аднаскладовых
+                w = StressUtils.setStressFromStart(w, 0);
+                logger.accept("Аўтаматычна пазначаныя націскі: " + w);
+            }
         }
 
         if (wordContext.asnounaja == null || !wordContext.asnounaja.isMorphologyDefined()) {

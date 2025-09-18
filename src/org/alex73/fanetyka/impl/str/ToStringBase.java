@@ -40,7 +40,9 @@ public abstract class ToStringBase {
         }
 
         // вывад у адзін радок
-        hs.getLast().spaceAfter = false;
+        if (!hs.isEmpty()) {
+            hs.getLast().spaceAfter = false;
+        }
 
         // applyIPAstresses(hs);//TODO
 
