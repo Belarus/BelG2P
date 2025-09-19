@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
+import org.alex73.fanetyka.impl.str.IPAReader;
 import org.alex73.fanetyka.impl.str.ToStringIPA;
 import org.alex73.fanetyka.utils.Amohrafy;
 import org.alex73.fanetyka.utils.ReadResource;
@@ -330,7 +331,7 @@ public class WordInitialConverter {
             return;
         }
         logger.accept("Адмысловая фанетыка з базы: " + fan);
-        huki = IPAUtils.parseIpa(fan);
+        huki = IPAReader.parseIpa(fan);
         huki.getLast().padzielPasla |= Huk.PADZIEL_SLOVY;
     }
 

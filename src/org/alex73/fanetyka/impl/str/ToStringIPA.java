@@ -7,20 +7,21 @@ import java.util.Map;
 
 import org.alex73.fanetyka.impl.Huk;
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
-import org.alex73.fanetyka.impl.IPAUtils;
 import org.alex73.fanetyka.utils.ReadResource;
 
 /**
  * Канвертавання гукаў у String для IPA.
  * 
  * У IPA націскі трэба падаваць перад складам, а не над галоснай. Але для гэтага
- * трэба вызначыць межы складаў. Шыблоны пазначэння націскаў -- у
+ * трэба вызначыць межы складаў. Шаблоны пазначэння націскаў -- у
  * ipa_stress.txt. Але ёсць цяжкія выпадкі - падваенне гукаў і межы паміж
  * прыстаўкай і каранямі. Мяжа пасля прыстаўкі не ўлічваецца, калі ў прыстаўцы
  * няма галоснай.
  */
 public class ToStringIPA extends ToStringBase {
     private static final char IPA_STRESS_CHAR = 'ˈ';
+
+    public static final Map<Huk.POUNY_HUK, String> IPA_MAP = loadOutputMap("out_ipa.txt");
 
     /**
      * Асобнае канвертаванне ў string з падзелам на склады.
@@ -83,7 +84,7 @@ public class ToStringIPA extends ToStringBase {
 
     @Override
     public String huk2str(Huk h) {
-        return IPAUtils.huk2ipa(h).name();
+        return IPA_MAP.get(h.pouny());
     }
 
     @Override
@@ -159,9 +160,6 @@ public class ToStringIPA extends ToStringBase {
 
     static {
         ReadResource.readLines(ToStringIPA.class, "ipa_stress.txt").forEach(s -> {
-            if (s.isBlank()) {
-                return;
-            }
             int p = s.indexOf('ˈ');
             if (p < 0) {
                 throw new RuntimeException("No stress in '" + s + "' in the ipa_stress.txt");

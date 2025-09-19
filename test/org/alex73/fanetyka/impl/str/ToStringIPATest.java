@@ -15,9 +15,9 @@ public class ToStringIPATest {
     void syllBordersFromStartText() {
         ToStringIPA c = new ToStringIPA();
         List<HukChars> hs = new ArrayList<>();
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.з, 0)));
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.з, 0)));
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а, 0)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.з)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.з)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а)));
         assertEquals(0, c.getSyllStart(hs, hs.size() - 1));
     }
 
@@ -25,10 +25,10 @@ public class ToStringIPATest {
     void syllBordersFromStartWord() {
         ToStringIPA c = new ToStringIPA();
         List<HukChars> hs = new ArrayList<>();
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а, Huk.PADZIEL_SLOVY)));
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.к, 0)));
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.з, 0)));
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а, 0)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а, 0, Huk.PADZIEL_SLOVY)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.к)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.з)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а)));
         assertEquals(1, c.getSyllStart(hs, hs.size() - 1));
     }
 
@@ -36,10 +36,10 @@ public class ToStringIPATest {
     void syllBordersFromBorder() {
         ToStringIPA c = new ToStringIPA();
         List<HukChars> hs = new ArrayList<>();
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а, Huk.PADZIEL_SLOVY)));
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.к, 0)));
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.з, 0)));
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а, 0)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а, 0, Huk.PADZIEL_SLOVY)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.к)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.з)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а)));
         assertEquals(1, c.getSyllStart(hs, hs.size() - 1));
     }
 
@@ -47,10 +47,10 @@ public class ToStringIPATest {
     void syllBordersFromBorderNoHal() {
         ToStringIPA c = new ToStringIPA();
         List<HukChars> hs = new ArrayList<>();
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а, Huk.PADZIEL_SLOVY)));
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.к, Huk.PADZIEL_PRYSTAUKA)));
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.з, 0)));
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а, 0)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а, 0, Huk.PADZIEL_SLOVY)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.к, 0, Huk.PADZIEL_PRYSTAUKA)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.з)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а)));
         assertEquals(1, c.getSyllStart(hs, hs.size() - 1));
     }
 
@@ -58,10 +58,10 @@ public class ToStringIPATest {
     void syllBordersFromBorderRoots() {
         ToStringIPA c = new ToStringIPA();
         List<HukChars> hs = new ArrayList<>();
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.к, 0)));
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.к, Huk.PADZIEL_KARANI)));
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.з, 0)));
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а, 0)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.к)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.к, 0, Huk.PADZIEL_KARANI)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.з)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а)));
         assertEquals(2, c.getSyllStart(hs, hs.size() - 1));
     }
 
@@ -69,9 +69,9 @@ public class ToStringIPATest {
     void syllBordersFromBorderPryn() {
         ToStringIPA c = new ToStringIPA();
         List<HukChars> hs = new ArrayList<>();
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.з, Huk.PADZIEL_PRYNAZOUNIK)));
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.з, 0)));
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а, 0)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.з, 0, Huk.PADZIEL_PRYNAZOUNIK)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.з)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а)));
         assertEquals(1, c.getSyllStart(hs, hs.size() - 1));
     }
 
@@ -79,10 +79,10 @@ public class ToStringIPATest {
     void syllBordersFromHal() {
         ToStringIPA c = new ToStringIPA();
         List<HukChars> hs = new ArrayList<>();
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.к, 0)));
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а, 0)));
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.з, 0)));
-        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а, 0)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.к)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.з)));
+        hs.add(c.new HukChars(new Huk("", Huk.BAZAVY_HUK.а)));
         assertEquals(1, c.getSyllStart(hs, hs.size() - 1));
     }
 }

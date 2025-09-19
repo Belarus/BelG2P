@@ -1,7 +1,6 @@
 package org.alex73.fanetyka.impl.str;
 
 import org.alex73.fanetyka.impl.Huk;
-import org.alex73.fanetyka.impl.IPAUtils;
 
 /**
  * Канвертавання гукаў у String для IPA з націскам пасля галоснай, а не як у
@@ -10,7 +9,7 @@ import org.alex73.fanetyka.impl.IPAUtils;
 public class ToStringIPAOldStress extends ToStringBase {
     @Override
     protected String huk2str(Huk h) {
-        return IPAUtils.huk2ipa(h).name();
+        return ToStringIPA.IPA_MAP.get(h.pouny());
     }
 
     @Override
