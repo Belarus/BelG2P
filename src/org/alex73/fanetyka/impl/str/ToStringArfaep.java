@@ -68,11 +68,6 @@ public class ToStringArfaep extends ToStringBase {
     }
 
     @Override
-    protected char getIpaStressChar() {
-        return 'ˈ';
-    }
-
-    @Override
     protected char getStressChar() {
         return 0;
     }

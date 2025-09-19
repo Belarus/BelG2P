@@ -78,7 +78,6 @@ public class Fanetyka3 {
                 throw new RuntimeException("Зашмат крокаў канверсіі");
             }
         }
-        IPAUtils.setIpaStress(huki, this);
     }
 
     /**
@@ -114,6 +113,11 @@ public class Fanetyka3 {
         // збіраем гукі з усіх слоў
         for (WordInitialConverter w : words) {
             huki.addAll(w.huki);
+        }
+
+        // адкідаем прагал у канцы
+        if (!huki.isEmpty()) {
+            huki.getLast().padzielPasla &= ~Huk.PADZIEL_SLOVY;
         }
 
         // яканне

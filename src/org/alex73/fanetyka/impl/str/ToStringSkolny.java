@@ -70,11 +70,6 @@ public class ToStringSkolny extends ToStringBase {
     }
 
     @Override
-    protected char getIpaStressChar() {
-        return 0;
-    }
-
-    @Override
     protected char getStressChar() {
         return '\u0301';
     }

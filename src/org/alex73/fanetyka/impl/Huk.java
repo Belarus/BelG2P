@@ -62,7 +62,6 @@ public class Huk {
     public String zychodnyjaLitary;
     public BAZAVY_HUK bazavyHuk;
     public int miakki;
-    public boolean stressIpa;
     public boolean stress;
 
     // толькі ўстаўны "а" ці "ы"
@@ -80,6 +79,12 @@ public class Huk {
     public Huk(String z, BAZAVY_HUK b) {
         zychodnyjaLitary = z;
         bazavyHuk = b;
+    }
+
+    public Huk(String z, BAZAVY_HUK b, int padzielPasla) {
+        zychodnyjaLitary = z;
+        bazavyHuk = b;
+        this.padzielPasla = padzielPasla;
     }
 
     @Override

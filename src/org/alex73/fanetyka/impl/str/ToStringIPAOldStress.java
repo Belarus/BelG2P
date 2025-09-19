@@ -14,11 +14,6 @@ public class ToStringIPAOldStress extends ToStringBase {
     }
 
     @Override
-    protected char getIpaStressChar() {
-        return 0;
-    }
-
-    @Override
     protected char getStressChar() {
         return '´';
     }

@@ -1,25 +1,89 @@
 package org.alex73.fanetyka.impl.str;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.alex73.fanetyka.impl.Huk;
+import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 import org.alex73.fanetyka.impl.IPAUtils;
 import org.alex73.fanetyka.utils.ReadResource;
 
 /**
  * Канвертавання гукаў у String для IPA.
+ * 
+ * У IPA націскі трэба падаваць перад складам, а не над галоснай. Але для гэтага
+ * трэба вызначыць межы складаў. Шыблоны пазначэння націскаў -- у
+ * ipa_stress.txt. Але ёсць цяжкія выпадкі - падваенне гукаў і межы паміж
+ * прыстаўкай і каранямі. Мяжа пасля прыстаўкі не ўлічваецца, калі ў прыстаўцы
+ * няма галоснай.
  */
 public class ToStringIPA extends ToStringBase {
-    @Override
-    public String huk2str(Huk h) {
-        return IPAUtils.huk2ipa(h).name();
+    private static final char IPA_STRESS_CHAR = 'ˈ';
+
+    /**
+     * Асобнае канвертаванне ў string з падзелам на склады.
+     */
+    public String toString(List<Huk> huki) {
+        // папярэдняя канвертацыя
+        List<HukChars> hs = new ArrayList<>(huki.stream().map(h -> new HukChars(h)).toList());
+
+        // падваенне
+        for (int i = 1; i < hs.size(); i++) {
+            HukChars p = hs.get(i - 1);
+            HukChars c = hs.get(i);
+            if (p.zycny && c.zycny && p.str.equals(c.str)) {
+                p.str += getPadvojenyChar();
+                p.stress |= c.stress;
+                p.spaceAfter = c.spaceAfter;
+                // пераносім padzielPasla на папярэднні
+                if (i > 1) {
+                    hs.get(i - 2).padzielPasla |= p.padzielPasla;
+                    p.padzielPasla = 0;
+                }
+                p.padzielPasla |= c.padzielPasla;
+                hs.remove(i);
+                i--;
+            }
+        }
+
+        // для ўсіх націскаў шукаем пачатак складу і ставім там ipaStressBefore
+        StringBuilder pattern = new StringBuilder();
+        for (int i = 0; i < hs.size(); i++) {
+            HukChars h = hs.get(i);
+            if (h.stress) {
+                // шукаем пачатак складу
+                int syllStart = getSyllStart(hs, i);
+                pattern.setLength(0);
+                for (int p = syllStart; p <= i; p++) {
+                    pattern.append(hs.get(p).tp.name());
+                }
+                Integer stressPos = IPA_STRESSES.get(pattern.toString());
+                if (stressPos == null) {
+                    System.err.println("No IPA stress pattern for '" + pattern + "'");
+                } else {
+                    hs.get(syllStart + stressPos).ipaStressBefore = true;
+                }
+            }
+        }
+
+        StringBuilder out = new StringBuilder();
+        for (HukChars h : hs) {
+            if (h.ipaStressBefore) {
+                out.append(IPA_STRESS_CHAR);
+            }
+            out.append(h.str);
+            if (h.spaceAfter) {
+                out.append(' ');
+            }
+        }
+        return out.toString();
     }
 
     @Override
-    protected char getIpaStressChar() {
-        return 'ˈ';
+    public String huk2str(Huk h) {
+        return IPAUtils.huk2ipa(h).name();
     }
 
     @Override
@@ -32,35 +96,62 @@ public class ToStringIPA extends ToStringBase {
         return 'ː';
     }
 
-    @Override
-    protected void applyIPAstresses(List<HukChars> hs) {
-        int hal = 0;
-        for (int i = 0; i < hs.size(); i++) {
-            HukChars h = hs.get(i);
-            if (h.stressAfter) {
-                applyIPAstresses(hs, hal, i);
+    /**
+     * Вызначае межы складу вакол патрэбнай галоснай.
+     */
+    protected int getSyllStart(List<HukChars> hs, int halIndex) {
+        // шукаем пачатак складу
+        int syllStart = 0;
+        int syllStartAfterPadziel = -1;
+        for (int i = halIndex - 1; i >= 0; i--) {
+            HukChars t = hs.get(i);
+            if (t.spaceAfter || (t.padzielPasla & (Huk.PADZIEL_KARANI | Huk.PADZIEL_ZLUCOK)) != 0) {
+                syllStart = i + 1;
+                break;
             }
-            if (h.tp == ToStringIPA.TYPE.H) {
-                hal = i;
+            if (t.tp == TYPE.H) {
+                if (syllStartAfterPadziel >= 0) {
+                    syllStart = syllStartAfterPadziel;
+                } else {
+                    syllStart = i; // перад складам ідзе папярэдні галосны
+                }
+                break;
             }
-            if (h.padzielSkladau) {
-                hal = i + 1;
+            if ((t.padzielPasla & Huk.PADZIEL_PRYSTAUKA) != 0) {
+                // тут, калі знойдзем галосны да прагалу
+                syllStartAfterPadziel = i + 1;
             }
         }
+        return syllStart;
     }
 
-    private static void applyIPAstresses(List<HukChars> huki, int prevHalIndex, int halIndex) {
-        // huki.get(halIndex).stress = false;
-        StringBuilder s = new StringBuilder();
-        for (int i = prevHalIndex; i <= halIndex; i++) {
-            HukChars h = huki.get(i);
-            s.append(h.tp.name());
-        }
-        Integer pierad = IPA_STRESSES.get(s.toString());
-        if (pierad == null) {
-            System.err.println("Незразумелая мяжа складаў у мадэлі '" + s + "' для " + huki);
-        } else {
-            huki.get(prevHalIndex + pierad).ipaStressBefore = true;
+    enum TYPE {
+        J, H, S, Z
+    };
+
+    public class HukChars {
+        boolean ipaStressBefore, spaceAfter, stress;
+        int padzielPasla;
+        boolean zycny;
+        String str;
+        TYPE tp;
+
+        public HukChars(Huk huk) {
+            str = huk2str(huk);
+            stress = huk.stress;
+            spaceAfter = (huk.padzielPasla & (Huk.PADZIEL_SLOVY | Huk.PADZIEL_PRYNAZOUNIK)) != 0;
+            padzielPasla = huk.padzielPasla;
+            zycny = !Huk.halosnyja.contains(huk.bazavyHuk);
+
+            if (huk.bazavyHuk == BAZAVY_HUK.ў || huk.bazavyHuk == BAZAVY_HUK.j || huk.bazavyHuk == BAZAVY_HUK.р) {
+                tp = TYPE.J;
+            } else if (Huk.halosnyja.contains(huk.bazavyHuk)) {
+                tp = TYPE.H;
+            } else if (Huk.sanornyja.contains(huk.bazavyHuk)) {
+                tp = TYPE.S;
+            } else {
+                tp = TYPE.Z;
+            }
         }
     }
 

@@ -1,7 +1,6 @@
 package org.alex73.fanetyka.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -11,7 +10,7 @@ import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 import org.alex73.fanetyka.impl.str.ToStringIPA;
 import org.junit.jupiter.api.Test;
 
-class IPAUtilsTest {
+public class IPAUtilsTest {
 
     @Test
     void parseIpaHandlesValidInput() {
@@ -50,22 +49,6 @@ class IPAUtilsTest {
     void parseIpaHandlesEmptyInput() {
         List<Huk> result = IPAUtils.parseIpa("");
         assertTrue(result.isEmpty());
-    }
-
-    @Test
-    void setIpaStressAppliesStressCorrectly() {
-        List<Huk> huki = IPAUtils.parseIpa("ˈa");
-        IPAUtils.setIpaStress(huki, null);
-        assertTrue(huki.get(0).stressIpa);
-    }
-
-    @Test
-    void setIpaStressHandlesMultipleSyllables() {
-        List<Huk> huki = IPAUtils.parseIpa("ˈaba");
-        IPAUtils.setIpaStress(huki, null);
-        assertTrue(huki.get(0).stressIpa);
-        assertFalse(huki.get(1).stressIpa);
-        assertFalse(huki.get(2).stressIpa);
     }
 
     @Test
