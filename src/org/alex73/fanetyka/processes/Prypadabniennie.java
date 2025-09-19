@@ -7,7 +7,7 @@ import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 
 public class Prypadabniennie {
 
-    @ProcessCase(name = "Прыпадабненне зычных: ц'-т -> т-т", logCountBefore = 2, logCountAfter = 2)
+    @ProcessCase(name = "Прыпадабненне па цвёрдасці: ц'-т -> т-т; ц'-ц -> т-ц", logCountBefore = 2, logCountAfter = 2)
     public boolean ct(Huk h1, Huk h2) {
         h1.bazavyHuk = BAZAVY_HUK.т;
         h1.miakki = 0;
@@ -26,7 +26,7 @@ public class Prypadabniennie {
         return true;
     }
 
-    @ProcessCase(name = "Прыпадабненне: шумны пярэднеязычны змычны+шумны пярэднеязычны змычна-шчылінны", logCountBefore = 2, logCountAfter = 2)
+    @ProcessCase(name = "Прыпадабненне: шумны пярэднеязычны змычны+шумны пярэднеязычны змычна-шчылінны", logCountBefore = 3, logCountAfter = 3)
     public boolean prySPZSPZS(Huk huk1, Huk huk2, Huk huk3) {
         huk2.bazavyHuk = huk3.bazavyHuk;
         return true;
