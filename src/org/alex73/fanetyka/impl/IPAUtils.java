@@ -1,10 +1,7 @@
 package org.alex73.fanetyka.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 import org.alex73.fanetyka.impl.str.ToStringIPA;
@@ -14,8 +11,6 @@ import org.alex73.fanetyka.impl.str.ToStringIPA;
  * syllable.
  */
 public class IPAUtils {
-
-    public static final Map<String, Integer> IPA_STRESSES;
 
     public enum IPA {
         a, ɐ, b, bʲ, v, vʲ, β, βʲ, ɣ, ɣʲ, g, gʲ, d, dʲ, ɛ, d͡ʐ, d͡z, d͡zʲ, ʐ, z, zʲ, i, k, kʲ, ɫ, lʲ, m, mʲ, ɱ, n, nʲ, ɔ, p, pʲ, r, s, sʲ, t, tʲ, u, u̯, f, fʲ,
@@ -464,26 +459,5 @@ public class IPAUtils {
         if (pierad >= 0) {
             huki.get(prevHalIndex + pierad).stressIpa = true;
         }
-    }
-
-    static {
-        Map<String, Integer> ipaStresses = new HashMap<>();
-        WordInitialConverter.readResourceLines("ipa_stress.txt").forEach(s -> {
-            if (s.isBlank()) {
-                return;
-            }
-            int p = s.indexOf('ˈ');
-            if (p < 0) {
-                throw new RuntimeException("No stress in '" + s + "' in the ipa_stress.txt");
-            }
-            s = s.substring(0, p) + s.substring(p + 1);
-            if (!s.matches("[HZJS]+")) {
-                throw new RuntimeException("Wrong line '" + s + "' in the ipa_stress.txt");
-            }
-            if (ipaStresses.put(s, p) != null) {
-                throw new RuntimeException("Duplicate line '" + s + "' in the ipa_stress.txt");
-            }
-        });
-        IPA_STRESSES = Collections.unmodifiableMap(ipaStresses);
     }
 }

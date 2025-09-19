@@ -1,9 +1,12 @@
 package org.alex73.fanetyka.impl.str;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.alex73.fanetyka.impl.Huk;
 import org.alex73.fanetyka.impl.IPAUtils;
+import org.alex73.fanetyka.utils.ReadResource;
 
 /**
  * Канвертавання гукаў у String для IPA.
@@ -53,11 +56,32 @@ public class ToStringIPA extends ToStringBase {
             HukChars h = huki.get(i);
             s.append(h.tp.name());
         }
-        Integer pierad = IPAUtils.IPA_STRESSES.get(s.toString());
+        Integer pierad = IPA_STRESSES.get(s.toString());
         if (pierad == null) {
             System.err.println("Незразумелая мяжа складаў у мадэлі '" + s + "' для " + huki);
         } else {
             huki.get(prevHalIndex + pierad).ipaStressBefore = true;
         }
+    }
+
+    private static final Map<String, Integer> IPA_STRESSES = new HashMap<>();
+
+    static {
+        ReadResource.readLines(ToStringIPA.class, "ipa_stress.txt").forEach(s -> {
+            if (s.isBlank()) {
+                return;
+            }
+            int p = s.indexOf('ˈ');
+            if (p < 0) {
+                throw new RuntimeException("No stress in '" + s + "' in the ipa_stress.txt");
+            }
+            s = s.substring(0, p) + s.substring(p + 1);
+            if (!s.matches("[HZJS]+")) {
+                throw new RuntimeException("Wrong line '" + s + "' in the ipa_stress.txt");
+            }
+            if (IPA_STRESSES.put(s, p) != null) {
+                throw new RuntimeException("Duplicate line '" + s + "' in the ipa_stress.txt");
+            }
+        });
     }
 }

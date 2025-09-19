@@ -1,8 +1,5 @@
 package org.alex73.fanetyka.impl;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -10,11 +7,11 @@ import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 import org.alex73.fanetyka.impl.str.ToStringIPA;
 import org.alex73.fanetyka.utils.Amohrafy;
+import org.alex73.fanetyka.utils.ReadResource;
 import org.alex73.grammardb.GrammarDB2;
 import org.alex73.grammardb.GrammarFinder;
 import org.alex73.grammardb.StressUtils;
@@ -525,24 +522,11 @@ public class WordInitialConverter {
     static final List<String> PRYSTAUKI_ZLUCOK;
     static final Set<String> NIENACISKNYJA;
 
-    static Stream<String> readResourceLines(String resourceName) {
-        List<String> lines = new ArrayList<>();
-        try (BufferedReader rd = new BufferedReader(new InputStreamReader(Fanetyka3.class.getResourceAsStream(resourceName), StandardCharsets.UTF_8))) {
-            String s;
-            while ((s = rd.readLine()) != null) {
-                lines.add(s);
-            }
-        } catch (Exception ex) {
-            throw new ExceptionInInitializerError(ex);
-        }
-        return lines.stream().map(s -> s.replaceAll("#.*", "").trim()).filter(s -> !s.isEmpty());
-    }
-
     static {
         Pattern RE_P = Pattern.compile("(.+)=(.*)");
         Pattern RE_N = Pattern.compile("[A-Z]/(.+)");
 
-        PRYSTAUKI = readResourceLines("prystauki.txt").map(s -> {
+        PRYSTAUKI = ReadResource.readLines(WordInitialConverter.class, "prystauki.txt").map(s -> {
             Matcher m = RE_P.matcher(s);
             if (!m.matches()) {
                 throw new ExceptionInInitializerError(s);
@@ -557,9 +541,9 @@ public class WordInitialConverter {
             }
         }).filter(p -> p != null).sorted().toList();
 
-        PRYSTAUKI_ZLUCOK = readResourceLines("prystauki_zlucok.txt").toList();
+        PRYSTAUKI_ZLUCOK = ReadResource.readLines(WordInitialConverter.class, "prystauki_zlucok.txt").toList();
 
-        NIENACISKNYJA = readResourceLines("nienacisknyja.txt").map(s -> {
+        NIENACISKNYJA = ReadResource.readLines(WordInitialConverter.class, "nienacisknyja.txt").map(s -> {
             Matcher m = RE_N.matcher(s);
             if (!m.matches()) {
                 throw new ExceptionInInitializerError(s);
