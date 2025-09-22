@@ -115,11 +115,6 @@ public class Fanetyka3 {
             huki.addAll(w.huki);
         }
 
-        // адкідаем прагал у канцы
-        if (!huki.isEmpty()) {
-            huki.getLast().padzielPasla &= ~Huk.PADZIEL_SLOVY;
-        }
-
         // яканне
         jakannie();
     }

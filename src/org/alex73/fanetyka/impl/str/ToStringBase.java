@@ -24,7 +24,12 @@ public abstract class ToStringBase {
         for (Huk h : huki) {
             String hukStr = huk2str(h);
             if (!Huk.halosnyja.contains(h.bazavyHuk) && hukStr.equals(prevHukStr)) {
-                out.append(getPadvojenyChar());
+                if (out.charAt(out.length() - 1) == ' ') {
+                    // калі падваенне вакол прагала - прагала не мусіць быць наогул
+                    out.setCharAt(out.length() - 1, getPadvojenyChar());
+                } else {
+                    out.append(getPadvojenyChar());
+                }
             } else {
                 out.append(hukStr);
             }
@@ -36,7 +41,10 @@ public abstract class ToStringBase {
                 out.append(' ');
             }
         }
-        return out.toString();
+
+        // адкідаем прагал у канцы - нельга рабіць гэта пры канвертацыі слоў, бо тады не
+        // будзе спрацоўваць праверка на канец слова
+        return out.toString().trim();
     }
 
     /**

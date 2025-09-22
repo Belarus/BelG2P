@@ -69,6 +69,12 @@ public class ToStringIPA extends ToStringBase {
             }
         }
 
+        // адкідаем прагал у канцы - нельга рабіць гэта пры канвертацыі слоў, бо тады не
+        // будзе спрацоўваць праверка на канец слова
+        if (!hs.isEmpty()) {
+            hs.getLast().spaceAfter = false;
+        }
+
         StringBuilder out = new StringBuilder();
         for (HukChars h : hs) {
             if (h.ipaStressBefore) {
