@@ -7,9 +7,9 @@ import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 
 public class Prypadabniennie {
 
-    @ProcessCase(name = "Прыпадабненне па цвёрдасці: ц'-т -> т-т; ц'-ц -> т-ц", logCountBefore = 2, logCountAfter = 2)
+    @ProcessCase(name = "Прыпадабненне: ц'-т -> т-т; ц'-ц -> ц-ц", logCountBefore = 2, logCountAfter = 2)
     public boolean ct(Huk h1, Huk h2) {
-        h1.bazavyHuk = BAZAVY_HUK.т;
+        h1.bazavyHuk = h2.bazavyHuk;
         h1.miakki = 0;
         return true;
     }
@@ -20,7 +20,7 @@ public class Prypadabniennie {
         return true;
     }
 
-    @ProcessCase(name = "Прыпадабненне т-ш -> ч-ш пасля галоснага", logCountBefore = 2, logCountAfter = 2)
+    @ProcessCase(name = "Прыпадабненне: т-ш -> ч-ш пасля галоснага", logCountBefore = 2, logCountAfter = 2)
     public boolean pryTS(Huk huk1, Huk huk2) {
         huk2.bazavyHuk = BAZAVY_HUK.ч;
         return true;
@@ -32,19 +32,13 @@ public class Prypadabniennie {
         return true;
     }
 
-    @ProcessCase(name = "Прыпадабненне т-ш -> ч-ш, т+ч => ч на канцы слова", logCountBefore = 3, logCountAfter = 2)
-    public boolean pryTSe(ProcessContext context) {
-        context.vydalicPierad(1);
-        return true;
-    }
-
-    @ProcessCase(name = "Прыпадабненне ґ+г => г:", logCountBefore = 2, logCountAfter = 2)
+    @ProcessCase(name = "Прыпадабненне: ґ+г -> г:", logCountBefore = 2, logCountAfter = 2)
     public boolean gh(Huk h1, Huk h2, ProcessContext context) {
         h1.bazavyHuk = BAZAVY_HUK.г;
         return true;
     }
 
-    @ProcessCase(name = "Прыпадабненне дз+д => д+д", logCountBefore = 2, logCountAfter = 2)
+    @ProcessCase(name = "Прыпадабненне: дз+д -> д+д", logCountBefore = 2, logCountAfter = 2)
     public boolean dzd(Huk h1, Huk h2, ProcessContext context) {
         h1.bazavyHuk = BAZAVY_HUK.д;
         h1.miakki = 0;

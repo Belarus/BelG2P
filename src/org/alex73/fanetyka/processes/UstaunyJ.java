@@ -70,7 +70,7 @@ public class UstaunyJ {
         return true;
     }
 
-    @ProcessCase(name = "Дадаецца j перад галоснай пасля прыстаўкі, якая канчаецца на 'й'", logCountBefore = 1, logCountAfter = 2)
+    @ProcessCase(name = "Дадаецца 'j' перад галоснай пасля прыстаўкі на '-j'", logCountBefore = 1, logCountAfter = 2)
     public boolean jpry(ProcessContext context) {
         context.dadac(1, jot());
         return true;

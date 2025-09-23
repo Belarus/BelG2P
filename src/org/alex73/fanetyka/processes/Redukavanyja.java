@@ -45,7 +45,7 @@ public class Redukavanyja {
         int syllAfter = 0;
         for (int i = context.currentPosition - 1; i >= 0; i--) {
             Huk h = context.huki.get(i);
-            if (h.padzielPasla != 0) {
+            if ((h.padzielPasla & (Huk.PADZIEL_SLOVY | Huk.PADZIEL_ZLUCOK)) != 0) {
                 break;
             }
             if (Huk.halosnyja.contains(h.bazavyHuk)) {
@@ -63,7 +63,7 @@ public class Redukavanyja {
             if (h.stress) {
                 stressesAfter++;
             }
-            if (h.padzielPasla != 0) {
+            if ((h.padzielPasla & (Huk.PADZIEL_SLOVY | Huk.PADZIEL_ZLUCOK)) != 0) {
                 break;
             }
         }

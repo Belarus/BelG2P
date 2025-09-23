@@ -119,4 +119,10 @@ public class Sprascennie {
         context.vydalicPierad(2);
         return true;
     }
+
+    @ProcessCase(name = "Спрашчэнне: т-ш -> ч-ш, т+ч -> ч на канцы слова", logCountBefore = 3, logCountAfter = 2)
+    public boolean pryTSe(ProcessContext context) {
+        context.vydalicPierad(1);
+        return true;
+    }
 }
