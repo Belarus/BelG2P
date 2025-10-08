@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.alex73.fanetyka.config.Case.Example;
 
@@ -14,7 +16,7 @@ public class TsvPrykladyConfig implements IConfig {
     private final List<String[]> lines = new ArrayList<>();
     private int lineIndex;
     public CaseCross cross;
-    public List<Example> examples = new ArrayList<>();
+    public Map<String, List<Example>> examples = new TreeMap<>();
 
     public TsvPrykladyConfig(String name, InputStream in) throws Exception {
         this.configName = name;
@@ -23,7 +25,7 @@ public class TsvPrykladyConfig implements IConfig {
 
     @Override
     public List<Example> getExamples() {
-        return examples;
+        return examples.values().stream().flatMap(c -> c.stream()).toList();
     }
 
     private void load(InputStream in) throws Exception {
@@ -38,17 +40,19 @@ public class TsvPrykladyConfig implements IConfig {
             String[] line = lines.get(lineIndex);
             if (line.length == 0 || line[0].isBlank()) {
                 continue;
-            } else if ("Прыклады".equals(line[0])) {
+            } else if (!line[0].isBlank()) {
+                String name = line[0];
                 lineIndex++;
-                parseExamples();
+                examples.put(name, parseExamples());
             } else {
                 err(0, "Невядомы загаловак: " + line[0]);
             }
         }
     }
 
-    private void parseExamples() {
-        for (; lineIndex < lines.size(); lineIndex++) {
+    private List<Example> parseExamples() {
+        List<Example> result = new ArrayList<>();
+        f: for (; lineIndex < lines.size(); lineIndex++) {
             List<String> cells = new ArrayList<>();
             Case.Example ex = new Case.Example();
             ex.caseName = "";
@@ -64,14 +68,17 @@ public class TsvPrykladyConfig implements IConfig {
                 col++;
             }
             switch (cells.size()) {
+            case 0:
+                break f;
             default:
                 ex.expected = cells.get(1);
             case 1:
                 ex.word = cells.get(0);
-                examples.add(ex);
+                result.add(ex);
                 break;
             }
         }
+        return result;
     }
 
     private static String[] split(String s) {
