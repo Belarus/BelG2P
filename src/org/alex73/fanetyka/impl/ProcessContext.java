@@ -6,7 +6,7 @@ public class ProcessContext {
     public List<Huk> huki;
     public int currentPosition;
     public String debugPrefix; // if !=null - show debug
-    public List<String> debug;
+    public ILogging debug;
 
     public String dump(int logCount) {
         StringBuilder o = new StringBuilder();

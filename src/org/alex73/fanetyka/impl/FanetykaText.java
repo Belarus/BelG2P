@@ -14,7 +14,7 @@ public class FanetykaText {
     public List<String> why = new ArrayList<>();
 
     public FanetykaText(GrammarFinder finder, String text) throws Exception {
-        FanetykaConfig config = new FanetykaConfig(finder, null);
+        FanetykaConfig config = new FanetykaConfig(finder);
         String word = "";
         List<String> words = new ArrayList<>();
         Fanetyka3 f = new Fanetyka3(config);
@@ -39,7 +39,7 @@ public class FanetykaText {
                     words.clear();
                     ipa += f.toString(new ToStringIPA());
                     skola += f.toString(new ToStringSkolny());
-                    why.addAll(f.logPhenomenon);
+                    why.add(f.logPhenomenon.dump());
                     f = new Fanetyka3(config);
                     ipa += c;
                     skola += c;
@@ -50,9 +50,9 @@ public class FanetykaText {
             words.add(word);
         }
         f.calcFanetyka(words);
-        ipa +=  f.toString(new ToStringIPA());
+        ipa += f.toString(new ToStringIPA());
         skola += f.toString(new ToStringSkolny());
-        why.addAll(f.logPhenomenon);
+        why.add(f.logPhenomenon.dump());
     }
 
     boolean isLetter(char c) {
@@ -64,7 +64,7 @@ public class FanetykaText {
         GrammarDB2 db = GrammarDB2.empty();
         GrammarFinder finder = new GrammarFinder(db);
 
-        String text ="лё";// new String(System.in.readAllBytes());
+        String text = "лё";// new String(System.in.readAllBytes());
         FanetykaText t = new FanetykaText(finder, text);
         System.out.println(t.skola);
     }

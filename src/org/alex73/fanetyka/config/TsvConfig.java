@@ -80,7 +80,7 @@ public class TsvConfig implements IConfig {
         if (line[1].isBlank()) {
             err(1, "мусіць быць тэкст падрабязнасцяў");
         }
-        t.logMessage = line[1].trim();
+        t.details = line[1].trim();
         lineIndex++;
         // правяраем трэці радок - што адбываецца
         line = lines.get(lineIndex);
@@ -90,7 +90,7 @@ public class TsvConfig implements IConfig {
         if (line[1].isBlank()) {
             err(1, "мусіць быць тэкст што адбываецца");
         }
-        t.details = line[1].trim();
+        t.changeDescription = line[1].trim();
         lineIndex++;
 
         // тут могуць быць каментары, дзе першы слупок - пусты

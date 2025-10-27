@@ -19,7 +19,28 @@ import org.junit.jupiter.api.Test;
 
 public class WordContextTest {
 
-    Consumer<String> logger = (msg) -> System.out.println(msg);
+    ILogging logger = new ILogging() {
+
+        @Override
+        public void logPrepare(String msg) {
+            System.out.println(msg);
+        }
+
+        @Override
+        public void logChange(String title, String details, String changeFrom, String changeTo, String dumpFrom, String dumpTo) {
+            System.out.println(title);
+        }
+
+        @Override
+        public void logAttention(String msg) {
+            System.out.println(msg);
+        }
+
+        @Override
+        public void logChange(String msg) {
+            System.out.println(msg);
+        }
+    };
     GrammarFinder emptyFinder;
 
     @BeforeEach

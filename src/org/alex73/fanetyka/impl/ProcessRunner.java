@@ -143,7 +143,7 @@ public class ProcessRunner implements IProcess {
                 if (changed) {
                     String after = context.dump(ann.logCountAfter());
                     String wordAfter = instance.toString(new ToStringIPA());
-                    instance.logPhenomenon.add(ca.name + ": [" + before + " -> " + after + "]. " + ca.logMessage + "; " + wordBefore + "=>" + wordAfter);
+                    instance.logPhenomenon.logChange(ca.name, ca.details, before, after, wordBefore, wordAfter);
                     if (caseName.equals(instance.debugRuleName)) {
                         instance.debugRuleProcessed = true; // ці выканалася гэтае правіла
                     }
@@ -171,7 +171,7 @@ public class ProcessRunner implements IProcess {
             String err = checkRules(ca.name, ca.borderCheckBefore, h);
             if (err != null) {
                 if (context.debugPrefix != null) {
-                    context.debug.add(context.debugPrefix + " не выканалася ўмова для гука напачатку: " + err);
+                    context.debug.logChange(context.debugPrefix + " не выканалася ўмова для гука напачатку: " + err);
                 }
                 return false;
             }
@@ -179,7 +179,7 @@ public class ProcessRunner implements IProcess {
         for (int i = context.currentPosition; i < before; i++) {
             if (!checkHuk(ca.name, ca.checks.get(i - context.currentPosition), context.huki.get(i))) {
                 if (context.debugPrefix != null) {
-                    context.debug.add(context.debugPrefix + " гук не супадае ў пазіцыі +" + (i - context.currentPosition) + ": '" + context.huki.get(i)
+                    context.debug.logChange(context.debugPrefix + " гук не супадае ў пазіцыі +" + (i - context.currentPosition) + ": '" + context.huki.get(i)
                             + "' замест '" + String.join(" ", ca.checks.get(i - context.currentPosition).which) + "'");
                 }
                 return false;
@@ -189,7 +189,7 @@ public class ProcessRunner implements IProcess {
             String err = checkRules(ca.name, ca.checks.get(i - context.currentPosition), context.huki.get(i));
             if (err != null) {
                 if (context.debugPrefix != null) {
-                    context.debug.add(context.debugPrefix + " не выканалася ўмова для гука ў пазіцыі +" + (i - context.currentPosition) + ": " + err);
+                    context.debug.logChange(context.debugPrefix + " не выканалася ўмова для гука ў пазіцыі +" + (i - context.currentPosition) + ": " + err);
                 }
                 return false;
             }

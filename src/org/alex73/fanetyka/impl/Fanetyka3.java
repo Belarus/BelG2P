@@ -23,7 +23,7 @@ public class Fanetyka3 {
 
     protected String debugRuleName;
     public boolean debugRuleProcessed;
-    public List<String> logPhenomenon = new ArrayList<>(); // log of phonetic phenomenon
+    public Logger logPhenomenon = new Logger();
 
     /**
      * Create phonetic converted instance using config.
@@ -102,7 +102,7 @@ public class Fanetyka3 {
         for (int i = inputWords.size() - 1; i >= 0; i--) {
             // апрацоўваем словы, ад канца да пачатку,
             // бо патрэбна спасылка на наступнае слова
-            WordInitialConverter w = new WordInitialConverter(config.finder, inputWords.get(i), nextWord, log -> logPhenomenon.add(log));
+            WordInitialConverter w = new WordInitialConverter(config.finder, inputWords.get(i), nextWord, logPhenomenon);
             words.add(w);
             nextWord = w;
         }
@@ -145,7 +145,9 @@ public class Fanetyka3 {
                 }
                 if (change) {
                     h.bazavyHuk = BAZAVY_HUK.а;
-                    logPhenomenon.add("Яканне ў '" + h.wordContext.word + "' перад словам з націскам на першы склад");
+                    if (logPhenomenon != null) {
+                        logPhenomenon.logPrepare("Яканне ў '" + h.wordContext.word + "' перад словам з націскам на першы склад");
+                    }
                 }
             }
         }

@@ -8,8 +8,8 @@ import org.alex73.fanetyka.impl.Huk;
 
 public class Case {
     public String name;
-    public String logMessage;
     public String details;
+    public String changeDescription;
     public HukCheck borderCheckBefore; // праверкі для мяжы перад першым гукам
     public List<HukCheck> checks = new ArrayList<>(); // праверкі для кожнага гуку
     public int requiresHuks;

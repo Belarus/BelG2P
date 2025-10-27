@@ -59,7 +59,7 @@ public class SypiacyjaSvisciacyja {
                 String last3 = word.length() >= 3 ? word.substring(word.length() - 3) : word;
                 String msg = String.format("Заўвага: вымаўленне “-%s” у слове “%s”, калі пачатковая форма “%s”, а не “%s”", last3, word,
                         String.join(",", nonKa), String.join(",", ka));
-                context.debug.addFirst(msg);
+                context.debug.logAttention(msg);
             }
             BAZAVY_HUK replaceTo = sypiacyja2svisciacyja.get(huk.bazavyHuk);
             huk.bazavyHuk = replaceTo;

@@ -30,7 +30,7 @@ public class WordInitialConverter {
     public static final String usie_apostrafy = GrammarDB2.pravilny_apostraf + "\'\u2019";
 
     private final GrammarFinder finder;
-    private final Consumer<String> logger;
+    private final ILogging logger;
     public String word;
     private final WordInitialConverter nextWord;
     private boolean appendToNextWord;
@@ -38,7 +38,7 @@ public class WordInitialConverter {
     protected float debugPartBegin = 0, debugPartEnd = 0; // if debug, value will be from 0 to 1 - position in word
     private WordContext wordContext = new WordContext();
 
-    public WordInitialConverter(GrammarFinder finder, String wordToProcess, WordInitialConverter nextWord, Consumer<String> logger) {
+    public WordInitialConverter(GrammarFinder finder, String wordToProcess, WordInitialConverter nextWord, ILogging logger) {
         this.finder = finder;
         this.logger = logger;
         this.word = wordToProcess;
@@ -51,7 +51,9 @@ public class WordInitialConverter {
             String wlower = word.toLowerCase();
             if (wlower.equals("ў") || NIENACISKNYJA.contains(wlower)) {
                 // Простыя ненаціскныя словы - не бяром націск і прыстаўкі з базы.
-                logger.accept("Слова '" + word + "' - у спісе ненаціскных, не бяром націск і прыстаўкі з базы");
+                if (logger != null) {
+                    logger.logPrepare("Слова '" + word + "' - у спісе ненаціскных, не бяром націск і прыстаўкі з базы");
+                }
             } else {
                 // Звычайныя словы - глядзім базу.
                 word = zBazy(word);
@@ -315,7 +317,9 @@ public class WordInitialConverter {
                 }
             }
         }
-        logger.accept("Базавыя гукі з '" + wl + "': " + new ToStringIPA().toString(huki));
+        if (logger != null) {
+            logger.logPrepare("Базавыя гукі з '" + wl + "': " + new ToStringIPA().toString(huki));
+        }
     }
 
     /**
@@ -330,7 +334,9 @@ public class WordInitialConverter {
         if (fan == null) {
             return;
         }
-        logger.accept("Адмысловая фанетыка з базы: " + fan);
+        if (logger != null) {
+            logger.logPrepare("Адмысловая фанетыка з базы: " + fan);
+        }
         huki = IPAReader.parseIpa(fan);
         huki.getLast().padzielPasla |= Huk.PADZIEL_SLOVY;
     }
@@ -370,7 +376,9 @@ public class WordInitialConverter {
         }
 
         if (wordContext.asnounaja == null) {
-            logger.accept("Слова не знойдзена ў базе: " + w);
+            if (logger != null) {
+                logger.logPrepare("Слова не знойдзена ў базе: " + w);
+            }
             // не знайшлі ў базе - прастаўляем націскі на о, ё
             int p = w.indexOf('о');
             if (p < 0) {
@@ -378,23 +386,34 @@ public class WordInitialConverter {
             }
             if (p >= 0) {
                 w = w.substring(0, p + 1) + GrammarDB2.pravilny_nacisk + w.substring(p + 1);
-                logger.accept("Аўтаматычна пазначаныя націскі: " + w);
+                if (logger != null) {
+                    logger.logPrepare("Аўтаматычна пазначаныя націскі: " + w);
+                }
             } else if (!StressUtils.hasStress(w) && StressUtils.syllCount(w) == 1) {
                 // пазначаем націск у аднаскладовых
                 w = StressUtils.setStressFromStart(w, 0);
-                logger.accept("Аўтаматычна пазначаныя націскі: " + w);
+                if (logger != null) {
+                    logger.logPrepare("Аўтаматычна пазначаныя націскі: " + w);
+                }
             }
         } else {
             if (foundForms.stream().map(f -> f.getFanetykaApplied()).distinct().count() > 1) {
                 // ці не ўсе аднолькавыя ?
-                logger.accept("Аманімія для '" + w + "' з базы: " + foundForms);
+                if (logger != null) {
+                    logger.logPrepare("Аманімія для '" + w + "' з базы: " + foundForms);
+                }
             }
             w = wordContext.asnounaja.getFanetykaApplied(); // нават калі прыстаўкі не вызначаныя, могуць быць змены фанетыкі
-            logger.accept("Націскі, пазначэнне ґ і прыставак з базы " + wordContext.asnounaja.p.getPdgId() + wordContext.asnounaja.v.getId() + ": " + w);
+            if (logger != null) {
+                logger.logPrepare(
+                        "Націскі, пазначэнне ґ і прыставак з базы " + wordContext.asnounaja.p.getPdgId() + wordContext.asnounaja.v.getId() + ": " + w);
+            }
             if (!StressUtils.hasStress(w) && StressUtils.syllCount(w) == 1) {
                 // пазначаем націск у аднаскладовых
                 w = StressUtils.setStressFromStart(w, 0);
-                logger.accept("Аўтаматычна пазначаныя націскі: " + w);
+                if (logger != null) {
+                    logger.logPrepare("Аўтаматычна пазначаныя націскі: " + w);
+                }
             }
         }
 
@@ -423,9 +442,13 @@ public class WordInitialConverter {
                     }
 
                     if (p.result.isEmpty()) {
-                        logger.accept("Мяркуем, што няма прыстаўкі ці першага кораня");
+                        if (logger != null) {
+                            logger.logPrepare("Мяркуем, што няма прыстаўкі ці першага кораня");
+                        }
                     } else {
-                        logger.accept("Мяркуем, што прыстаўка ці першы корань '" + p.result + "'");
+                        if (logger != null) {
+                            logger.logPrepare("Мяркуем, што прыстаўка ці першы корань '" + p.result + "'");
+                        }
                         w = StressUtils.setUsuallyStress(w);
                         boolean[] stresses = StressUtils.getStressMap(w);
                         wUnstressed = p.result + wUnstressed.substring(skipLength);

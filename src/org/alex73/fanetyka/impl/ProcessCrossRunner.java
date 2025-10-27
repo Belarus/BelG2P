@@ -8,6 +8,7 @@ import java.util.Map;
 import org.alex73.fanetyka.config.CaseCross;
 import org.alex73.fanetyka.config.IConfig;
 import org.alex73.fanetyka.config.TsvCrossConfig;
+import org.alex73.fanetyka.impl.str.ToStringIPA;
 
 public class ProcessCrossRunner implements IProcess {
     public static final String DEBUG_NAME = "Мяккасць";
@@ -63,67 +64,78 @@ public class ProcessCrossRunner implements IProcess {
             if (zm.zmiahcajecca) {
                 if (miazaSlou(h1, h2, instance.logPhenomenon, debugHuki)) {
                     if (zm.pierakrocvajeMiezySlou) {
-                        h1.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                        instance.logPhenomenon.add("Мяккасць: адбылося змякчэнне " + h1.bazavyHuk + ": " + instance);
+                        setMiakkasc(instance, h1, instance.logPhenomenon);
                     }
                 } else if (miazaUsiaredzinieSlova(h1, h2, instance.logPhenomenon, debugHuki)) {
                     if (zm.pierakrocvajeMiezyUsizredzinieSlova) {
-                        h1.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                        instance.logPhenomenon.add("Мяккасць: адбылося змякчэнне " + h1.bazavyHuk + ": " + instance);
+                        setMiakkasc(instance, h1, instance.logPhenomenon);
                     }
                 } else {
-                    h1.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
-                    instance.logPhenomenon.add("Мяккасць: адбылося змякчэнне " + h1.bazavyHuk + ": " + instance);
+                    setMiakkasc(instance, h1, instance.logPhenomenon);
                 }
             }
+        }
+    }
+
+    private void setMiakkasc(Fanetyka3 instance, Huk h1, ILogging log) {
+        String charBefore = null, wordBefore = null;
+        if (log != null) {
+            charBefore = h1.toString();
+            wordBefore = instance.toString(new ToStringIPA());
+        }
+        h1.miakki = Huk.MIAKKASC_ASIMILACYJNAJA;
+        if (log != null) {
+            String charAfter = h1.toString();
+            String wordAfter = instance.toString(new ToStringIPA());
+            instance.logPhenomenon.logChange("Мяккасць", "асіміляцыйнае змякчэнне " + h1.bazavyHuk, charBefore, charAfter, wordBefore, wordAfter);
         }
     }
 
     /**
      * Правяраем гукі на адпаведнасць агульным умовам.
      */
-    public static boolean check(Huk h1, Huk h2, List<String> log, String debugHuki) {
+    public static boolean check(Huk h1, Huk h2, ILogging log, String debugHuki) {
         // гук 2 мусіць быць мяккі
         if (h2.miakki == 0) {
-            if (debugHuki != null) {
-                log.add(debugHuki + " другі гук не мяккі");
+            if (debugHuki != null && log != null) {
+                log.logChange(debugHuki + " другі гук не мяккі");
             }
             return false;
         }
         // гук 1 не мусіць быць ужо мяккі
         if (h1.miakki != 0) {
-            if (debugHuki != null) {
-                log.add(debugHuki + " першы гук ужо мяккі");
+            if (debugHuki != null && log != null) {
+                log.logChange(debugHuki + " першы гук ужо мяккі");
             }
             return false;
         }
         return true;
     }
 
-    public static boolean miazaUsiaredzinieSlova(Huk h1, Huk h2, List<String> log, String debugHuki) {
+    public static boolean miazaUsiaredzinieSlova(Huk h1, Huk h2, ILogging log, String debugHuki) {
         // ці ёсць мяжа ?
         switch (h1.padzielPasla) {
-        case Huk.PADZIEL_KARANI://TODO зліць межы ?
+        case Huk.PADZIEL_KARANI:// TODO зліць межы ?
         case Huk.PADZIEL_PRYSTAUKA:
         case Huk.PADZIEL_PRYNAZOUNIK:
         case Huk.PADZIEL_APOSTRAF:
             return true;
         }
-        if (debugHuki != null) {
-            log.add(debugHuki + " няма мяжы ўсярэдзіне слова паміж гукамі");
+        if (debugHuki != null && log != null) {
+            log.logChange(debugHuki + " няма мяжы ўсярэдзіне слова паміж гукамі");
         }
         return false;
     }
 
-    public static boolean miazaSlou(Huk h1, Huk h2, List<String> log, String debugHuki) {
+    public static boolean miazaSlou(Huk h1, Huk h2, ILogging log, String debugHuki) {
         // ці ёсць мяжа ?
         switch (h1.padzielPasla) {
         case Huk.PADZIEL_ZLUCOK:
         case Huk.PADZIEL_SLOVY:
             return true;
         }
-        if (debugHuki != null) {
-            log.add(debugHuki + " няма мяжы слоў паміж гукамі");
+        if (debugHuki != null && log != null) {
+            log.logChange(debugHuki + " няма мяжы слоў паміж гукамі");
         }
         return false;
     }
