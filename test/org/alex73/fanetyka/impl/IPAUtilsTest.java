@@ -31,7 +31,7 @@ public class IPAUtilsTest {
 
     @Test
     void parseIpaHandlesSoftConsonants() {
-        List<Huk> result = IPAReader.parseIpa("dʲa");
+        List<Huk> result = IPAReader.parseIpa("d\u032Aʲa");
         assertEquals(2, result.size());
         assertEquals(BAZAVY_HUK.д, result.get(0).bazavyHuk);
         assertEquals(Huk.MIAKKASC_ASIMILACYJNAJA, result.get(0).miakki);
@@ -40,7 +40,7 @@ public class IPAUtilsTest {
 
     @Test
     void parseIpaHandlesLong() {
-        List<Huk> result = IPAReader.parseIpa("dː");
+        List<Huk> result = IPAReader.parseIpa("d\u032Aː");
         assertEquals(2, result.size());
         assertEquals(BAZAVY_HUK.д, result.get(0).bazavyHuk);
         assertEquals(BAZAVY_HUK.д, result.get(1).bazavyHuk);

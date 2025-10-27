@@ -52,7 +52,7 @@ public class WordContextTest {
     @Test
     void testFanetykaBazy() {
         GrammarFinder mockFinder = mock(GrammarFinder.class);
-        when(mockFinder.getFan("тэст")).thenReturn("ttt");
+        when(mockFinder.getFan("тэст")).thenReturn("t\u032At\u032At\u032A");
 
         WordInitialConverter wc = new WordInitialConverter(mockFinder, "тэст", null, logger);
 
