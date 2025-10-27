@@ -8,7 +8,10 @@ import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 public class UstaunyJ {
 
     @ProcessCase(name = "Злучнік 'і' пераходзіць у 'й'", logCountBefore = 3, logCountAfter = 3)
-    public boolean zi2(Huk h1, Huk h2) {
+    public boolean zi2(Huk h1, Huk h2,Huk h3) {
+        if (h3 != null && h3.bazavyHuk == Huk.BAZAVY_HUK.ў) {
+            return false;
+        }
         h2.bazavyHuk = Huk.BAZAVY_HUK.j;
         return true;
     }
