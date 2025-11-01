@@ -4,4 +4,6 @@ import java.util.List;
 
 public interface IConfig {
     List<Case.Example> getExamples();
+
+    boolean reportRuleExecutionFail();
 }

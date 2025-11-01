@@ -22,6 +22,11 @@ public class TsvConfig implements IConfig {
     public final Map<String, Case> cases = new TreeMap<>();
     public final List<String> casesOrder = new ArrayList<>();
 
+    @Override
+    public boolean reportRuleExecutionFail() {
+        return true;
+    }
+
     public TsvConfig(String name, InputStream in) throws Exception {
         this.configName = name;
         load(in);

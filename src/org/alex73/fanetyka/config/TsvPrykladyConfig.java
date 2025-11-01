@@ -18,6 +18,11 @@ public class TsvPrykladyConfig implements IConfig {
     public CaseCross cross;
     public Map<String, List<Example>> examples = new TreeMap<>();
 
+    @Override
+    public boolean reportRuleExecutionFail() {
+        return false;
+    }
+
     public TsvPrykladyConfig(String name, InputStream in) throws Exception {
         this.configName = name;
         load(in);
@@ -70,12 +75,20 @@ public class TsvPrykladyConfig implements IConfig {
             switch (cells.size()) {
             case 0:
                 break f;
-            default:
-                ex.expected = cells.get(1);
-            case 1:
+            case 2:
                 ex.word = cells.get(0);
+                ex.expected = cells.get(1);
+                ex.ruleExecution = true;
                 result.add(ex);
                 break;
+            case 3:
+                ex.word = cells.get(0);
+                ex.expected = cells.get(1);
+                ex.ruleExecution = false;
+                result.add(ex);
+                break;
+            default:
+                throw new RuntimeException();
             }
         }
         return result;

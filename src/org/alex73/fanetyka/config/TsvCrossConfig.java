@@ -18,6 +18,11 @@ public class TsvCrossConfig implements IConfig {
     public CaseCross cross;
     public List<Example> examples = new ArrayList<>();
 
+    @Override
+    public boolean reportRuleExecutionFail() {
+        return true;
+    }
+
     public TsvCrossConfig(String name, InputStream in) throws Exception {
         this.configName = name;
         load(in);
