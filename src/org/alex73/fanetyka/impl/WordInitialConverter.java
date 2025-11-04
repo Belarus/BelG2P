@@ -86,7 +86,12 @@ public class WordInitialConverter {
                 s.append(c);
             }
         }
-        word = Amohrafy.resolveAmohraf(s.toString());
+        word = s.toString();
+        String amohraf = Amohrafy.resolveAmohraf(word);
+        if (amohraf != null) {
+            logger.logPrepare("Аманімія націскаў, з файла амографаў: " + amohraf);
+            word = amohraf;
+        }
         if (word.length() >= 0) {
             if (debugBegin < 0 && debugEnd >= 0) {
                 debugBegin = 0;

@@ -18,7 +18,7 @@ public class Amohrafy {
             while ((s = rd.readLine()) != null) {
                 s = s.replaceAll("#.*", "").trim().replace('+', GrammarDB2.pravilny_nacisk);
                 if (!s.isEmpty()) {
-                    naciski.put(StressUtils.unstress(s), s);
+                    naciski.put(StressUtils.unstress(s).toLowerCase(), s);
                 }
             }
         } catch (Exception ex) {
@@ -27,7 +27,6 @@ public class Amohrafy {
     }
 
     public static String resolveAmohraf(String word) {
-        String r = naciski.get(word.toLowerCase());
-        return r != null ? r : word;
+        return naciski.get(word.toLowerCase());
     }
 }
