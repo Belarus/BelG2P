@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<project name="Fanetyka" default="all" basedir=".">
+<project name="BelG2P" default="all" basedir=".">
 
 	<target name="clean">
 		<delete dir="build" failonerror="false" />
@@ -15,9 +15,9 @@
 		<copy todir="build/classes">
 			<fileset dir="src" />
 		</copy>
-		<jar jarfile="build/Fanetyka.jar" basedir="build/classes" />
+		<jar jarfile="build/BelG2P.jar" basedir="build/classes" />
 
-		<jar jarfile="build/Fanetyka-full.jar" basedir="build/classes">
+		<jar jarfile="build/BelG2P-with-dependencies.jar" basedir="build/classes">
 			<zipgroupfileset dir="lib" includes="**/*.jar" />
 		</jar>
 	</target>
