@@ -159,7 +159,7 @@ public class IPAReader {
             // шукаем з якога IPA гуку пачынаецца радок
             String ff = s;
             IpaHuk line = ipa2huk.stream().filter(ih -> ff.startsWith(ih.ipa)).findFirst()
-                    .orElseThrow(() -> new RuntimeException("Няправільнае аднаўленне гуку: " + orig));
+                    .orElseThrow(() -> new RuntimeException("Няправільнае аднаўленне гуку з часткі '" + ff + "' з поўнага слова '" + orig + "'"));
 
             Huk huk = p2h(line.ipa, line.pouny);
             s = s.substring(line.ipa.length());
