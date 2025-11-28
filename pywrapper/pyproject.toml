@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=70", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "BelG2P"
+version = "0.2.0"
+description = "JPype wrapper for BelG2P Java program"
+authors = [{name = "Aleś Bułojčyk"}]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = ["jpype1"]
+classifiers = [
+    "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)"
+]
+license = {file = "LICENSE.md"} 
+
+[tool.setuptools.package-data]
+BelG2P = ["jvm/*.jar"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["BelG2P*"]

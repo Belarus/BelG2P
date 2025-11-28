@@ -1,2 +1,5 @@
 /classes/
 /build/
+/pywrapper/BelG2P/jvm/
+/pywrapper/BelG2P.egg-info/
+/pywrapper/dist/
