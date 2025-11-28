@@ -5,6 +5,9 @@ import org.alex73.fanetyka.impl.Huk;
 /**
  * Канвертавання гукаў у String для IPA з націскам пасля галоснай, а не як у
  * стандартным IPA - перад складам.
+ * 
+ * Выкарыстоўваецца толькі для праверкі вынікаў канвертавання па нашых старых
+ * спісах.
  */
 public class ToStringIPAOldStress extends ToStringBase {
     @Override

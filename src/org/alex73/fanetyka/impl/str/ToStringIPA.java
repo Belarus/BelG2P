@@ -19,7 +19,7 @@ import org.alex73.fanetyka.utils.ReadResource;
  * няма галоснай.
  */
 public class ToStringIPA extends ToStringBase {
-    private static final char IPA_STRESS_CHAR = 'ˈ';
+    public static final char IPA_STRESS_CHAR = 'ˈ';
 
     public static final Map<Huk.POUNY_HUK, String> IPA_MAP = loadOutputMap("out_ipa.txt");
 

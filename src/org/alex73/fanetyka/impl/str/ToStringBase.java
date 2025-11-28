@@ -16,6 +16,10 @@ public abstract class ToStringBase {
 
     abstract protected char getStressChar();
 
+    protected boolean doubleAroundSpace() {
+        return true;
+    }
+
     abstract protected char getPadvojenyChar();
 
     public String toString(List<Huk> huki) {
@@ -24,9 +28,16 @@ public abstract class ToStringBase {
         for (Huk h : huki) {
             String hukStr = huk2str(h);
             if (!Huk.halosnyja.contains(h.bazavyHuk) && hukStr.equals(prevHukStr)) {
+                // гук такі самы які папярэдні
                 if (out.charAt(out.length() - 1) == ' ') {
-                    // калі падваенне вакол прагала - прагала не мусіць быць наогул
-                    out.setCharAt(out.length() - 1, getPadvojenyChar());
+                    // падваенне вакол прагала
+                    if (doubleAroundSpace()) {
+                        // падваенне вакол прагала дазволена - прагала не мусіць быць наогул
+                        out.setCharAt(out.length() - 1, getPadvojenyChar());
+                    } else {
+                        // падваенне вакол прагала не дазволена - прагала не мусіць быць наогул
+                        out.append(hukStr);
+                    }
                 } else {
                     out.append(getPadvojenyChar());
                 }
