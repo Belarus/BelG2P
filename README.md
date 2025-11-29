@@ -7,12 +7,12 @@
 
 Выкарыстанне канвертара:
 
-	var db = GrammarDB2.initializeFrom...     // чытаць Граматычную базу беларускай мовы
+	var db = GrammarDB2.initializeFromJar();  // чытаць Граматычную базу беларускай мовы
 	var finder = new GrammarFinder(db);       // стварыць пошукавік па Граматычнай базе
 	var config = new FanetykaConfig(finder);  // стварыць канфігурацыю на падставе пошукавіку і ўбудаваных табліц канвертара
 	var f = new Fanetyka3(config);            // стварыць канвертар
 	f.calcFanetyka(words);                    // канвертаванне
-	f.toString(outputType);                   // вывад фанетыкі ў патрэбным стандарце
+	f.toString(new ToStringIPA());            // вывад фанетыкі ў патрэбным стандарце
 
 GrammarDB2, GrammarFinder, FanetykaConfig - thread safe.
 

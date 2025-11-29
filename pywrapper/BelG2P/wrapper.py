@@ -8,12 +8,11 @@ def start_jvm():
         return
 
     base = os.path.dirname(__file__)
-    jar_path1 = os.path.join(base, "jvm", "BelG2P-with-dependencies.jar")
-    jar_path2 = os.path.join(base, "jvm", "g.jar")
+    jar_path = os.path.join(base, "jvm", "BelG2P-with-dependencies.jar")
 
     # Запускаем JVM
     jpype.startJVM(
-        classpath=[jar_path1,jar_path2],
+        classpath=[jar_path],
         convertStrings=True
     )
 

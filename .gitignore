@@ -1,5 +1,7 @@
-/classes/
-/build/
 /pywrapper/BelG2P/jvm/
 /pywrapper/BelG2P.egg-info/
+/pywrapper/build/
 /pywrapper/dist/
+/target/
+/venv/
+__pycache__/
