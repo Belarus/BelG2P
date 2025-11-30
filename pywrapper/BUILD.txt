@@ -1,0 +1,7 @@
+python3 -m venv ../venv
+../venv/bin/pip3 install build twine
+../venv/bin/pip3 install .
+../venv/bin/python3    # check how it works (by example from README.md)
+rm dist/*
+../venv/bin/python3 -m build
+../venv/bin/twine upload dist/*
