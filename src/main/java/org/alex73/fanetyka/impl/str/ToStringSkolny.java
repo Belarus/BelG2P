@@ -13,7 +13,12 @@ public class ToStringSkolny extends ToStringBase {
     private static final Map<Huk.POUNY_HUK, String> SKOLNY_MAP = loadOutputMap("out_skolny.txt");
 
     @Override
-    protected char getStressChar() {
+    protected char getStressCharBefore() {
+        return 0;
+    }
+
+    @Override
+    protected char getStressCharAfter() {
         return '\u0301';
     }
 

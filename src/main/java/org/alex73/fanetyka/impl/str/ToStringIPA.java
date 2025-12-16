@@ -94,7 +94,12 @@ public class ToStringIPA extends ToStringBase {
     }
 
     @Override
-    protected char getStressChar() {
+    protected char getStressCharBefore() {
+        return 0;
+    }
+
+    @Override
+    protected char getStressCharAfter() {
         return 0;
     }
 

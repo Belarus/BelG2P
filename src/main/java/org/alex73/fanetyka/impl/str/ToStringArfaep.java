@@ -11,7 +11,12 @@ public class ToStringArfaep extends ToStringBase {
     private static final Map<Huk.POUNY_HUK, String> ARFAEP_MAP = loadOutputMap("out_arfaep.txt");
 
     @Override
-    protected char getStressChar() {
+    protected char getStressCharBefore() {
+        return 0;
+    }
+
+    @Override
+    protected char getStressCharAfter() {
         return 0;
     }
 

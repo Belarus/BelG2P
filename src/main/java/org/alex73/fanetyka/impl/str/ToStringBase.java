@@ -14,7 +14,9 @@ import org.alex73.fanetyka.utils.ReadResource;
 public abstract class ToStringBase {
     abstract protected String huk2str(Huk huk);
 
-    abstract protected char getStressChar();
+    abstract protected char getStressCharBefore();
+
+    abstract protected char getStressCharAfter();
 
     protected boolean doubleAroundSpace() {
         return true;
@@ -27,6 +29,9 @@ public abstract class ToStringBase {
         String prevHukStr = null;
         for (Huk h : huki) {
             String hukStr = huk2str(h);
+            if (getStressCharBefore() != 0 && h.stress) {
+                out.append(getStressCharBefore());
+            }
             if (!Huk.halosnyja.contains(h.bazavyHuk) && hukStr.equals(prevHukStr)) {
                 // гук такі самы які папярэдні
                 if (out.charAt(out.length() - 1) == ' ') {
@@ -45,8 +50,8 @@ public abstract class ToStringBase {
                 out.append(hukStr);
             }
             prevHukStr = hukStr;
-            if (getStressChar() != 0 && h.stress) {
-                out.append(getStressChar());
+            if (getStressCharAfter() != 0 && h.stress) {
+                out.append(getStressCharAfter());
             }
             if ((h.padzielPasla & (Huk.PADZIEL_SLOVY | Huk.PADZIEL_PRYNAZOUNIK)) != 0) {
                 out.append(' ');
