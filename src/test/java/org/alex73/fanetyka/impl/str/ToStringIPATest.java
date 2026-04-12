@@ -10,6 +10,30 @@ import org.alex73.fanetyka.impl.str.ToStringIPA.HukChars;
 import org.junit.jupiter.api.Test;
 
 public class ToStringIPATest {
+    @Test
+    void letters() {
+        Huk h1 = new Huk("", Huk.BAZAVY_HUK.б);
+        Huk h2 = new Huk("", Huk.BAZAVY_HUK.в);
+        Huk h3 = new Huk("", Huk.BAZAVY_HUK.г);
+        Huk h4 = new Huk("", Huk.BAZAVY_HUK.а);
+        Huk h5 = new Huk("", Huk.BAZAVY_HUK.б);
+        assertEquals("bʋɣab", new ToStringIPA().toString(List.of(h1, h2, h3, h4, h5)));
+    }
+
+    @Test
+    void doubleNoSpace() {
+        Huk h1 = new Huk("", Huk.BAZAVY_HUK.б);
+        Huk h2 = new Huk("", Huk.BAZAVY_HUK.б);
+        assertEquals("bː", new ToStringIPA().toString(List.of(h1, h2)));
+    }
+
+    @Test
+    void doubleAroundSpace() {
+        Huk h1 = new Huk("", Huk.BAZAVY_HUK.б);
+        h1.padzielPasla = Huk.PADZIEL_SLOVY;
+        Huk h2 = new Huk("", Huk.BAZAVY_HUK.б);
+        assertEquals("bː", new ToStringIPA().toString(List.of(h1, h2)));
+    }
 
     @Test
     void syllBordersFromStartText() {

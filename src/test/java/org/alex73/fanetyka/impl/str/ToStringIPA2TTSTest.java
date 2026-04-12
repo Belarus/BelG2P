@@ -16,7 +16,7 @@ public class ToStringIPA2TTSTest {
         Huk h4 = new Huk("", Huk.BAZAVY_HUK.а);
         h4.stress = true;
         Huk h5 = new Huk("", Huk.BAZAVY_HUK.б);
-        assertEquals("bʋɣaˈb", new ToStringIPA2TTS().toString(List.of(h1, h2, h3, h4, h5)));
+        assertEquals("bwɦˈab", new ToStringIPA2TTS().toString(List.of(h1, h2, h3, h4, h5)));
     }
 
     @Test
