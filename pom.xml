@@ -123,27 +123,20 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.6.1</version>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.8.0</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
 				<executions>
 					<execution>
+						<id>make-assembly</id>
 						<phase>package</phase>
 						<goals>
-							<goal>shade</goal>
+							<goal>single</goal>
 						</goals>
-						<configuration>
-							<createDependencyReducedPom>false</createDependencyReducedPom>
-							<outputFile>${project.basedir}/pywrapper/BelG2P/jvm/BelG2P-with-dependencies.jar</outputFile>
-							<!--artifactSet>
-								<excludes>
-									<exclude>org.glassfish.jaxb:jaxb-runtime</exclude>
-									<exclude>jakarta.xml.bind:jakarta.xml.bind-api</exclude>
-									<exclude>org.glassfish.jaxb:txw2</exclude>
-									<exclude>com.sun.istack:istack-commons-runtime</exclude>
-									<exclude>com.sun.activation:jakarta.activation</exclude>
-								</excludes>
-							</artifactSet-->
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
