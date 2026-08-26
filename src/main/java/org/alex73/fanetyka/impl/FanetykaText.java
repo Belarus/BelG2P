@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.alex73.fanetyka.impl.str.ToStringIPA;
+import org.alex73.fanetyka.impl.str.ToStringIPA2TTS;
 import org.alex73.fanetyka.impl.str.ToStringSkolny;
 import org.alex73.grammardb.GrammarDB2;
 import org.alex73.grammardb.GrammarFinder;
@@ -11,6 +12,7 @@ import org.alex73.grammardb.GrammarFinder;
 public class FanetykaText {
     public String ipa = "";
     public String skola = "";
+    public String ipa2tts = "";
     public List<String> why = new ArrayList<>();
 
     public FanetykaText(GrammarFinder finder, String text) throws Exception {
@@ -33,16 +35,19 @@ public class FanetykaText {
                 } else if (c == ' ') {
                     ipa += c;
                     skola += c;
+                    ipa2tts += c;
                 }
                 if (c != ' ') {
                     f.calcFanetyka(words);
                     words.clear();
                     ipa += f.toString(new ToStringIPA());
                     skola += f.toString(new ToStringSkolny());
+                    ipa2tts += f.toString(new ToStringIPA2TTS());
                     why.add(f.logPhenomenon.dump());
                     f = new Fanetyka3(config);
                     ipa += c;
                     skola += c;
+                    ipa2tts += c;
                 }
             }
         }
@@ -52,6 +57,7 @@ public class FanetykaText {
         f.calcFanetyka(words);
         ipa += f.toString(new ToStringIPA());
         skola += f.toString(new ToStringSkolny());
+        ipa2tts += f.toString(new ToStringIPA2TTS());
         why.add(f.logPhenomenon.dump());
     }
 
@@ -64,7 +70,7 @@ public class FanetykaText {
         GrammarDB2 db = GrammarDB2.empty();
         GrammarFinder finder = new GrammarFinder(db);
 
-        String text = "лё";// new String(System.in.readAllBytes());
+        String text = "лё кі.";// new String(System.in.readAllBytes());
         FanetykaText t = new FanetykaText(finder, text);
         System.out.println(t.skola);
     }
