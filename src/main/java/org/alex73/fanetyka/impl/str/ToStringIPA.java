@@ -1,17 +1,15 @@
 package org.alex73.fanetyka.impl.str;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.alex73.fanetyka.impl.Huk;
 import org.alex73.fanetyka.impl.Huk.BAZAVY_HUK;
 import org.alex73.fanetyka.utils.ReadResource;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 /**
  * Канвертавання гукаў у String для IPA.
- * 
+ * <p>
  * У IPA націскі трэба падаваць перад складам, а не над галоснай. Але для гэтага
  * трэба вызначыць межы складаў. Шаблоны пазначэння націскаў -- у
  * ipa_stress.txt. Але ёсць цяжкія выпадкі - падваенне гукаў і межы паміж
@@ -62,7 +60,23 @@ public class ToStringIPA extends ToStringBase {
                 }
                 Integer stressPos = IPA_STRESSES.get(pattern.toString());
                 if (stressPos == null) {
-                    System.err.println("No IPA stress pattern for '" + pattern + "'");
+                    if (UNKNOWN_IPA_STRESSES != null) {
+                        synchronized (UNKNOWN_IPA_STRESSES) {
+                            Set<String> unknownInputs = UNKNOWN_IPA_STRESSES.computeIfAbsent(pattern.toString(), k -> new HashSet<>());
+                            if (unknownInputs.size() < MAX_UNKNOWN_IPA_STRESS_COUNT) {
+                                unknownInputs.add(huki.stream().map(Huk::toString).collect(Collectors.joining(" ")));
+                            }
+                        }
+                    }
+                    int p = i - 1;
+                    while (p >= 0 && !hs.get(p).spaceAfter && hs.get(p).tp != TYPE.H) {
+                        p--;
+                    }
+                    if (p >= 0 && hs.get(p).tp == TYPE.H) {
+                        hs.get(i - 1).ipaStressBefore = true;
+                    } else {
+                        hs.get(p + 1).ipaStressBefore = true;
+                    }
                 } else {
                     hs.get(syllStart + stressPos).ipaStressBefore = true;
                 }
@@ -139,7 +153,9 @@ public class ToStringIPA extends ToStringBase {
 
     enum TYPE {
         J, H, S, Z
-    };
+    }
+
+    ;
 
     public class HukChars {
         boolean ipaStressBefore, spaceAfter, stress;
@@ -168,6 +184,8 @@ public class ToStringIPA extends ToStringBase {
     }
 
     private static final Map<String, Integer> IPA_STRESSES = new HashMap<>();
+    public static int MAX_UNKNOWN_IPA_STRESS_COUNT = 10;
+    public static Map<String, Set<String>> UNKNOWN_IPA_STRESSES;
 
     static {
         ReadResource.readLines(ToStringIPA.class, "ipa_stress.txt").forEach(s -> {
