@@ -120,6 +120,15 @@ public class Sprascennie {
         return true;
     }
 
+    @ProcessCase(name = "Спрашчэнне: тры аднолькавыя зычныя", logCountBefore = 3, logCountAfter = 2)
+    public boolean h3(ProcessContext context, Huk huk1, Huk huk2, Huk huk3) {
+        if (huk1.bazavyHuk != huk2.bazavyHuk || huk2.bazavyHuk != huk3.bazavyHuk) {
+            return false;
+        }
+        context.vydalicPierad(2);
+        return true;
+    }
+
     @ProcessCase(name = "Спрашчэнне: т-ш -> ч-ш, т+ч -> ч на канцы слова", logCountBefore = 3, logCountAfter = 2)
     public boolean pryTSe(ProcessContext context) {
         context.vydalicPierad(1);
