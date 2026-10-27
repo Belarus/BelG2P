@@ -8,6 +8,7 @@ import org.alex73.fanetyka.impl.Huk;
 
 public class Case {
     public String name;
+    public String code;
     public String details;
     public String changeDescription;
     public HukCheck borderCheckBefore; // праверкі для мяжы перад першым гукам

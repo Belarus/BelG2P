@@ -64,20 +64,20 @@ public class ProcessCrossRunner implements IProcess {
             if (zm.zmiahcajecca) {
                 if (miazaSlou(h1, h2, instance.logPhenomenon, debugHuki)) {
                     if (zm.pierakrocvajeMiezySlou) {
-                        setMiakkasc(instance, h1, instance.logPhenomenon);
+                        setMiakkasc(instance, h1, h2, instance.logPhenomenon);
                     }
                 } else if (miazaUsiaredzinieSlova(h1, h2, instance.logPhenomenon, debugHuki)) {
                     if (zm.pierakrocvajeMiezyUsizredzinieSlova) {
-                        setMiakkasc(instance, h1, instance.logPhenomenon);
+                        setMiakkasc(instance, h1, h2, instance.logPhenomenon);
                     }
                 } else {
-                    setMiakkasc(instance, h1, instance.logPhenomenon);
+                    setMiakkasc(instance, h1, h2, instance.logPhenomenon);
                 }
             }
         }
     }
 
-    private void setMiakkasc(Fanetyka3 instance, Huk h1, ILogging log) {
+    private void setMiakkasc(Fanetyka3 instance, Huk h1, Huk h2, ILogging log) {
         String charBefore = null, wordBefore = null;
         if (log != null) {
             charBefore = h1.toString();
@@ -87,7 +87,7 @@ public class ProcessCrossRunner implements IProcess {
         if (log != null) {
             String charAfter = h1.toString();
             String wordAfter = instance.toString(new ToStringIPA());
-            instance.logPhenomenon.logChange("Мяккасць", "асіміляцыйнае змякчэнне " + h1.bazavyHuk, charBefore, charAfter, wordBefore, wordAfter);
+            instance.logPhenomenon.logChange("Мяккасць", "асіміляцыйнае змякчэнне " + h1.bazavyHuk, charBefore, charAfter, wordBefore, wordAfter, "m", List.of(h1, h2));
         }
     }
 

@@ -139,11 +139,16 @@ public class ProcessRunner implements IProcess {
                 ProcessCase ann = m.getAnnotation(ProcessCase.class);
                 String before = context.dump(ann.logCountBefore());
                 String wordBefore = instance.toString(new ToStringIPA());
+                List<Huk> hukiBefore = new ArrayList<>(context.huki.size());
+                for (int i = 0; i < ca.checks.size() && context.currentPosition + i < context.huki.size(); i++) {
+                    hukiBefore.add(context.huki.get(context.currentPosition + i).clone());
+                }
                 boolean changed = (Boolean) m.invoke(processor, parameters.toArray());
+                // захоўваць feature text: case.checks (можа не быць апошніх) ад context.currentPosition
                 if (changed) {
                     String after = context.dump(ann.logCountAfter());
                     String wordAfter = instance.toString(new ToStringIPA());
-                    instance.logPhenomenon.logChange(ca.name, ca.details, before, after, wordBefore, wordAfter);
+                    instance.logPhenomenon.logChange(ca.name, ca.details, before, after, wordBefore, wordAfter, ca.code, hukiBefore);
                     if (caseName.equals(instance.debugRuleName)) {
                         instance.debugRuleProcessed = true; // ці выканалася гэтае правіла
                     }

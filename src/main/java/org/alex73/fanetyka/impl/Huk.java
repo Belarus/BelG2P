@@ -13,7 +13,7 @@ import org.alex73.fanetyka.impl.str.ToStringSkolny;
  * 
  * - ФСБЛМ с. 61
  */
-public class Huk {
+public class Huk implements Cloneable {
     public static final int PADZIEL_PRYSTAUKA = 1; // прыстаўка
     public static final int PADZIEL_PRYNAZOUNIK = 16; // Прыназоўнікі без, не, з, праз. TODO Дадаецца разам з падзелам на словы ?
     public static final int PADZIEL_KARANI = 2;
@@ -96,6 +96,11 @@ public class Huk {
         bazavyHuk = b;
         this.miakki = miakki;
         this.padzielPasla = padzielPasla;
+    }
+
+    @Override
+    protected Huk clone() throws CloneNotSupportedException {
+        return (Huk) super.clone();
     }
 
     @Override

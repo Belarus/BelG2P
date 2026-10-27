@@ -20,6 +20,10 @@ public class TsvConfig implements IConfig {
     private final List<String[]> lines = new ArrayList<>();
     private int lineIndex;
     public final Map<String, Case> cases = new TreeMap<>();
+    // мапа назва->код для кожнай з'явы
+    public final Map<String, String> case2code = new TreeMap<>();
+    // мапа код->назва для кожнай з'явы
+    public final Map<String, String> code2case = new TreeMap<>();
     public final List<String> casesOrder = new ArrayList<>();
 
     @Override
@@ -29,6 +33,11 @@ public class TsvConfig implements IConfig {
 
     public TsvConfig(String name, InputStream in) throws Exception {
         this.configName = name;
+
+        // каб зарэзерваваць назву з'явы "Мяккасць" і код "m"
+        case2code.put("Мяккасць", "m");
+        code2case.put("m", "Мяккасць");
+
         load(in);
     }
 
@@ -71,9 +80,20 @@ public class TsvConfig implements IConfig {
         if (line[1].isBlank()) {
             err(1, "мусіць быць назва з'явы");
         }
-        t.name = line[1].trim();
+        String[] nameLine = line[1].trim().split("/");
+        if (nameLine.length != 2) {
+            err(1, "назва з'явы мусіць быць у фармаце 'назва/код'");
+        }
+        t.name = nameLine[0].trim();
+        t.code = nameLine[1].trim();
         if (cases.put(t.name, t) != null) {
             err(1, "паўтараецца назва з'явы: " + t.name);
+        }
+        if (case2code.put(t.name, t.code) != null) {
+            err(1, "паўтараецца назва з'явы ў case2code: " + t.name);
+        }
+        if (code2case.put(t.code, t.name) != null) {
+            err(1, "паўтараецца код з'явы ў code2case: " + t.code);
         }
         casesOrder.add(t.name);
         lineIndex++;

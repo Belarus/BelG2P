@@ -27,7 +27,7 @@ public class WordContextTest {
         }
 
         @Override
-        public void logChange(String title, String details, String changeFrom, String changeTo, String dumpFrom, String dumpTo) {
+        public void logChange(String title, String details, String changeFrom, String changeTo, String dumpFrom, String dumpTo, String caseCode, List<Huk> huki) {
             System.out.println(title);
         }
 

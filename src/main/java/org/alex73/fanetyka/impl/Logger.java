@@ -19,7 +19,7 @@ public class Logger implements ILogging {
     }
 
     @Override
-    public void logChange(String title, String details, String charsBefore, String charsAfter, String dumpBefore, String dumpAfter) {
+    public void logChange(String title, String details, String charsBefore, String charsAfter, String dumpBefore, String dumpAfter, String caseCode, List<Huk> hukiBefore) {
         changes.add("<b>" + title + "</b>: [" + charsBefore + " -> " + charsAfter + "]. " + details + "; <span style='color: #663300'>" + dumpBefore + " => " + dumpAfter + "</span>");
     }
 
